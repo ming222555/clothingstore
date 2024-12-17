@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+
+import YnsLink from "@/ui/yns-link";
 
 export default function LogoNav() {
   const pathname = usePathname();
@@ -29,12 +30,12 @@ export default function LogoNav() {
   }, [pathname]);
 
   return (
-    <Link href="/" className="text-decoration-none">
+    <YnsLink href="/" className="text-decoration-none">
       {isH1 ? (
-        <h1 className="h4"> Your Next Store</h1>
+        <h1 className="h4">Your Next Store</h1>
       ) : (
-        <span className="h4"> Your Next Store</span>
+        <span className="h4">Your Next Store</span>
       )}
-    </Link>
+    </YnsLink>
   );
 }

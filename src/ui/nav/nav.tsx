@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import YnsLink from "@/ui/yns-link";
 import LogoNav from "./logo-nav";
 // import CartSummaryNav from "./cart-summary-nav";
 
@@ -12,16 +11,16 @@ export default function Nav() {
             <LogoNav />
           </li>
           <li>
-            <Link href="/">Home</Link>
+            <YnsLink href="/">Home</YnsLink>
           </li>
           <li>
-            <Link href="/category/apparel">Apparel</Link>
+            <YnsLink href="/category/apparel">Apparel</YnsLink>
           </li>
           <li>
-            <Link href="/category/accessories">Accessories</Link>
+            <YnsLink href="/category/accessories">Accessories</YnsLink>
           </li>
           <li>
-            <Link href="/category/digital">Digital</Link>
+            <YnsLink href="/category/digital">Digital</YnsLink>
           </li>
           <li>{/* <Search /> */}</li>
           <li>{/* <CartSummaryNav /> */}</li>
