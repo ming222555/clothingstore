@@ -1,0 +1,55 @@
+.SearchNav__search-icon {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.SearchNav__backdrop {
+  display: none;
+  background: rgba(0, 0, 0, 0.25);
+
+  &.mobile {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    @include media-breakpoint-up(md) {
+      display: none;
+    }
+  }
+}
+
+@mixin SearchNav__input-breakpoint-md-up() {
+  @include media-breakpoint-up(md) {
+    display: block;
+    position: static;
+    width: 12.5rem;
+    z-index: auto;
+  }
+}
+
+@mixin SearchNav__input-breakpoint-lg-up() {
+  @include media-breakpoint-up(lg) {
+    width: 16rem;
+  }
+}
+
+.SearchNav__input {
+  display: none;
+  @include SearchNav__input-breakpoint-md-up();
+  @include SearchNav__input-breakpoint-lg-up();
+
+  font-size: 0.875rem;
+  padding: 0.2rem;
+
+  &.mobile {
+    display: block;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    @include SearchNav__input-breakpoint-md-up();
+    @include SearchNav__input-breakpoint-lg-up();
+  }
+}

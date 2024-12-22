@@ -1,11 +1,13 @@
-import { SearchIcon, ShoppingBagIcon, MenuIcon } from "lucide-react";
+import { ShoppingBagIcon, MenuIcon } from "lucide-react";
 
 // import YnsLink from "@/ui/yns-link";
-import NavMenu from "@/ui/nav/nav-menu";
 import LogoNav from "./logo-nav";
+import NavMenu from "./nav-menu";
+import SearchNav from "./search-nav";
+
 // import CartSummaryNav from "./cart-summary-nav";
 
-export default function Nav() {
+export default function MainNav() {
   return (
     <header className="p-3 bg-secondary">
       <nav
@@ -16,6 +18,7 @@ export default function Nav() {
       >
         <LogoNav />
         <NavMenu />
+        <SearchNav />
         {/* <div
           className="ms-auto d-md-none position-absolute"
           style={{
@@ -32,12 +35,12 @@ export default function Nav() {
             className="w-100"
           />
         </div> */}
-        <input
+        {/* <input
           type="text"
           placeholder="Search for products..."
           style={{ fontSize: "0.875rem", padding: "0.2rem" }}
           className="MainNav__searchInput d-none d-md-block ms-auto bg-warning"
-        />
+        /> */}
         <div>
           <div className="ms-3 opacity-25">
             <ShoppingBagIcon />

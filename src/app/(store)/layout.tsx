@@ -1,4 +1,4 @@
-import Nav from "@/ui/nav/nav";
+import MainNav from "@/ui/main-nav/main-nav";
 import Footer from "@/ui/footer/footer";
 
 export default function StoreLayout({
@@ -8,7 +8,7 @@ export default function StoreLayout({
 }) {
   return (
     <>
-      <Nav />
+      <MainNav />
       <main>{children}</main>
       <Footer />
     </>
