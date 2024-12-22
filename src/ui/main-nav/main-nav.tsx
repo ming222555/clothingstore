@@ -9,7 +9,7 @@ import SearchNav from "./search-nav";
 
 export default function MainNav() {
   return (
-    <header className="p-3 bg-secondary">
+    <header className="p-3 bg-secondary position-sticky top-0">
       <nav
         className="d-flex align-items-center m-auto bg-info position-relative"
         style={{
