@@ -1,6 +1,7 @@
 import { SearchIcon, ShoppingBagIcon, MenuIcon } from "lucide-react";
 
-import YnsLink from "@/ui/yns-link";
+// import YnsLink from "@/ui/yns-link";
+import NavMenu from "@/ui/nav/nav-menu";
 import LogoNav from "./logo-nav";
 // import CartSummaryNav from "./cart-summary-nav";
 
@@ -8,51 +9,21 @@ export default function Nav() {
   return (
     <header className="p-3 bg-secondary">
       <nav
-        className="d-flex align-items-center m-auto bg-info"
+        className="d-flex align-items-center m-auto bg-info position-relative"
         style={{
           maxWidth: "var(--bs-breakpoint-xl)",
         }}
       >
         <LogoNav />
+        <NavMenu />
         {/* <div
-          className="d-none d-sm-flex bg-secondary"
-          // className="d-flex bg-secondary"
-          //  className="d-flex bg-secondary overflow-auto"
-          // style={{ minWidth: "20.5rem" }}
-          style={{ outline: "3px solid yellow" }}
-        > */}
-        <YnsLink
-          href="/"
-          className="d-none d-sm-flex btn btn-light me-1"
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
+          className="ms-auto d-md-none position-absolute"
+          style={{
+            left: "100%",
+          }}
         >
-          Home
-        </YnsLink>
-        <YnsLink
-          href="/category/apparel"
-          className="d-none d-sm-flex btn btn-light me-1"
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
-        >
-          Apparel
-        </YnsLink>
-        <YnsLink
-          href="/category/accessories"
-          className="d-none d-sm-flex btn btn-light me-1"
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
-        >
-          Accessories
-        </YnsLink>
-        <YnsLink
-          href="/category/digital"
-          className="d-none d-sm-flex btn btn-light me-1"
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
-        >
-          Digital
-        </YnsLink>
-        {/* </div> */}
-        <div className="ms-auto d-md-none">
           <SearchIcon />
-        </div>
+        </div> */}
         {/* <div className="MainNav__search d-none d-md-block ms-auto bg-warning">
           <input
             type="text"
