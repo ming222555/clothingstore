@@ -4,3 +4,7 @@
   background-color: var(--bs-btn-hover-bg);
   border-color: var(--bs-btn-hover-border-color);
 }
+
+.hover-cursor-pointer:hover {
+  cursor: pointer;
+}

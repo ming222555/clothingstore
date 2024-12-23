@@ -1,9 +1,10 @@
-import { ShoppingBagIcon, MenuIcon } from "lucide-react";
+import { ShoppingBagIcon } from "lucide-react";
 
 // import YnsLink from "@/ui/yns-link";
 import LogoNav from "./logo-nav";
 import NavMenu from "./nav-menu";
 import SearchNav from "./search-nav";
+import NavMenuAside from "./nav-menu-aside";
 
 // import CartSummaryNav from "./cart-summary-nav";
 
@@ -46,9 +47,10 @@ export default function MainNav() {
             <ShoppingBagIcon />
           </div>
         </div>
-        <div className="ms-2 d-sm-none">
+        {/* <div className="ms-2 d-sm-none">
           <MenuIcon />
-        </div>
+        </div> */}
+        <NavMenuAside />
         {/* <div>CartSummaryNav_Stub</div> */}
         {/* <li><Search /></li> */}
         {/* <li><CartSummaryNav /></li> */}

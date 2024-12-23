@@ -9,7 +9,7 @@ export default function SearchNav() {
 
   return (
     <>
-      <div className="SearchNav__search-icon ms-auto d-md-none">
+      <div className="SearchNav__search-icon ms-auto d-md-none hover-cursor-pointer">
         <SearchIcon
           onClick={() => {
             // inputRef.current!.focus(); // this not working. bug?
