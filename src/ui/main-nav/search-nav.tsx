@@ -1,36 +1,62 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { SearchIcon } from "lucide-react";
 
 export default function SearchNav() {
   const [mobile, setMobile] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
-      <div className="SearchNav__search-icon ms-auto d-md-none hover-cursor-pointer">
+      <label
+        className="ms-auto d-md-none hover-cursor-pointer"
+        htmlFor="SearchNav__input"
+      >
         <SearchIcon
           onClick={() => {
-            // inputRef.current!.focus(); // this not working. bug?
-            setTimeout(() => inputRef.current!.focus(), 0);
             setMobile(true);
           }}
         />
-      </div>
+      </label>
       <div
         className={`SearchNav__backdrop${mobile ? " mobile" : ""}`}
         onClick={() => setMobile(false)}
       ></div>
-      <input
+      {/* <input
         type="text"
         placeholder="Search for products..."
-        className={`SearchNav__input ms-auto bg-warning${
+        className={`SearchNav__input ms-auto bg-warning form-control${
           mobile ? " mobile" : ""
         }`}
         ref={inputRef}
-      />
-      {/* 
+      /> */}
+      <div
+        className={`SearchNav__input-group ms-auto input-group input-group-sm bg-warning${
+          mobile ? " mobile" : ""
+        }`}
+      >
+        <input
+          type="text"
+          placeholder="Search for products..."
+          className="form-control"
+          id="SearchNav__input"
+        />
+        <label
+          className="input-group-text d-none d-md-block hover-cursor-pointer"
+          htmlFor="SearchNav__input"
+        >
+          <SearchIcon />
+        </label>
+      </div>
+      {/* <input
+        type="text"
+        placeholder="Search for products..."
+        className={`SearchNav__input ms-auto bg-warning form-control${
+          mobile ? " mobile" : ""
+        }`}
+        ref={inputRef}
+      /> */}
+      {/*
       <input
         type="text"
         placeholder="Search for products..."

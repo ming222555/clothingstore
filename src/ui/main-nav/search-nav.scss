@@ -15,35 +15,31 @@
   }
 }
 
-@mixin SearchNav__input-breakpoint-md-up() {
+@mixin SearchNav__input-group-breakpoint-md-up() {
   @include media-breakpoint-up(md) {
-    display: block;
+    display: flex;
     position: static;
     width: 12.5rem;
     z-index: auto;
   }
 }
 
-@mixin SearchNav__input-breakpoint-lg-up() {
+@mixin SearchNav__input-group-breakpoint-lg-up() {
   @include media-breakpoint-up(lg) {
-    width: 16rem;
+    width: 18rem;
   }
 }
 
-.SearchNav__input {
+.SearchNav__input-group {
   display: none;
-  @include SearchNav__input-breakpoint-md-up();
-  @include SearchNav__input-breakpoint-lg-up();
-
-  font-size: 0.875rem;
-  padding: 0.2rem;
+  @include SearchNav__input-group-breakpoint-md-up();
+  @include SearchNav__input-group-breakpoint-lg-up();
 
   &.mobile {
-    display: block;
-    width: 100%;
+    display: flex;
     position: absolute;
     z-index: 1;
-    @include SearchNav__input-breakpoint-md-up();
-    @include SearchNav__input-breakpoint-lg-up();
+    @include SearchNav__input-group-breakpoint-md-up();
+    @include SearchNav__input-group-breakpoint-lg-up();
   }
 }
