@@ -18,8 +18,9 @@
 .NavMenuAside__links {
   display: none;
 
-  padding-bottom: 2rem;
+  padding: 2rem 0;
   transform: translateY(100%);
+  background: rgba(0, 0, 0, 0.2);
 
   &.mobile {
     display: flex;

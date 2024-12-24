@@ -28,37 +28,33 @@ export default function NavMenuAside() {
       >
         <YnsLink
           href="/"
-          className={`btn btn-sm btn-light w-75${
+          className={`btn btn-sm btn-light fw-medium w-75${
             pathname === "/" ? " link-is-active" : ""
           }`}
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
         >
           Home
         </YnsLink>
         <YnsLink
           href="/category/apparel"
-          className={`btn btn-sm btn-light w-75${
+          className={`btn btn-sm btn-light fw-medium w-75${
             pathname === "/category/apparel" ? " link-is-active" : ""
           }`}
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
         >
           Apparel
         </YnsLink>
         <YnsLink
           href="/category/accessories"
-          className={`btn btn-sm btn-light w-75${
+          className={`btn btn-sm btn-light fw-medium w-75${
             pathname === "/category/accessories" ? " link-is-active" : ""
           }`}
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
         >
           Accessories
         </YnsLink>
         <YnsLink
           href="/category/digital"
-          className={`btn btn-sm btn-light w-75${
+          className={`btn btn-sm btn-light fw-medium w-75${
             pathname === "/category/digital" ? " link-is-active" : ""
           }`}
-          style={{ fontSize: "0.875rem", fontWeight: 500 }}
         >
           Digital
         </YnsLink>

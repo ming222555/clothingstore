@@ -22,16 +22,8 @@ export default function SearchNav() {
         className={`SearchNav__backdrop${mobile ? " mobile" : ""}`}
         onClick={() => setMobile(false)}
       ></div>
-      {/* <input
-        type="text"
-        placeholder="Search for products..."
-        className={`SearchNav__input ms-auto bg-warning form-control${
-          mobile ? " mobile" : ""
-        }`}
-        ref={inputRef}
-      /> */}
       <div
-        className={`SearchNav__input-group ms-auto input-group input-group-sm bg-warning${
+        className={`SearchNav__input-group input-group input-group-sm ms-auto bg-warning${
           mobile ? " mobile" : ""
         }`}
       >
@@ -48,21 +40,6 @@ export default function SearchNav() {
           <SearchIcon />
         </label>
       </div>
-      {/* <input
-        type="text"
-        placeholder="Search for products..."
-        className={`SearchNav__input ms-auto bg-warning form-control${
-          mobile ? " mobile" : ""
-        }`}
-        ref={inputRef}
-      /> */}
-      {/*
-      <input
-        type="text"
-        placeholder="Search for products..."
-        style={{ fontSize: "0.875rem", padding: "0.2rem" }}
-        className="SearchNav__input mobile d-none d-md-block ms-auto bg-warning"
-      /> */}
     </>
   );
 }
