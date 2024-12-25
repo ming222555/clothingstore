@@ -1,6 +1,9 @@
-import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { ShoppingBagIcon } from "lucide-react";
+
+import { getCartFromCookiesAction } from "@/actions/cart-actions";
+import { calculateCartTotalNetWithoutShipping } from "@/lib/commerce-kit";
+import YnsLink from "@/ui/yns-link";
 
 const CartFallback = () => (
   <div className="ms-3 opacity-25">
@@ -23,29 +26,25 @@ const CartSummaryNavInnerContent = ({
 }) => <>{children}</>;
 
 const CartSummaryNavInner = async () => {
-  const cookieValues = await cookies();
-  cookieValues.get("yns_cart");
+  const cart = await getCartFromCookiesAction();
+  if (!cart) {
+    return <CartFallback />;
+  }
+  if (!cart.lines.length) {
+    return <CartFallback />;
+  }
 
-  await new Promise((resolv) => {
-    setTimeout(resolv, 6666);
-  });
+  // const total = await calculateCartTotalNetWithoutShipping(cart);
+  const totalItems = cart.lines.reduce((accum, line) => accum + line.qty, 0);
 
-  // CartSummaryNavInnerContent is a server component.
-  // In below, we will be wrapping <CartSummaryNavInnerContent> with
-  // client component that is a context provider.
   return (
     <CartSummaryNavInnerContent>
-      <>
-        <p>totalItems 123</p>
+      <YnsLink href="/cart-overlay" className="d-block position-relative ms-3">
         <ShoppingBagIcon />
-        {/* 1. Await if cookie ysn_cart exists
-      2. If no exist, return <CartFallback />
-      3. Otherwise, get cart totalItems and total amount.
-      4. Display <ShoppingBagIcon /> and totalItems.
-      5. Tooltip hovers to show totalItems and total amount.
-        (react bootstrap popover>)
-       */}
-      </>
+        <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-warning rounded-pill fs-7">
+          {totalItems}
+        </span>
+      </YnsLink>
     </CartSummaryNavInnerContent>
   );
 };

@@ -1,11 +1,8 @@
-import { ShoppingBagIcon } from "lucide-react";
-
 import LogoNav from "./logo-nav";
 import NavMenu from "./nav-menu";
 import SearchNav from "./search-nav";
 import NavMenuAside from "./nav-menu-aside";
-
-// import CartSummaryNav from "./cart-summary-nav";
+import CartSummaryNav from "./cart-summary-nav";
 
 export default function MainNav() {
   return (
@@ -19,13 +16,8 @@ export default function MainNav() {
         <LogoNav />
         <NavMenu />
         <SearchNav />
-        <div>
-          <div className="ms-3 opacity-25">
-            <ShoppingBagIcon />
-          </div>
-        </div>
+        <CartSummaryNav />
         <NavMenuAside />
-        {/* <li><CartSummaryNav /></li> */}
       </nav>
     </header>
   );

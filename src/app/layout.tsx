@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+
+import createCookieAction from "@/actions/createCookieAction";
 import { roboto } from "@/lib/utils/fonts";
 import "../globals.scss";
 
@@ -21,7 +23,13 @@ export default function RootLayout({
           } as React.CSSProperties
         }
       >
-        <div>{children}</div>
+        <div>
+          <form action={createCookieAction}>
+            <input type="text" defaultValue="popp" />
+            <button type="submit">Cre cart cookie</button>
+          </form>
+          {children}
+        </div>
       </body>
     </html>
   );
