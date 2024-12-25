@@ -4,6 +4,7 @@ import { ShoppingBagIcon } from "lucide-react";
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
 import { calculateCartTotalNetWithoutShipping } from "@/lib/commerce-kit";
 import YnsLink from "@/ui/yns-link";
+import ShoppingBagIconTooltip from "./shopping-bag-icon-tooltip";
 
 const CartFallback = () => (
   <div className="ms-3 opacity-25">
@@ -19,12 +20,6 @@ export default function CartSummaryNav() {
   );
 }
 
-const CartSummaryNavInnerContent = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <>{children}</>;
-
 const CartSummaryNavInner = async () => {
   const cart = await getCartFromCookiesAction();
   if (!cart) {
@@ -34,17 +29,26 @@ const CartSummaryNavInner = async () => {
     return <CartFallback />;
   }
 
-  // const total = await calculateCartTotalNetWithoutShipping(cart);
+  const total = await calculateCartTotalNetWithoutShipping(cart);
   const totalItems = cart.lines.reduce((accum, line) => accum + line.qty, 0);
 
   return (
-    <CartSummaryNavInnerContent>
-      <YnsLink href="/cart-overlay" className="d-block position-relative ms-3">
-        <ShoppingBagIcon />
-        <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-warning rounded-pill fs-7">
-          {totalItems}
-        </span>
-      </YnsLink>
-    </CartSummaryNavInnerContent>
+    <YnsLink
+      href="/cart-overlay"
+      className="d-block position-relative ms-3"
+      data-tooltip-id="shopping-bag-icon-tooltip"
+    >
+      <ShoppingBagIcon />
+      <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-warning rounded-pill fs-7 mw-1rem">
+        {totalItems}
+      </span>
+
+      <ShoppingBagIconTooltip
+        tooltipId="shopping-bag-icon-tooltip"
+        totalItems={totalItems}
+        total={total}
+        currency={cart.currency}
+      />
+    </YnsLink>
   );
 };
