@@ -1,3 +1,5 @@
+import { getCart, cartTotalNetWithoutShipping } from "@/lib/db";
+
 export interface Cart {
   id: string;
   lines: {
@@ -8,7 +10,6 @@ export interface Cart {
 }
 
 export const cartGet = async (cartId: string): Promise<Cart | null> => {
-  // TODO
   // Retrieve cart from db with cartId.
   // Return cart or else null if cart not found.
 
@@ -20,14 +21,9 @@ export const cartGet = async (cartId: string): Promise<Cart | null> => {
     return null;
   }
 
-  return {
-    id: cartId,
-    lines: [
-      { product_id: "gloves-with-holes", qty: 2 },
-      { product_id: "brewster-mug", qty: 1 },
-    ],
-    currency: "USD",
-  };
+  const cart = await getCart(cartId);
+
+  return cart;
 };
 
 export const calculateCartTotalNetWithoutShipping = async (
@@ -37,7 +33,7 @@ export const calculateCartTotalNetWithoutShipping = async (
     return 0;
   }
 
-  // TODO
-  // To compute cart total, do a join on tables cart, cart_line, and product
-  return 888123666.9;
+  const cartTotalWithoutShipping = await cartTotalNetWithoutShipping(cart);
+
+  return cartTotalWithoutShipping;
 };
