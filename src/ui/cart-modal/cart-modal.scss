@@ -1,0 +1,10 @@
+.CartModal {
+  transform: translateX(0);
+  animation: keyframes-CartModal 1s forwards;
+
+  @keyframes keyframes-CartModal {
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+}
