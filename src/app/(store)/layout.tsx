@@ -3,13 +3,18 @@ import Footer from "@/ui/footer/footer";
 
 export default function StoreLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <>
       <MainNav />
-      <main>{children}</main>
+      <main>
+        {children}
+        {modal}
+      </main>
       <Footer />
     </>
   );
