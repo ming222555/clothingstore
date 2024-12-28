@@ -9,14 +9,26 @@
   cursor: pointer;
 }
 
-.fs-7 {
+.fs-12 {
+  font-size: 1.2rem;
+}
+
+.fs-0875 {
+  font-size: 0.875rem;
+}
+
+.fs-075 {
   font-size: 0.75rem;
 }
 
-.mw-1rem {
+.min-w-1rem {
   min-width: 1rem;
 }
 
 a {
   text-decoration: none;
+}
+
+ul {
+  list-style: none;
 }

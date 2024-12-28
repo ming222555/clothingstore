@@ -1,6 +1,19 @@
 .CartModal {
   transform: translateX(0);
-  animation: keyframes-CartModal 1s forwards;
+  animation: keyframes-CartModal 0.5s forwards;
+
+  width: 100%;
+  height: 80%;
+
+  transition: height 1s;
+
+  @include media-breakpoint-up(sm) {
+    width: 50%;
+    height: 100%;
+  }
+  @include media-breakpoint-up(lg) {
+    width: 33%;
+  }
 
   @keyframes keyframes-CartModal {
     100% {

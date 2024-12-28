@@ -39,7 +39,7 @@ const CartSummaryNavInner = async () => {
       data-tooltip-id="shopping-bag-icon-tooltip"
     >
       <ShoppingBagIcon />
-      <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-warning rounded-pill fs-7 mw-1rem">
+      <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-warning rounded-pill fs-075 min-w-1rem">
         {totalItems}
       </span>
 
