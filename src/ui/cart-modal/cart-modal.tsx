@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
 
@@ -15,9 +17,57 @@ export default function CartModal() {
             (open full view)
           </YnsLink>
         </header>
-        <ul className="flex-grow-1 p-3 m-0 overflow-auto">
-          <li>line 1</li>
-          <li>line 2</li>
+        <ul className="flex-grow-1 p-3 pt-0 m-0 overflow-auto">
+          <li className="py-4 border-bottom border-secondary-subtle">
+            <div className="d-flex">
+              <div
+                className="position-relative bg-warning align-self-center"
+                style={{
+                  width: "3.8rem",
+                  height: "3.8rem",
+                  outline: "1px solid blue",
+                }}
+              >
+                <Image src="/pop.jpg" fill alt="" />
+              </div>
+              <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
+                <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
+                  One shoe
+                </p>
+                <p className="fs-0875 fw-medium p-0 mt-2 mb-0 bg-info">
+                  Quantity: 1
+                </p>
+              </div>
+              <div className="fs-0875 fw-medium bg-warning">
+                <p>$299.00</p>
+              </div>
+            </div>
+          </li>
+          <li className="py-4 border-bottom border-secondary-subtle">
+            <div className="d-flex">
+              <div
+                className="position-relative bg-warning align-self-center"
+                style={{
+                  width: "3.8rem",
+                  height: "3.8rem",
+                  outline: "1px solid blue",
+                }}
+              >
+                <Image src="/pop.jpg" fill alt="" />
+              </div>
+              <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
+                <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
+                  Sunbeam Tote Ray Tomasz
+                </p>
+                <p className="fs-0875 fw-medium p-0 mt-2 mb-0 bg-info">
+                  Quantity: 1
+                </p>
+              </div>
+              <div className="fs-0875 fw-medium bg-warning">
+                <p>$299.00</p>
+              </div>
+            </div>
+          </li>
           <li>line 3</li>
           <li>line 1</li>
           <li>line 2</li>
