@@ -14,7 +14,7 @@ function initDb() {
     CREATE TABLE IF NOT EXISTS product (
       id TEXT PRIMARY KEY, 
       name TEXT,
-      price REAL
+      unit_price REAL
     )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS cart_line (
@@ -31,12 +31,12 @@ function initDb() {
 
   if (stmt.get().count === 0) {
     db.exec(`
-    INSERT INTO product (id, name, price)
+    INSERT INTO product (id, name, unit_price)
     VALUES ('gloves-with-holes', 'Gloves with holes', 4.99)
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, price)
+    INSERT INTO product (id, name, unit_price)
     VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16)
   `);
   }
@@ -157,7 +157,7 @@ export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
   const cart_id = cart.id;
 
   const stmt = db.prepare(`
-    SELECT SUM( cl.qty * p.price) AS cart_total
+    SELECT SUM( cl.qty * p.unit_price) AS cart_total
     FROM cart AS c
     LEFT OUTER JOIN cart_line AS cl
     ON c.id = cl.cart_id

@@ -13,7 +13,7 @@ export default function CartModal() {
           id: "watch",
           name: "Watch",
           imgSrc: "/prod123.jpg",
-          price: 249999,
+          unit_price: 249999,
           qty: 3,
         },
       },
@@ -22,7 +22,7 @@ export default function CartModal() {
           id: "single-sock",
           name: "Single sock",
           imgSrc: "/prod123.jpg",
-          price: 4.99,
+          unit_price: 4.99,
           qty: 6,
         },
       },
@@ -31,7 +31,7 @@ export default function CartModal() {
           id: "one-shoe",
           name: "One shoe",
           imgSrc: "/prod123.jpg",
-          price: 299,
+          unit_price: 299,
           qty: 1,
         },
       },
@@ -40,7 +40,7 @@ export default function CartModal() {
           id: "sunbeam-tote-ray-tomasz",
           name: "Sunbeam Tote Ray Tomasz",
           imgSrc: "/prod123.jpg",
-          price: 25,
+          unit_price: 25,
           qty: 1,
         },
       },
@@ -86,7 +86,7 @@ export default function CartModal() {
                   </p>
                 </div>
                 <div className="fs-0875 fw-medium bg-warning">
-                  <p>${line.product.price}</p>
+                  <p>${line.product.unit_price}</p>
                 </div>
               </div>
             </li>
