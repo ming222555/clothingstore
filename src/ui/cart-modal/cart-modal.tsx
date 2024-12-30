@@ -1,51 +1,88 @@
 import Image from "next/image";
 
+import { getCartFromCookiesAction } from "@/actions/cart-actions";
+import { calculateCartTotalNetWithoutShipping } from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
 
-export default function CartModal() {
-  const cart = {
-    currency: "USD",
-    total: 750350.94,
-    lines: [
-      {
-        product: {
-          id: "watch",
-          name: "Watch",
-          imgSrc: "/prod123.jpg",
-          unit_price: 249999,
-          qty: 3,
-        },
-      },
-      {
-        product: {
-          id: "single-sock",
-          name: "Single sock",
-          imgSrc: "/prod123.jpg",
-          unit_price: 4.99,
-          qty: 6,
-        },
-      },
-      {
-        product: {
-          id: "one-shoe",
-          name: "One shoe",
-          imgSrc: "/prod123.jpg",
-          unit_price: 299,
-          qty: 1,
-        },
-      },
-      {
-        product: {
-          id: "sunbeam-tote-ray-tomasz",
-          name: "Sunbeam Tote Ray Tomasz",
-          imgSrc: "/prod123.jpg",
-          unit_price: 25,
-          qty: 1,
-        },
-      },
-    ],
-  };
+//////////// export default async function CartModal({ add }: { add: string | undefined }) {
+export default async function CartModal() {
+  // Argument add is the product id to add to cart e.g. "one-shoe"
+  ////////// const originalCart = await getCartFromCookiesAction();
+  const cart = await getCartFromCookiesAction();
+
+  // const cart = await Commerce.cartAddOptimistic({
+  //   add,
+  //   cart: originalCart,
+  // });
+
+  if (!cart || cart.lines.length === 0) {
+    return null;
+  }
+
+  /////////////// const total = await calculateCartTotalNetWithoutShipping(cart);
+  await calculateCartTotalNetWithoutShipping(cart);
+
+  // const cart = await Commerce.cartAddOptimistic({
+  //   add,
+  //   cart: originalCart,
+  // });
+  //
+  // if (!cart || cart.lines.length === 0) {
+  //   return null;
+  // }
+
+  // const cart = await Commerce.cartAddOptimistic({
+  //   add,
+  //   cart: originalCart,
+  // });
+  //
+  // if (!cart || cart.lines.length === 0) {
+  //   return null;
+  // }
+
+  // const cart = {
+  //   currency: "USD",
+  //   total: 750350.94,
+  //   lines: [
+  //     {
+  //       product: {
+  //         id: "watch",
+  //         name: "Watch",
+  //         imgSrc: "/prod123.jpg",
+  //         price: 249999,
+  //         qty: 3,
+  //       },
+  //     },
+  //     {
+  //       product: {
+  //         id: "single-sock",
+  //         name: "Single sock",
+  //         imgSrc: "/prod123.jpg",
+  //         price: 4.99,
+  //         qty: 6,
+  //       },
+  //     },
+  //     {
+  //       product: {
+  //         id: "one-shoe",
+  //         name: "One shoe",
+  //         imgSrc: "/prod123.jpg",
+  //         price: 299,
+  //         qty: 1,
+  //       },
+  //     },
+  //     {
+  //       product: {
+  //         id: "sunbeam-tote-ray-tomasz",
+  //         name: "Sunbeam Tote Ray Tomasz",
+  //         imgSrc: "/prod123.jpg",
+  //         price: 25,
+  //         qty: 1,
+  //       },
+  //     },
+  //   ],
+  // };
 
   return (
     <>
