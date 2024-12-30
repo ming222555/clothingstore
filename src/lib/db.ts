@@ -4,6 +4,9 @@ import type { Cart } from "@/lib/commerce-kit";
 
 const db = new sql("cart.db");
 
+const DEFAULT_CURRENCY = "USD";
+const QTY_TO_ADD_TO_CART = 1;
+
 function initDb() {
   db.exec(`
     CREATE TABLE IF NOT EXISTS cart (
@@ -203,6 +206,146 @@ export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
   }
   return cart_total;
 }
+
+export async function getCartWithUnitPrice(cart: Cart): Promise<Cart | null> {
+  const cart_lines = cart.lines;
+  const placeholders = cart_lines.map(() => "?").join(",");
+
+  const products = cart_lines.map((line) => `${line.product_id}`);
+
+  const cart_id = cart.id;
+
+  const stmt = db.prepare(`
+    SELECT c.id, c.currency, cl.product_id, cl.qty, p.unit_price
+    FROM cart AS c
+    LEFT OUTER JOIN cart_line AS cl
+    ON c.id = cl.cart_id
+    LEFT OUTER JOIN product AS p
+    ON cl.product_id = p.id
+    WHERE c.id = ? AND p.id IN (${placeholders})`);
+
+  // Sample result sets
+  //
+  // [
+  //   {
+  //       "id": "pi_123",
+  //       "currency": "USD",
+  //       "product_id": "arctic-circle-neck-warmer",
+  //       "qty": 7
+  //   },
+  //   {
+  //       "id": "pi_123",
+  //       "currency": "USD",
+  //       "product_id": "gloves-with-holes",
+  //       "qty": 6
+  //   }
+  // ]
+  //
+  // cart table non empty but cart_line table empty.
+  // [ { id: 'pi_123', currency: 'USD', product_id: null, qty: null } ]
+  //
+  // cart table empty
+  // []
+
+  // return stmt.all(id);
+
+  const resultset = stmt.all(cart_id, ...products);
+
+  if (resultset.length === 0) {
+    return null;
+  }
+
+  const id = resultset[0].id;
+  const currency = resultset[0].currency;
+
+  if (resultset.length === 1) {
+    if (resultset[0].product_id === null) {
+      return {
+        id,
+        lines: [],
+        currency: "",
+      };
+    }
+  }
+
+  return {
+    id: id,
+    lines: resultset,
+    currency,
+  };
+}
+
+export const getPreviewCartAddOptimistic = async ({
+  add,
+  cart,
+}: {
+  add: string;
+  cart: Cart | null;
+}): Promise<Cart | null> => {
+  /**
+   * Check product-id to be added
+   * if !add
+   *   check cart
+   *   if !cart || cart has no lines
+   *     return null
+   *   retrieve from db the unit_price of product_id's in cart lines and append to cart lines
+   *   return updated cart
+   * else
+   *   if cart
+   *     append (product-id to be added, qty = 1) to cart lines
+   *     retrieve from db the unit_price of product_id's in cart lines and append to cart lines
+   *     return updated cart
+   *   else
+   *     make new cart object
+   *     {
+   *        id: '',
+   *        lines: [{ product_id: add , qty: 1}];
+    unit_price?: number;
+  }],
+   *      
+  lines: [];
+  currency: string;
+}
+   *     
+   *     
+   */
+
+  const originalCart = cart;
+
+  let cartWithUnitPrice = null;
+
+  if (!add) {
+    if (!originalCart || originalCart.lines.length === 0) {
+      return null;
+    }
+    cartWithUnitPrice = await getCartWithUnitPrice(originalCart);
+    return cartWithUnitPrice;
+  }
+
+  if (originalCart) {
+    const originalCartWithAppendedProductLine = {
+      ...originalCart,
+      lines: [
+        ...originalCart.lines,
+        { product_id: add, qty: QTY_TO_ADD_TO_CART },
+      ],
+    };
+
+    cartWithUnitPrice = await getCartWithUnitPrice(
+      originalCartWithAppendedProductLine
+    );
+    return cartWithUnitPrice;
+  }
+
+  const newCart = {
+    id: "",
+    lines: [{ product_id: add, qty: 1 }],
+    currency: DEFAULT_CURRENCY,
+  };
+
+  cartWithUnitPrice = await getCartWithUnitPrice(newCart);
+  return cartWithUnitPrice;
+};
 
 // export async function getPosts(maxNumber) {
 //   let limitClause = "";

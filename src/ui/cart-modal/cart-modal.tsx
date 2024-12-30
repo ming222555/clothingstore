@@ -1,27 +1,27 @@
 import Image from "next/image";
 
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
-import { calculateCartTotalNetWithoutShipping } from "@/lib/commerce-kit";
+import {
+  calculateCartTotalNetWithoutShipping,
+  cartAddOptimistic,
+} from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
 
-//////////// export default async function CartModal({ add }: { add: string | undefined }) {
-export default async function CartModal() {
+export default async function CartModal({ add }: { add: string | undefined }) {
   // Argument add is the product id to add to cart e.g. "one-shoe"
-  ////////// const originalCart = await getCartFromCookiesAction();
-  const cart = await getCartFromCookiesAction();
+  const originalCart = await getCartFromCookiesAction();
 
-  // const cart = await Commerce.cartAddOptimistic({
-  //   add,
-  //   cart: originalCart,
-  // });
+  const cart = await cartAddOptimistic({
+    add: `${add ? add : ""}`,
+    cart: originalCart,
+  });
 
   if (!cart || cart.lines.length === 0) {
     return null;
   }
 
-  /////////////// const total = await calculateCartTotalNetWithoutShipping(cart);
-  await calculateCartTotalNetWithoutShipping(cart);
+  const total = await calculateCartTotalNetWithoutShipping(cart);
 
   // const cart = await Commerce.cartAddOptimistic({
   //   add,
@@ -101,7 +101,7 @@ export default async function CartModal() {
           {cart.lines.map((line) => (
             <li
               className="py-4 border-bottom border-secondary-subtle"
-              key={line.product.id}
+              key={line.product_id}
             >
               <div className="d-flex">
                 <div
@@ -112,7 +112,7 @@ export default async function CartModal() {
                     outline: "1px solid blue",
                   }}
                 >
-                  <Image src={line.product.imgSrc} fill alt="" />
+                  <Image src={line.imgSrc!} fill alt="" />
                 </div>
                 <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
                   <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">

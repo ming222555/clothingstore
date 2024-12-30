@@ -1,4 +1,8 @@
-import { getCart, cartTotalNetWithoutShipping } from "@/lib/db";
+import {
+  getCart,
+  cartTotalNetWithoutShipping,
+  getPreviewCartAddOptimistic,
+} from "@/lib/db";
 
 export interface Cart {
   id: string;
@@ -36,4 +40,14 @@ export const calculateCartTotalNetWithoutShipping = async (
   const cartTotalWithoutShipping = await cartTotalNetWithoutShipping(cart);
 
   return cartTotalWithoutShipping;
+};
+
+export const cartAddOptimistic = async ({
+  add,
+  cart,
+}: {
+  add: string;
+  cart: Cart | null;
+}): Promise<Cart | null> => {
+  return await getPreviewCartAddOptimistic({ add, cart });
 };
