@@ -7,6 +7,7 @@ import {
 } from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
+import { formatMoney } from "@/lib/utils/utils";
 
 export default async function CartModal({ add }: { add: string | undefined }) {
   // Argument add is the product id to add to cart e.g. "one-shoe"
@@ -23,66 +24,7 @@ export default async function CartModal({ add }: { add: string | undefined }) {
 
   const total = await calculateCartTotalNetWithoutShipping(cart);
 
-  // const cart = await Commerce.cartAddOptimistic({
-  //   add,
-  //   cart: originalCart,
-  // });
-  //
-  // if (!cart || cart.lines.length === 0) {
-  //   return null;
-  // }
-
-  // const cart = await Commerce.cartAddOptimistic({
-  //   add,
-  //   cart: originalCart,
-  // });
-  //
-  // if (!cart || cart.lines.length === 0) {
-  //   return null;
-  // }
-
-  // const cart = {
-  //   currency: "USD",
-  //   total: 750350.94,
-  //   lines: [
-  //     {
-  //       product: {
-  //         id: "watch",
-  //         name: "Watch",
-  //         imgSrc: "/prod123.jpg",
-  //         price: 249999,
-  //         qty: 3,
-  //       },
-  //     },
-  //     {
-  //       product: {
-  //         id: "single-sock",
-  //         name: "Single sock",
-  //         imgSrc: "/prod123.jpg",
-  //         price: 4.99,
-  //         qty: 6,
-  //       },
-  //     },
-  //     {
-  //       product: {
-  //         id: "one-shoe",
-  //         name: "One shoe",
-  //         imgSrc: "/prod123.jpg",
-  //         price: 299,
-  //         qty: 1,
-  //       },
-  //     },
-  //     {
-  //       product: {
-  //         id: "sunbeam-tote-ray-tomasz",
-  //         name: "Sunbeam Tote Ray Tomasz",
-  //         imgSrc: "/prod123.jpg",
-  //         price: 25,
-  //         qty: 1,
-  //       },
-  //     },
-  //   ],
-  // };
+  console.log("total", total);
 
   return (
     <>
@@ -104,95 +46,29 @@ export default async function CartModal({ add }: { add: string | undefined }) {
               key={line.product_id}
             >
               <div className="d-flex">
-                <div
-                  className="position-relative bg-warning align-self-center"
-                  style={{
-                    width: "3.8rem",
-                    height: "3.8rem",
-                    outline: "1px solid blue",
-                  }}
-                >
-                  <Image src={line.imgSrc!} fill alt="" />
-                </div>
+                <Image
+                  src={line.imgSrc}
+                  width={60}
+                  height={60}
+                  alt=""
+                  className="align-self-center"
+                />
+
                 <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
                   <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
-                    {line.product.name}
+                    {line.name}
                   </p>
                   <p className="fs-0875 fw-medium p-0 mt-2 mb-0 bg-info text-black-50">
-                    Quantity: {line.product.qty}
+                    Quantity: {line.qty}
                   </p>
                 </div>
                 <div className="fs-0875 fw-medium bg-warning">
-                  <p>${line.product.unit_price}</p>
+                  <p>${line.unit_price}</p>
                 </div>
               </div>
             </li>
           ))}
-          {/* <li className="py-4 border-bottom border-secondary-subtle">
-            <div className="d-flex">
-              <div
-                className="position-relative bg-warning align-self-center"
-                style={{
-                  width: "3.8rem",
-                  height: "3.8rem",
-                  outline: "1px solid blue",
-                }}
-              >
-                <Image src="/pop.jpg" fill alt="" />
-              </div>
-              <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
-                <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
-                  One shoe
-                </p>
-                <p className="fs-0875 fw-medium p-0 mt-2 mb-0 bg-info">
-                  Quantity: 1
-                </p>
-              </div>
-              <div className="fs-0875 fw-medium bg-warning">
-                <p>$299.00</p>
-              </div>
-            </div>
-          </li>
-          <li className="py-4 border-bottom border-secondary-subtle">
-            <div className="d-flex">
-              <div
-                className="position-relative bg-warning align-self-center"
-                style={{
-                  width: "3.8rem",
-                  height: "3.8rem",
-                  outline: "1px solid blue",
-                }}
-              >
-                <Image src="/pop.jpg" fill alt="" />
-              </div>
-              <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
-                <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
-                  Sunbeam Tote Ray Tomasz
-                </p>
-                <p className="fs-0875 fw-medium p-0 mt-2 mb-0 bg-info">
-                  Quantity: 1
-                </p>
-              </div>
-              <div className="fs-0875 fw-medium bg-warning">
-                <p>$299.00</p>
-              </div>
-            </div>
-          </li> */}
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
+
           <li>line 3</li>
           <li>line 1</li>
           <li>line 2</li>
@@ -214,7 +90,7 @@ export default async function CartModal({ add }: { add: string | undefined }) {
         <div className="p-3">
           <div className="d-flex justify-content-between fw-medium">
             <span>Total</span>
-            <span className="fs-12">$7,915.00</span>
+            <span className="fs-12">{formatMoney(total, cart.currency)}</span>
           </div>
           <p className="text-black-50 fs-0875 mb-3">
             Shipping and taxes will be added at the next step

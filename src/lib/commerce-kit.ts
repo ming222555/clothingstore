@@ -4,14 +4,24 @@ import {
   getPreviewCartAddOptimistic,
 } from "@/lib/db";
 
-export interface Cart {
+export type Cart = {
   id: string;
   lines: {
     product_id: string;
     qty: number;
   }[];
   currency: string;
-}
+};
+
+export type CartDetailed = Omit<Cart, "lines"> & {
+  lines: {
+    product_id: string;
+    qty: number;
+    name: string;
+    unit_price: number;
+    imgSrc: string;
+  }[];
+};
 
 export const cartGet = async (cartId: string): Promise<Cart | null> => {
   // Retrieve cart from db with cartId.
@@ -31,7 +41,7 @@ export const cartGet = async (cartId: string): Promise<Cart | null> => {
 };
 
 export const calculateCartTotalNetWithoutShipping = async (
-  cart: Cart
+  cart: Cart | CartDetailed
 ): Promise<number> => {
   if (!cart) {
     return 0;
@@ -48,6 +58,6 @@ export const cartAddOptimistic = async ({
 }: {
   add: string;
   cart: Cart | null;
-}): Promise<Cart | null> => {
+}): Promise<CartDetailed | null> => {
   return await getPreviewCartAddOptimistic({ add, cart });
 };

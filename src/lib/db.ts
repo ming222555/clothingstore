@@ -1,11 +1,11 @@
 import sql from "better-sqlite3";
 
-import type { Cart } from "@/lib/commerce-kit";
+import type { Cart, CartDetailed } from "@/lib/commerce-kit";
 
 const db = new sql("cart.db");
 
 const DEFAULT_CURRENCY = "USD";
-const QTY_TO_ADD_TO_CART = 1;
+const DEFAULT_QTY_TO_ADD_TO_CART = 1;
 
 function initDb() {
   db.exec(`
@@ -17,7 +17,8 @@ function initDb() {
     CREATE TABLE IF NOT EXISTS product (
       id TEXT PRIMARY KEY, 
       name TEXT,
-      unit_price REAL
+      unit_price REAL,
+      imgSrc TEXT
     )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS cart_line (
@@ -34,13 +35,18 @@ function initDb() {
 
   if (stmt.get().count === 0) {
     db.exec(`
-    INSERT INTO product (id, name, unit_price)
-    VALUES ('gloves-with-holes', 'Gloves with holes', 4.99)
+    INSERT INTO product (id, name, unit_price, imgSrc)
+    VALUES ('gloves-with-holes', 'Gloves with holes', 6.99, '/img-glove.jpg')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price)
-    VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16)
+    INSERT INTO product (id, name, unit_price, imgSrc)
+    VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16.99, '/img-arctic.jpg')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, imgSrc)
+    VALUES ('sunbeam-tote-ray-tomasz', 'Sunbeam Tote Ray Tomasz', 25.00, '/img-tomasz.jpg')
   `);
   }
 
@@ -66,6 +72,11 @@ function initDb() {
     db.exec(`
       INSERT INTO cart_line (cart_id, product_id, qty)
       VALUES ('pi_123', 'arctic-circle-neck-warmer', 7)
+    `);
+
+    db.exec(`
+      INSERT INTO cart_line (cart_id, product_id, qty)
+      VALUES ('pi_123', 'sunbeam-tote-ray-tomasz', 20)
     `);
   }
 }
@@ -142,7 +153,9 @@ export async function getCart(id: string): Promise<Cart | null> {
   };
 }
 
-export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
+export async function cartTotalNetWithoutShipping(
+  cart: Cart | CartDetailed
+): Promise<number> {
   // const stmt = db.prepare(`
   //   SELECT c.id, c.currency, cl.product_id, cl.qty
   //   FROM cart AS c
@@ -207,7 +220,9 @@ export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
   return cart_total;
 }
 
-export async function getCartWithUnitPrice(cart: Cart): Promise<Cart | null> {
+export async function getCartWithDetails(
+  cart: Cart
+): Promise<CartDetailed | null> {
   const cart_lines = cart.lines;
   const placeholders = cart_lines.map(() => "?").join(",");
 
@@ -216,7 +231,7 @@ export async function getCartWithUnitPrice(cart: Cart): Promise<Cart | null> {
   const cart_id = cart.id;
 
   const stmt = db.prepare(`
-    SELECT c.id, c.currency, cl.product_id, cl.qty, p.unit_price
+    SELECT c.id, c.currency, cl.product_id, cl.qty, p.name, p.unit_price, p.imgSrc
     FROM cart AS c
     LEFT OUTER JOIN cart_line AS cl
     ON c.id = cl.cart_id
@@ -275,15 +290,41 @@ export async function getCartWithUnitPrice(cart: Cart): Promise<Cart | null> {
   };
 }
 
+async function getNewCartWithProductLineToAdd(
+  product_id: string
+): Promise<CartDetailed | null> {
+  const stmt = db.prepare(`
+    SELECT product_id, ${DEFAULT_QTY_TO_ADD_TO_CART} AS qty, name, unit_price, imgSrc
+    FROM product
+    WHERE id = ?`);
+
+  const resultset = stmt.all(product_id);
+
+  // no such product in db
+  if (resultset.length === 0) {
+    return null;
+  }
+
+  const newCartline = resultset[0];
+
+  const newCart = {
+    id: "",
+    lines: newCartline,
+    currency: DEFAULT_CURRENCY,
+  };
+
+  return newCart;
+}
+
 export const getPreviewCartAddOptimistic = async ({
   add,
   cart,
 }: {
   add: string;
   cart: Cart | null;
-}): Promise<Cart | null> => {
+}): Promise<CartDetailed | null> => {
   /**
-   * Check product-id to be added
+   * Check product_id to be added
    * if !add
    *   check cart
    *   if !cart || cart has no lines
@@ -292,22 +333,13 @@ export const getPreviewCartAddOptimistic = async ({
    *   return updated cart
    * else
    *   if cart
-   *     append (product-id to be added, qty = 1) to cart lines
+   *     append (product_id to be added, qty = 1) to cart lines
    *     retrieve from db the unit_price of product_id's in cart lines and append to cart lines
    *     return updated cart
    *   else
    *     make new cart object
-   *     {
-   *        id: '',
-   *        lines: [{ product_id: add , qty: 1}];
-    unit_price?: number;
-  }],
-   *      
-  lines: [];
-  currency: string;
-}
-   *     
-   *     
+   *     ...
+   *
    */
 
   const originalCart = cart;
@@ -318,7 +350,7 @@ export const getPreviewCartAddOptimistic = async ({
     if (!originalCart || originalCart.lines.length === 0) {
       return null;
     }
-    cartWithUnitPrice = await getCartWithUnitPrice(originalCart);
+    cartWithUnitPrice = await getCartWithDetails(originalCart);
     return cartWithUnitPrice;
   }
 
@@ -327,23 +359,19 @@ export const getPreviewCartAddOptimistic = async ({
       ...originalCart,
       lines: [
         ...originalCart.lines,
-        { product_id: add, qty: QTY_TO_ADD_TO_CART },
+        { product_id: add, qty: DEFAULT_QTY_TO_ADD_TO_CART },
       ],
     };
 
-    cartWithUnitPrice = await getCartWithUnitPrice(
+    cartWithUnitPrice = await getCartWithDetails(
       originalCartWithAppendedProductLine
     );
     return cartWithUnitPrice;
   }
 
-  const newCart = {
-    id: "",
-    lines: [{ product_id: add, qty: 1 }],
-    currency: DEFAULT_CURRENCY,
-  };
+  // No cart to begin with
 
-  cartWithUnitPrice = await getCartWithUnitPrice(newCart);
+  cartWithUnitPrice = await getNewCartWithProductLineToAdd(add);
   return cartWithUnitPrice;
 };
 
