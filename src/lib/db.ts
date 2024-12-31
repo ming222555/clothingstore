@@ -48,6 +48,11 @@ function initDb() {
     INSERT INTO product (id, name, unit_price, imgSrc)
     VALUES ('sunbeam-tote-ray-tomasz', 'Sunbeam Tote Ray Tomasz', 25.00, '/img-tomasz.jpg')
   `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, imgSrc)
+    VALUES ('one-shoe', 'One Shoe', 32.00, '/one-shoe.jpg')
+  `);
   }
 
   // Creating dummy cart if not exist already
@@ -217,30 +222,36 @@ export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
   return cart_total;
 }
 
-export async function cartOptimisticTotalNetWithoutShipping(
-  cart: Cart,
+export async function cartAddOptimisticTotalNetWithoutShipping(
+  cart: Cart | null,
   product_id: string
 ): Promise<number> {
-  const price = await getProductUnitPrice(product_id);
+  let unit_price = 0;
 
-  console.log("pricepriceprice", price);
+  const product = await getProduct(product_id);
 
+  if (product) {
+    unit_price = product.unit_price;
+  }
   if (!cart) {
-    return price;
+    return unit_price;
   }
 
   const cartTotalWithoutShipping = await cartTotalNetWithoutShipping(cart);
 
-  console.log("cartTotalWithoutShippingqqqqqqqqq", cartTotalWithoutShipping);
+  const total = cartTotalWithoutShipping + unit_price;
 
-  const total = cartTotalWithoutShipping + price;
-  console.log("totaltotaltotaltotaltotal", total);
   return total;
 }
 
-export async function getProductUnitPrice(product_id: string): Promise<number> {
+export async function getProduct(product_id: string): Promise<{
+  id: string;
+  name: string;
+  unit_price: number;
+  imgSrc: string;
+} | null> {
   const stmt = db.prepare(`
-    SELECT unit_price
+    SELECT id, name, unit_price, imgSrc
     FROM product
     WHERE id = ?`);
 
@@ -248,16 +259,10 @@ export async function getProductUnitPrice(product_id: string): Promise<number> {
 
   // no such product in db
   if (resultset.length === 0) {
-    return 0;
+    return null;
   }
 
-  const price = resultset[0].unit_price;
-
-  if (price === null) {
-    return 0;
-  }
-
-  return price;
+  return resultset[0];
 }
 
 export async function getCartWithDetails(
@@ -330,32 +335,6 @@ export async function getCartWithDetails(
   };
 }
 
-async function getPreviewNewCartWithProductLineToAdd(
-  product_id: string
-): Promise<CartDetailed | null> {
-  const stmt = db.prepare(`
-    SELECT product_id, ${DEFAULT_QTY_TO_ADD_TO_CART} AS qty, name, unit_price, imgSrc
-    FROM product
-    WHERE id = ?`);
-
-  const resultset = stmt.all(product_id);
-
-  // no such product in db
-  if (resultset.length === 0) {
-    return null;
-  }
-
-  const newCartline = resultset[0];
-
-  const newCart = {
-    id: "",
-    lines: newCartline,
-    currency: DEFAULT_CURRENCY,
-  };
-
-  return newCart;
-}
-
 export const getPreviewCartAddOptimistic = async ({
   add,
   cart,
@@ -383,7 +362,7 @@ export const getPreviewCartAddOptimistic = async ({
    */
 
   const originalCart = cart;
-  let cartWithUnitPrice = null;
+  let cartWithUnitPrice: CartDetailed | null = null;
 
   if (!add) {
     if (!originalCart || originalCart.lines.length === 0) {
@@ -395,28 +374,42 @@ export const getPreviewCartAddOptimistic = async ({
 
   if (originalCart && originalCart.lines.length) {
     const pos = originalCart.lines.findIndex((line) => line.product_id === add);
-    console.log("poooooooooooooooooos", pos);
-    if (pos < 0) {
-      const originalCartWithAppendedProductLine = {
-        ...originalCart,
-        lines: [
-          ...originalCart.lines,
-          {
-            id: originalCart.id,
-            product_id: add,
-            qty: DEFAULT_QTY_TO_ADD_TO_CART,
-          },
-        ],
-      };
 
-      cartWithUnitPrice = await getCartWithDetails(
-        originalCartWithAppendedProductLine
-      );
-      return cartWithUnitPrice;
+    if (pos < 0) {
+      cartWithUnitPrice = await getCartWithDetails(originalCart);
+
+      const dupCartLines = [...cartWithUnitPrice!.lines];
+
+      const product = await getProduct(add);
+
+      let originalCartWithAppendedProductLine: CartDetailed | null = null;
+
+      if (product) {
+        originalCartWithAppendedProductLine = {
+          ...originalCart,
+          lines: [
+            {
+              product_id: add,
+              qty: DEFAULT_QTY_TO_ADD_TO_CART,
+              name: product.name,
+              unit_price: product.unit_price,
+              imgSrc: product.imgSrc,
+            },
+            ...dupCartLines,
+          ],
+        };
+      } else {
+        originalCartWithAppendedProductLine = {
+          ...originalCart,
+          lines: [...dupCartLines],
+        };
+      }
+
+      return originalCartWithAppendedProductLine;
     }
 
-    // update existing cart line of product_id by up qty by 1
-    cartWithUnitPrice = await getCartWithDetails(originalCart!);
+    // update existing cart line with product_id by up qty by 1
+    cartWithUnitPrice = await getCartWithDetails(originalCart);
 
     const dupCartLines = [...cartWithUnitPrice!.lines];
     dupCartLines[pos] = { ...cartWithUnitPrice!.lines[pos] };
@@ -432,10 +425,30 @@ export const getPreviewCartAddOptimistic = async ({
 
   // No cart to begin with
 
-  cartWithUnitPrice = await getPreviewNewCartWithProductLineToAdd(add);
-  return cartWithUnitPrice;
+  const product = await getProduct(add);
+
+  if (product) {
+    return {
+      id: "",
+      lines: [
+        {
+          product_id: add,
+          qty: DEFAULT_QTY_TO_ADD_TO_CART,
+          name: product.name,
+          unit_price: product.unit_price,
+          imgSrc: product.imgSrc,
+        },
+      ],
+      currency: DEFAULT_CURRENCY,
+    };
+  }
+
+  return null;
 };
 
+////// for reference only
+//////
+//////
 // export async function getPosts(maxNumber) {
 //   let limitClause = "";
 //

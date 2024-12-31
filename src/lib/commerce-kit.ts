@@ -1,9 +1,4 @@
-import {
-  getCart,
-  cartTotalNetWithoutShipping,
-  cartOptimisticTotalNetWithoutShipping,
-  getPreviewCartAddOptimistic,
-} from "@/lib/db";
+import * as Db from "@/lib/db";
 
 export type Cart = {
   id: string;
@@ -36,7 +31,7 @@ export const cartGet = async (cartId: string): Promise<Cart | null> => {
     return null;
   }
 
-  const cart = await getCart(cartId);
+  const cart = await Db.getCart(cartId);
 
   return cart;
 };
@@ -48,16 +43,19 @@ export const calculateCartTotalNetWithoutShipping = async (
     return 0;
   }
 
-  const total = await cartTotalNetWithoutShipping(cart);
+  const total = await Db.cartTotalNetWithoutShipping(cart);
 
   return total;
 };
 
-export const calculateOptimisticCartTotalNetWithoutShipping = async (
-  cart: Cart,
+export const calculateCartAddOptimisticCartTotalNetWithoutShipping = async (
+  cart: Cart | null,
   product_id: string
 ): Promise<number> => {
-  const total = await cartOptimisticTotalNetWithoutShipping(cart, product_id);
+  const total = await Db.cartAddOptimisticTotalNetWithoutShipping(
+    cart,
+    product_id
+  );
 
   return total;
 };
@@ -69,5 +67,5 @@ export const cartAddOptimistic = async ({
   add: string;
   cart: Cart | null;
 }): Promise<CartDetailed | null> => {
-  return await getPreviewCartAddOptimistic({ add, cart });
+  return await Db.getPreviewCartAddOptimistic({ add, cart });
 };

@@ -33,6 +33,8 @@ export default function RootLayout({
             <Link href="/cart-overlay?add=arctic-circle-neck-warmer">
               arctic-circle-neck-warmer add cart
             </Link>
+            <Link href="/cart-overlay?add=one-shoe">one-shoe add cart</Link>{" "}
+            <Link href="/cart-overlay?add=dummy-prod">dummy</Link>
           </div>
           {children}
         </div>

@@ -1,11 +1,7 @@
 import Image from "next/image";
 
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
-import {
-  calculateCartTotalNetWithoutShipping,
-  calculateOptimisticCartTotalNetWithoutShipping,
-  cartAddOptimistic,
-} from "@/lib/commerce-kit";
+import * as Commerce from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
 import { formatMoney } from "@/lib/utils/utils";
@@ -14,14 +10,10 @@ export default async function CartModal({ add }: { add: string | undefined }) {
   // Argument add is the product id to add to cart e.g. "one-shoe"
   const originalCart = await getCartFromCookiesAction();
 
-  console.log("originalCart ))))))))))) CartModal )))", originalCart);
-
-  const cart = await cartAddOptimistic({
+  const cart = await Commerce.cartAddOptimistic({
     add: `${add ? add : ""}`,
     cart: originalCart,
   });
-
-  console.log("cartAddOptimistic CartModal )))", cart);
 
   if (!cart || cart.lines.length === 0) {
     return null;
@@ -30,15 +22,14 @@ export default async function CartModal({ add }: { add: string | undefined }) {
   let total = 0;
 
   if (add) {
-    total = await calculateOptimisticCartTotalNetWithoutShipping(
-      originalCart!,
-      add
-    );
+    total =
+      await Commerce.calculateCartAddOptimisticCartTotalNetWithoutShipping(
+        originalCart,
+        add
+      );
   } else {
-    total = await calculateCartTotalNetWithoutShipping(originalCart!);
+    total = await Commerce.calculateCartTotalNetWithoutShipping(originalCart!);
   }
-
-  console.log("total", total);
 
   return (
     <>

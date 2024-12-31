@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { ShoppingBagIcon } from "lucide-react";
 
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
-import { calculateCartTotalNetWithoutShipping } from "@/lib/commerce-kit";
+import * as Commerce from "@/lib/commerce-kit";
 import YnsLink from "@/ui/yns-link";
 import ShoppingBagIconTooltip from "./shopping-bag-icon-tooltip";
 
@@ -29,7 +29,7 @@ const CartSummaryNavInner = async () => {
     return <CartFallback />;
   }
 
-  const total = await calculateCartTotalNetWithoutShipping(cart);
+  const total = await Commerce.calculateCartTotalNetWithoutShipping(cart);
   const totalItems = cart.lines.reduce((accum, line) => accum + line.qty, 0);
 
   return (
