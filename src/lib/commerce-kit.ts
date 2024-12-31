@@ -1,6 +1,7 @@
 import {
   getCart,
   cartTotalNetWithoutShipping,
+  cartOptimisticTotalNetWithoutShipping,
   getPreviewCartAddOptimistic,
 } from "@/lib/db";
 
@@ -41,15 +42,24 @@ export const cartGet = async (cartId: string): Promise<Cart | null> => {
 };
 
 export const calculateCartTotalNetWithoutShipping = async (
-  cart: Cart | CartDetailed
+  cart: Cart
 ): Promise<number> => {
   if (!cart) {
     return 0;
   }
 
-  const cartTotalWithoutShipping = await cartTotalNetWithoutShipping(cart);
+  const total = await cartTotalNetWithoutShipping(cart);
 
-  return cartTotalWithoutShipping;
+  return total;
+};
+
+export const calculateOptimisticCartTotalNetWithoutShipping = async (
+  cart: Cart,
+  product_id: string
+): Promise<number> => {
+  const total = await cartOptimisticTotalNetWithoutShipping(cart, product_id);
+
+  return total;
 };
 
 export const cartAddOptimistic = async ({
