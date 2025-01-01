@@ -1,6 +1,5 @@
 "use client";
 
-import YnsLink from "@/ui/yns-link";
 import { useEffect } from "react";
 
 export default function Error({
@@ -16,9 +15,7 @@ export default function Error({
   return (
     <main className="w-75 m-auto">
       <h1 className="h2">An unexpected error has occurred</h1>
-      <button className="btn btn-info">
-        <YnsLink href="/">Back to Home</YnsLink>
-      </button>
+      <a href="http://localhost:3000/">Back to Home</a>
     </main>
   );
 }
