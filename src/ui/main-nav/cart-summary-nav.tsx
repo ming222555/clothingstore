@@ -13,6 +13,7 @@ const CartFallback = () => (
 );
 
 export default function CartSummaryNav() {
+  console.log("Cartttttttttttt");
   return (
     <Suspense fallback={<CartFallback />}>
       <CartSummaryNavInner />
@@ -21,8 +22,10 @@ export default function CartSummaryNav() {
 }
 
 const CartSummaryNavInner = async () => {
+  console.log("yyyyyyyyyy iiiiiiiiii CartSummaryNavInner");
   const cart = await getCartFromCookiesAction();
   if (!cart) {
+    console.log("yyyyyyyyyy iiiiiiiiii CartSummaryNavInner NO cart found");
     return <CartFallback />;
   }
   if (!cart.lines.length) {

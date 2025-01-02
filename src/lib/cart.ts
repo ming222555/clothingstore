@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 
 import { safeJsonParse } from "@/lib/utils/utils";
 
-const CART_COOKIE = "yns_cart";
+export const CART_COOKIE = "yns_cart";
 
 type CartCookieJson = { id: string; linesCount: number };
 
@@ -10,6 +10,7 @@ export async function getCartCookieJson() {
   const cookiesValue = await cookies();
   const cartCookieValue = cookiesValue.get(CART_COOKIE)?.value;
 
+  console.log("yyyyyyyyyy cartCookieValue", cartCookieValue);
   if (cartCookieValue === undefined) {
     return null;
   }

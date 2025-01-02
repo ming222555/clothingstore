@@ -5,6 +5,7 @@ import * as Commerce from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
 import { formatMoney } from "@/lib/utils/utils";
+import CartModalSideEffect from "./cart-modal-side-effect";
 
 export default async function CartModal({ add }: { add: string | undefined }) {
   // Argument add is the product id to add to cart e.g. "one-shoe"
@@ -108,6 +109,7 @@ export default async function CartModal({ add }: { add: string | undefined }) {
           </YnsLink>
         </div>
       </div>
+      <CartModalSideEffect add={add} />
     </>
   );
 }

@@ -1,4 +1,5 @@
 export default function Home() {
+  console.log("HHHHHHHHHHHHHHome page");
   return (
     <div>
       Home page

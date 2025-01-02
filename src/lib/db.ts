@@ -446,6 +446,30 @@ export const getPreviewCartAddOptimistic = async ({
   return null;
 };
 
+export async function createCart(product_id: string) {
+  const stmt = db.prepare(`
+    INSERT INTO cart (id, currency)
+    VALUES (?, ?)`);
+  let rc = stmt.run("pi_456", DEFAULT_CURRENCY);
+
+  const stmt2 = db.prepare(`
+    INSERT INTO cart_line (cart_id, product_id, qty)
+    VALUES (?, ?, 1)`);
+  rc = stmt2.run("pi_456", product_id);
+  console.log(rc);
+}
+
+export async function addToCart(product_id: string) {
+  const stmt = db.prepare(`
+    UPDATE cart_line
+    SET qty = qty + 1
+    WHERE cart_id = 'pi_456'
+    AND product_id = ?`);
+  const rc = stmt.run(product_id);
+
+  console.log(rc);
+}
+
 ////// for reference only
 //////
 //////

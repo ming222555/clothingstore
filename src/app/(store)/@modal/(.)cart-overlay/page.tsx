@@ -6,6 +6,6 @@ export default async function CartModalPage({
   searchParams: Promise<{ add?: string }>;
 }) {
   const add = (await searchParams).add;
-
+  console.log("HHHHHHHHHHHHHHgggggggg CartModalPage");
   return <CartModal add={add} />;
 }

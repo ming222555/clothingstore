@@ -8,6 +8,7 @@ export default function StoreLayout({
   children: React.ReactNode;
   modal: React.ReactNode;
 }) {
+  console.log("LLLLLLLLLLLLLLLLLLLLayout");
   return (
     <>
       <MainNav />
