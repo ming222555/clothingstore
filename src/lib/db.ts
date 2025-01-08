@@ -1,6 +1,21 @@
 import sql from "better-sqlite3";
 
-import type { Cart, CartDetailed } from "@/lib/commerce-kit";
+import type { Cart } from "@/lib/commerce-kit";
+
+type DbProduct = {
+  id: string;
+  name: string;
+  unit_price: number;
+  img_src: string;
+};
+
+export interface CartAddReturn {
+  error: string;
+  meta: {
+    id: string;
+    linesCount: number;
+  } | null;
+}
 
 const db = new sql("cart.db");
 
@@ -18,77 +33,48 @@ function initDb() {
       id TEXT PRIMARY KEY, 
       name TEXT,
       unit_price REAL,
-      imgSrc TEXT
+      img_src TEXT
     )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS cart_line (
       cart_id TEXT, 
       product_id TEXT, 
       qty INTEGER, 
+      unit_price REAL,
       PRIMARY KEY(cart_id, product_id),
       FOREIGN KEY(cart_id) REFERENCES cart(id) ON DELETE CASCADE, 
       FOREIGN KEY(product_id) REFERENCES product(id) ON DELETE CASCADE
     )`);
 
   // Creating products
-  let stmt = db.prepare("SELECT COUNT(*) AS count FROM product");
+  const stmt = db.prepare("SELECT COUNT(*) AS count FROM product");
 
   if (stmt.get().count === 0) {
     db.exec(`
-    INSERT INTO product (id, name, unit_price, imgSrc)
+    INSERT INTO product (id, name, unit_price, img_src)
     VALUES ('gloves-with-holes', 'Gloves with holes', 6.99, '/img-glove.jpg')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, imgSrc)
+    INSERT INTO product (id, name, unit_price, img_src)
     VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16.99, '/img-arctic.jpg')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, imgSrc)
+    INSERT INTO product (id, name, unit_price, img_src)
     VALUES ('sunbeam-tote-ray-tomasz', 'Sunbeam Tote Ray Tomasz', 25.00, '/img-tomasz.jpg')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, imgSrc)
+    INSERT INTO product (id, name, unit_price, img_src)
     VALUES ('one-shoe', 'One Shoe', 32.00, '/one-shoe.jpg')
   `);
-  }
-
-  // Creating dummy cart if not exist already
-  // and its corresponding cart_line
-  stmt = db.prepare("SELECT COUNT(*) AS count FROM cart");
-
-  if (stmt.get().count === 0) {
-    db.exec(`
-    INSERT INTO cart (id, currency)
-    VALUES ('pi_123', 'USD')
-  `);
-  }
-
-  stmt = db.prepare("SELECT COUNT(*) AS count FROM cart_line");
-
-  if (stmt.get().count === 0) {
-    db.exec(`
-      INSERT INTO cart_line (cart_id, product_id, qty)
-      VALUES ('pi_123', 'gloves-with-holes', 6)
-    `);
-
-    db.exec(`
-      INSERT INTO cart_line (cart_id, product_id, qty)
-      VALUES ('pi_123', 'arctic-circle-neck-warmer', 7)
-    `);
-
-    db.exec(`
-      INSERT INTO cart_line (cart_id, product_id, qty)
-      VALUES ('pi_123', 'sunbeam-tote-ray-tomasz', 20)
-    `);
   }
 }
 
 initDb();
 
-export async function getCart(id: string): Promise<Cart | null> {
+export async function cartGet(id: string): Promise<Cart | null> {
   // const stmt = db.prepare(`
   //   SELECT c.id, c.currency, cl.product_id, cl.qty
   //   FROM cart AS c
@@ -99,7 +85,7 @@ export async function getCart(id: string): Promise<Cart | null> {
   //   WHERE c.id = ?`);
 
   const stmt = db.prepare(`
-    SELECT c.id, c.currency, cl.product_id, cl.qty
+    SELECT c.id, c.currency, cl.product_id, cl.qty, p.name, p.unit_price, p.img_src
     FROM cart AS c
     LEFT OUTER JOIN cart_line AS cl
     ON c.id = cl.cart_id
@@ -222,36 +208,11 @@ export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
   return cart_total;
 }
 
-export async function cartAddOptimisticTotalNetWithoutShipping(
-  cart: Cart | null,
+export async function getProduct(
   product_id: string
-): Promise<number> {
-  let unit_price = 0;
-
-  const product = await getProduct(product_id);
-
-  if (product) {
-    unit_price = product.unit_price;
-  }
-  if (!cart) {
-    return unit_price;
-  }
-
-  const cartTotalWithoutShipping = await cartTotalNetWithoutShipping(cart);
-
-  const total = cartTotalWithoutShipping + unit_price;
-
-  return total;
-}
-
-export async function getProduct(product_id: string): Promise<{
-  id: string;
-  name: string;
-  unit_price: number;
-  imgSrc: string;
-} | null> {
+): Promise<DbProduct | null> {
   const stmt = db.prepare(`
-    SELECT id, name, unit_price, imgSrc
+    SELECT id, name, unit_price, img_src
     FROM product
     WHERE id = ?`);
 
@@ -265,24 +226,28 @@ export async function getProduct(product_id: string): Promise<{
   return resultset[0];
 }
 
-export async function getCartWithDetails(
-  cart: Cart
-): Promise<CartDetailed | null> {
-  const cart_lines = cart.lines;
-  const placeholders = cart_lines.map(() => "?").join(",");
-
-  const products = cart_lines.map((line) => `${line.product_id}`);
-
-  const cart_id = cart.id;
+export async function cartAddUpdate(
+  cartId: string,
+  product: DbProduct
+): Promise<CartAddReturn> {
+  // const stmt = db.prepare(`
+  //   SELECT c.id, c.currency, cl.product_id, cl.qty
+  //   FROM cart AS c
+  //   INNER JOIN cart_line AS cl
+  //   ON c.id = cl.cart_id
+  //   INNER JOIN product AS p
+  //   ON cl.product_id = p.id
+  //   WHERE c.id = ?`);
 
   const stmt = db.prepare(`
-    SELECT c.id, c.currency, cl.product_id, cl.qty, p.name, p.unit_price, p.imgSrc
+    SELECT c.id, cl.product_id
     FROM cart AS c
     LEFT OUTER JOIN cart_line AS cl
     ON c.id = cl.cart_id
     LEFT OUTER JOIN product AS p
     ON cl.product_id = p.id
-    WHERE c.id = ? AND p.id IN (${placeholders})`);
+    WHERE c.id = ?
+    AND cl.product_id = ?`);
 
   // Sample result sets
   //
@@ -308,218 +273,224 @@ export async function getCartWithDetails(
   // []
 
   // return stmt.all(id);
-
-  const resultset = stmt.all(cart_id, ...products);
+  console.log("cartId", cartId);
+  const resultset = stmt.all(cartId, product.id);
 
   if (resultset.length === 0) {
-    return null;
+    // return {
+    //   error: "Failed to find cart with given id",
+    //   meta: null,
+    // };
+    // create cart line for cart, assuming cart already exists
+    try {
+      const stmt = db.prepare(`
+          INSERT INTO cart_line (cart_id, product_id, qty, unit_price)
+          VALUES (?, ?, ?, ?)`);
+      stmt.run(
+        cartId,
+        product.id,
+        DEFAULT_QTY_TO_ADD_TO_CART,
+        product.unit_price
+      );
+
+      const stmtLinesCount = db.prepare(`
+          SELECT c.id, cl.product_id
+          FROM cart AS c
+          LEFT OUTER JOIN cart_line AS cl
+          ON c.id = cl.cart_id
+          LEFT OUTER JOIN product AS p
+          ON cl.product_id = p.id
+          WHERE c.id = ?`);
+      const resultset = stmtLinesCount.all(cartId);
+
+      return {
+        error: "",
+        meta: { id: cartId, linesCount: resultset.length },
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        error: "Failed to create cart line",
+        meta: null,
+      };
+    }
   }
 
-  const id = resultset[0].id;
-  const currency = resultset[0].currency;
-
   if (resultset.length === 1) {
-    if (resultset[0].product_id === null) {
+    // if (resultset[0].product_id === null) {
+    //   // create cart line for cart found
+    //   try {
+    //     const stmt = db.prepare(`
+    //       INSERT INTO cart_line (cart_id, product_id, qty, unit_price)
+    //       VALUES (?, ?, ?, ?)`);
+    //     stmt.run(
+    //       cartId,
+    //       product.id,
+    //       DEFAULT_QTY_TO_ADD_TO_CART,
+    //       product.unit_price
+    //     );
+    //
+    //     const stmtLinesCount = db.prepare(`
+    //       SELECT c.id, cl.product_id
+    //       FROM cart AS c
+    //       LEFT OUTER JOIN cart_line AS cl
+    //       ON c.id = cl.cart_id
+    //       LEFT OUTER JOIN product AS p
+    //       ON cl.product_id = p.id
+    //       WHERE c.id = ?`);
+    //     const resultset = stmtLinesCount.all(cartId);
+    //
+    //     return {
+    //       error: "",
+    //       meta: { id: cartId, linesCount: resultset.length },
+    //     };
+    //
+    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //   } catch (e: any) {
+    //     console.log(e.message);
+    //
+    //     return {
+    //       error: "Failed to create cart line",
+    //       meta: null,
+    //     };
+    //   }
+    // }
+
+    // update cart line for cart found
+    try {
+      const stmt = db.prepare(`
+      UPDATE cart_line
+      SET qty = qty + 1
+      WHERE cart_id = ?
+      AND product_id = ?`);
+      stmt.run(cartId, product.id);
+
+      const stmtLinesCount = db.prepare(`
+        SELECT c.id, cl.product_id
+        FROM cart AS c
+        LEFT OUTER JOIN cart_line AS cl
+        ON c.id = cl.cart_id
+        LEFT OUTER JOIN product AS p
+        ON cl.product_id = p.id
+        WHERE c.id = ?`);
+      const resultset = stmtLinesCount.all(cartId);
+
       return {
-        id,
-        lines: [],
-        currency: "",
+        error: "",
+        meta: { id: cartId, linesCount: resultset.length },
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        error: "Failed to update cart line",
+        meta: null,
       };
     }
   }
 
   return {
-    id: id,
-    lines: resultset,
-    currency,
+    error: "Add to cart aborted: multiple cart lines found for given product",
+    meta: null,
   };
 }
 
-export const getPreviewCartAddOptimistic = async ({
-  add,
-  cart,
-}: {
-  add: string;
-  cart: Cart | null;
-}): Promise<CartDetailed | null> => {
-  /**
-   * Check product_id to be added
-   * if !add
-   *   check cart
-   *   if !cart || cart has no lines
-   *     return null
-   *   retrieve from db the unit_price of product_id's in cart lines and append to cart lines
-   *   return updated cart
-   * else
-   *   if cart
-   *     append (product_id to be added, qty = 1) to cart lines
-   *     retrieve from db the unit_price of product_id's in cart lines and append to cart lines
-   *     return updated cart
-   *   else
-   *     make new cart object
-   *     ...
-   *
-   */
+export async function cartAddCreate(
+  product: DbProduct
+): Promise<CartAddReturn> {
+  const TRIES = 2;
+  let insertCartOk = false;
+  let newCartId = "";
 
-  const originalCart = cart;
-  let cartWithUnitPrice: CartDetailed | null = null;
-
-  if (!add) {
-    if (!originalCart || originalCart.lines.length === 0) {
-      return null;
-    }
-    cartWithUnitPrice = await getCartWithDetails(originalCart);
-    return cartWithUnitPrice;
-  }
-
-  if (originalCart && originalCart.lines.length) {
-    const pos = originalCart.lines.findIndex((line) => line.product_id === add);
-
-    if (pos < 0) {
-      cartWithUnitPrice = await getCartWithDetails(originalCart);
-
-      const dupCartLines = [...cartWithUnitPrice!.lines];
-
-      const product = await getProduct(add);
-
-      let originalCartWithAppendedProductLine: CartDetailed | null = null;
-
-      if (product) {
-        originalCartWithAppendedProductLine = {
-          ...originalCart,
-          lines: [
-            {
-              product_id: add,
-              qty: DEFAULT_QTY_TO_ADD_TO_CART,
-              name: product.name,
-              unit_price: product.unit_price,
-              imgSrc: product.imgSrc,
-            },
-            ...dupCartLines,
-          ],
-        };
-      } else {
-        originalCartWithAppendedProductLine = {
-          ...originalCart,
-          lines: [...dupCartLines],
-        };
-      }
-
-      return originalCartWithAppendedProductLine;
-    }
-
-    // update existing cart line with product_id by up qty by 1
-    cartWithUnitPrice = await getCartWithDetails(originalCart);
-
-    const dupCartLines = [...cartWithUnitPrice!.lines];
-    dupCartLines[pos] = { ...cartWithUnitPrice!.lines[pos] };
-    dupCartLines[pos].qty = dupCartLines[pos].qty + DEFAULT_QTY_TO_ADD_TO_CART;
-
-    const originalCartWithUpdatedProductLine = {
-      ...originalCart,
-      lines: dupCartLines,
-    };
-
-    return originalCartWithUpdatedProductLine;
-  }
-
-  // No cart to begin with
-
-  const product = await getProduct(add);
-
-  if (product) {
-    return {
-      id: "",
-      lines: [
-        {
-          product_id: add,
-          qty: DEFAULT_QTY_TO_ADD_TO_CART,
-          name: product.name,
-          unit_price: product.unit_price,
-          imgSrc: product.imgSrc,
-        },
-      ],
-      currency: DEFAULT_CURRENCY,
-    };
-  }
-
-  return null;
-};
-
-export async function createCart(product_id: string) {
-  const stmt = db.prepare(`
+  for (let index = 0; index < TRIES; index++) {
+    try {
+      newCartId = "pi_" + Math.random();
+      const stmt = db.prepare(`
     INSERT INTO cart (id, currency)
     VALUES (?, ?)`);
-  let rc = stmt.run("pi_456", DEFAULT_CURRENCY);
+      stmt.run(newCartId, DEFAULT_CURRENCY);
+      insertCartOk = true;
+      break;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+    }
+  }
 
-  const stmt2 = db.prepare(`
-    INSERT INTO cart_line (cart_id, product_id, qty)
-    VALUES (?, ?, 1)`);
-  rc = stmt2.run("pi_456", product_id);
-  console.log(rc);
+  if (!insertCartOk) {
+    return {
+      error: "Failed to create cart",
+      meta: null,
+    };
+  }
+
+  // create cart line for new cart
+  try {
+    const stmt = db.prepare(`
+    INSERT INTO cart_line (cart_id, product_id, qty, unit_price)
+    VALUES (?, ?, ?, ?)`);
+    stmt.run(
+      newCartId,
+      product.id,
+      DEFAULT_QTY_TO_ADD_TO_CART,
+      product.unit_price
+    );
+
+    const stmtLinesCount = db.prepare(`
+      SELECT c.id, cl.product_id
+      FROM cart AS c
+      LEFT OUTER JOIN cart_line AS cl
+      ON c.id = cl.cart_id
+      LEFT OUTER JOIN product AS p
+      ON cl.product_id = p.id
+      WHERE c.id = ?`);
+    const resultset = stmtLinesCount.all(newCartId);
+    console.log(resultset, 111111111);
+    return {
+      error: "",
+      meta: {
+        id: newCartId,
+        linesCount: resultset.length,
+      },
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to create cart line",
+      meta: null,
+    };
+  }
 }
 
-export async function addToCart(product_id: string) {
-  const stmt = db.prepare(`
-    UPDATE cart_line
-    SET qty = qty + 1
-    WHERE cart_id = 'pi_456'
-    AND product_id = ?`);
-  const rc = stmt.run(product_id);
+export async function cartAdd({
+  productId,
+  cartId,
+}: {
+  productId: string;
+  cartId: string;
+}): Promise<CartAddReturn> {
+  const product = await getProduct(productId);
 
-  console.log(rc);
+  if (!product) {
+    return {
+      error: "No such product",
+      meta: null,
+    };
+  }
+
+  if (!cartId) {
+    const ret = await cartAddCreate(product);
+    return ret;
+  }
+
+  const ret = await cartAddUpdate(cartId, product);
+  return ret;
 }
-
-////// for reference only
-//////
-//////
-// export async function getPosts(maxNumber) {
-//   let limitClause = "";
-//
-//   if (maxNumber) {
-//     limitClause = "LIMIT ?";
-//   }
-//
-//   const stmt = db.prepare(`
-//     SELECT posts.id, image_url AS image, title, content, created_at AS createdAt, first_name AS userFirstName, last_name AS userLastName, COUNT(likes.post_id) AS likes, EXISTS(SELECT * FROM likes WHERE likes.post_id = posts.id and likes.user_id = 2) AS isLiked
-//     FROM posts
-//     INNER JOIN users ON posts.user_id = users.id
-//     LEFT JOIN likes ON posts.id = likes.post_id
-//     GROUP BY posts.id
-//     ORDER BY createdAt DESC
-//     ${limitClause}`);
-//
-//   await new Promise((resolve) => setTimeout(resolve, 1000));
-//   return maxNumber ? stmt.all(maxNumber) : stmt.all();
-// }
-//
-// export async function storePost(post) {
-//   const stmt = db.prepare(`
-//     INSERT INTO posts (image_url, title, content, user_id)
-//     VALUES (?, ?, ?, ?)`);
-//   await new Promise((resolve) => setTimeout(resolve, 1000));
-//   return stmt.run(post.imageUrl, post.title, post.content, post.userId);
-// }
-//
-// export async function updatePostLikeStatus(postId, userId) {
-//   const stmt = db.prepare(`
-//     SELECT COUNT(*) AS count
-//     FROM likes
-//     WHERE user_id = ? AND post_id = ?`);
-//
-//   const isLiked = stmt.get(userId, postId).count === 0;
-//
-//   if (isLiked) {
-//     const stmt = db.prepare(`
-//       INSERT INTO likes (user_id, post_id)
-//       VALUES (?, ?)`);
-//     await new Promise((resolve) => setTimeout(resolve, 1000));
-//     return stmt.run(userId, postId);
-//   } else {
-//     const stmt = db.prepare(`
-//       DELETE FROM likes
-//       WHERE user_id = ? AND post_id = ?`);
-//     await new Promise((resolve) => setTimeout(resolve, 1000));
-//     return stmt.run(userId, postId);
-//   }
-// }

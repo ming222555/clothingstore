@@ -6,6 +6,20 @@ export const CART_COOKIE = "yns_cart";
 
 type CartCookieJson = { id: string; linesCount: number };
 
+export async function setCartCookieJson(
+  cartCookieJson: CartCookieJson
+): Promise<boolean> {
+  try {
+    (await cookies()).set(CART_COOKIE, JSON.stringify(cartCookieJson));
+    console.log(cartCookieJson, 111111111);
+    console.log(JSON.stringify(cartCookieJson), 111111111);
+    return true;
+  } catch (error) {
+    console.error("Failed to set cart cookie", error);
+    return false;
+  }
+}
+
 export async function getCartCookieJson() {
   const cookiesValue = await cookies();
   const cartCookieValue = cookiesValue.get(CART_COOKIE)?.value;

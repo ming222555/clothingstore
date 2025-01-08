@@ -5,23 +5,15 @@ export type Cart = {
   lines: {
     product_id: string;
     qty: number;
+    name: string;
+    unit_price: number;
+    img_src: string;
   }[];
   currency: string;
 };
 
-export type CartDetailed = Omit<Cart, "lines"> & {
-  lines: {
-    product_id: string;
-    qty: number;
-    name: string;
-    unit_price: number;
-    imgSrc: string;
-  }[];
-};
-
 export const cartGet = async (cartId: string): Promise<Cart | null> => {
-  // Retrieve cart from db with cartId.
-  // Return cart or else null if cart not found.
+  // Retrieve cart from db with cartId
 
   if (!cartId) {
     return null;
@@ -31,7 +23,7 @@ export const cartGet = async (cartId: string): Promise<Cart | null> => {
     return null;
   }
 
-  const cart = await Db.getCart(cartId);
+  const cart = await Db.cartGet(cartId);
 
   return cart;
 };
@@ -48,24 +40,20 @@ export const calculateCartTotalNetWithoutShipping = async (
   return total;
 };
 
-export const calculateCartAddOptimisticCartTotalNetWithoutShipping = async (
-  cart: Cart | null,
-  product_id: string
-): Promise<number> => {
-  const total = await Db.cartAddOptimisticTotalNetWithoutShipping(
-    cart,
-    product_id
-  );
-
-  return total;
-};
-
-export const cartAddOptimistic = async ({
-  add,
-  cart,
+export const cartAdd = async ({
+  productId,
+  cartId,
 }: {
-  add: string;
-  cart: Cart | null;
-}): Promise<CartDetailed | null> => {
-  return await Db.getPreviewCartAddOptimistic({ add, cart });
+  productId: string;
+  cartId: string;
+}): Promise<Db.CartAddReturn> => {
+  if (!productId || typeof productId !== "string") {
+    return { error: "Invalid product ID", meta: null };
+  }
+
+  const ret = await Db.cartAdd({
+    productId,
+    cartId,
+  });
+  return ret;
 };

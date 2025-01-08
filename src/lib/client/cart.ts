@@ -1,11 +1,11 @@
-export async function addToCartApi(product_id: string) {
+export async function addToCartApi(productId: string) {
   const res = await fetch("http://localhost:3000/api/cart-overlay", {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ add: product_id }),
+    body: JSON.stringify({ add: productId }),
     credentials: "include",
   });
   console.log("addToCartApi res.ok", res.ok);

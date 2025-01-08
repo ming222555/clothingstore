@@ -5,32 +5,15 @@ import * as Commerce from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
 import YnsLink from "@/ui/yns-link";
 import { formatMoney } from "@/lib/utils/utils";
-import CartModalSideEffect from "./cart-modal-side-effect";
 
-export default async function CartModal({ add }: { add: string | undefined }) {
-  // Argument add is the product id to add to cart e.g. "one-shoe"
-  const originalCart = await getCartFromCookiesAction();
-
-  const cart = await Commerce.cartAddOptimistic({
-    add: `${add ? add : ""}`,
-    cart: originalCart,
-  });
+export default async function CartModal() {
+  const cart = await getCartFromCookiesAction();
 
   if (!cart || cart.lines.length === 0) {
     return null;
   }
 
-  let total = 0;
-
-  if (add) {
-    total =
-      await Commerce.calculateCartAddOptimisticCartTotalNetWithoutShipping(
-        originalCart,
-        add
-      );
-  } else {
-    total = await Commerce.calculateCartTotalNetWithoutShipping(originalCart!);
-  }
+  const total = await Commerce.calculateCartTotalNetWithoutShipping(cart!);
 
   return (
     <>
@@ -53,7 +36,7 @@ export default async function CartModal({ add }: { add: string | undefined }) {
             >
               <div className="d-flex">
                 <Image
-                  src={line.imgSrc}
+                  src={line.img_src}
                   width={60}
                   height={60}
                   alt=""
@@ -109,7 +92,6 @@ export default async function CartModal({ add }: { add: string | undefined }) {
           </YnsLink>
         </div>
       </div>
-      <CartModalSideEffect add={add} />
     </>
   );
 }

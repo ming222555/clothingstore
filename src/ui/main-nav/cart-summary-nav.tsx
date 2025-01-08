@@ -3,7 +3,7 @@ import { ShoppingBagIcon } from "lucide-react";
 
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
 import * as Commerce from "@/lib/commerce-kit";
-import YnsLink from "@/ui/yns-link";
+import CartSummaryNavShoppingIcon from "./cart-summary-nav-shopping-icon";
 import ShoppingBagIconTooltip from "./shopping-bag-icon-tooltip";
 
 const CartFallback = () => (
@@ -36,12 +36,11 @@ const CartSummaryNavInner = async () => {
   const totalItems = cart.lines.reduce((accum, line) => accum + line.qty, 0);
 
   return (
-    <YnsLink
-      href="/cart-overlay"
-      className="d-block position-relative ms-3"
+    <div
+      className="position-relative ms-3"
       data-tooltip-id="shopping-bag-icon-tooltip"
     >
-      <ShoppingBagIcon />
+      <CartSummaryNavShoppingIcon />
       <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-warning rounded-pill fs-075 min-w-1rem">
         {totalItems}
       </span>
@@ -52,6 +51,6 @@ const CartSummaryNavInner = async () => {
         total={total}
         currency={cart.currency}
       />
-    </YnsLink>
+    </div>
   );
 };

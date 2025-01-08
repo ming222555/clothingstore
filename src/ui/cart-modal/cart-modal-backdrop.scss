@@ -1,0 +1,8 @@
+.CartModalBackdrop {
+  transform: translateX(100%);
+  transition: all 0.5s;
+}
+
+.CartModalBackdrop.open {
+  transform: translateX(0);
+}

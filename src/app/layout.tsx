@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
-import createCookieAction from "@/actions/createCookieAction";
 import { roboto } from "@/lib/utils/fonts";
-import "../globals.scss";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
+import createCookieAction from "@/actions/createCookieAction";
 import FetchcookieClient from "./fetchcookie-client";
+import "../globals.scss";
 
 export const metadata: Metadata = {
   title: "Your Store",
@@ -40,6 +41,7 @@ export default function RootLayout({
             <Link href="/cart-overlay?add=dummy-prod">dummy</Link>
           </div>
           {children}
+          <Toaster />
         </div>
       </body>
     </html>
