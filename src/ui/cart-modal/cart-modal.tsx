@@ -3,8 +3,8 @@ import Image from "next/image";
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
 import * as Commerce from "@/lib/commerce-kit";
 import CartModalBackdrop from "./cart-modal-backdrop";
-import YnsLink from "@/ui/yns-link";
 import { formatMoney } from "@/lib/utils/utils";
+import GoToPayment from "./go-to-payment";
 
 export default async function CartModal() {
   const cart = await getCartFromCookiesAction();
@@ -21,12 +21,9 @@ export default async function CartModal() {
       <div className="CartModal d-flex flex-column bg-light position-fixed bottom-0 start-100">
         <header className="d-flex p-3">
           <h2 className="h5 fw-semibold me-auto">Shopping Cart</h2>
-          <YnsLink
-            href="/cart"
-            className="text-decoration-underline fs-0875 text-black-50"
-          >
+          <GoToPayment className="text-decoration-underline fs-0875 text-black-50">
             (open full view)
-          </YnsLink>
+          </GoToPayment>
         </header>
         <ul className="flex-grow-1 p-3 pt-0 m-0 overflow-auto">
           {cart.lines.map((line) => (
@@ -84,12 +81,9 @@ export default async function CartModal() {
           <p className="text-black-50 fs-0875 mb-3">
             Shipping and taxes will be added at the next step
           </p>
-          <YnsLink
-            href="/cart"
-            className="btn btn-dark rounded-pill w-100 my-2"
-          >
+          <GoToPayment className="btn btn-dark rounded-pill w-100 my-2">
             Go to payment
-          </YnsLink>
+          </GoToPayment>
         </div>
       </div>
     </>
