@@ -1,7 +1,7 @@
 export default function CartPage() {
   return (
-    <div className="p-3 bg-warning d-flex">
-      <div>
+    <div className="Page row g-0 bg-warning">
+      <div className="col-md-8">
         <div
           className="position-sticky top-0"
           style={{ background: "lightgreen" }}
@@ -70,7 +70,7 @@ export default function CartPage() {
           </p>
         </div>
       </div>
-      <div className="" style={{ background: "lightgreen" }}>
+      <div className="col-md-4" style={{ background: "lightgreen" }}>
         <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
           Me cart page
         </p>

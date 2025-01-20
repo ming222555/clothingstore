@@ -1,7 +1,7 @@
 export default function Home() {
   console.log("HHHHHHHHHHHHHHome page");
   return (
-    <div>
+    <div className="Page">
       Home page
       <div>
         <p>Basic verify Bootstrap flex, grid, and utilities</p>

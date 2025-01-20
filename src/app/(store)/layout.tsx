@@ -1,6 +1,6 @@
 import { CartModalProvider } from "@/providers/cart-modal-provider";
-import MainNav from "@/ui/main-nav/main-nav";
-import Footer from "@/ui/footer/footer";
+import MainNav from "@/ui/layout/header/main-nav/main-nav";
+import Footer from "@/ui/layout/footer/footer";
 import CartModal from "@/ui/cart-modal/cart-modal";
 
 export default function StoreLayout({
@@ -12,12 +12,7 @@ export default function StoreLayout({
   return (
     <CartModalProvider>
       <MainNav />
-      <main
-        className="py-1 bg-info m-auto"
-        style={{
-          maxWidth: "var(--bs-breakpoint-xl)",
-        }}
-      >
+      <main className="p-3 bg-info m-auto">
         {children}
         {<CartModal />}
       </main>
