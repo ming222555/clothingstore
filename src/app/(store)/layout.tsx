@@ -12,7 +12,12 @@ export default function StoreLayout({
   return (
     <CartModalProvider>
       <MainNav />
-      <main>
+      <main
+        className="py-1 bg-info m-auto"
+        style={{
+          maxWidth: "var(--bs-breakpoint-xl)",
+        }}
+      >
         {children}
         {<CartModal />}
       </main>
