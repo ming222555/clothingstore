@@ -18,7 +18,7 @@ export default async function CartModal() {
   return (
     <>
       <CartModalBackdrop />
-      <div className="CartModal d-flex flex-column bg-light position-fixed bottom-0 start-100">
+      <div className="CartModal d-flex flex-column bg-light position-fixed bottom-0 start-100 z-1">
         <header className="d-flex p-3">
           <h2 className="h5 fw-semibold me-auto">Shopping Cart</h2>
           <GoToPayment className="text-decoration-underline fs-0875 text-black-50">
