@@ -3,7 +3,6 @@ import NavMenu from "./nav-menu";
 import SearchNav from "./search-nav";
 import NavMenuAside from "./nav-menu-aside";
 import CartSummaryNav from "./cart-summary-nav";
-import Link from "next/link";
 
 export default function MainNav() {
   return (
@@ -14,7 +13,6 @@ export default function MainNav() {
           maxWidth: "var(--bs-breakpoint-xl)",
         }}
       >
-        <Link href="/product/one-shoe">Product one shoe</Link>
         <LogoNav />
         <NavMenu />
         <SearchNav />

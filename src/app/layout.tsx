@@ -38,7 +38,8 @@ export default function RootLayout({
               arctic-circle-neck-warmer add cart
             </Link>
             <Link href="/cart-overlay?add=one-shoe">one-shoe add cart</Link>{" "}
-            <Link href="/cart-overlay?add=dummy-prod">dummy</Link>
+            <Link href="/cart-overlay?add=dummy-prod">dummy</Link>{" "}
+            <Link href="/product/one-shoe">Product one shoe</Link>
           </div>
           {children}
           <Toaster />
