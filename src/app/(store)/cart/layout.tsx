@@ -1,15 +1,14 @@
 import CartSummaryTable from "@/ui/checkout/cart-summary-table";
-///////////// import { getCartFromCookiesAction } from "@/actions/cart-actions";
+import { getCartFromCookiesAction } from "@/actions/cart-actions";
 import { CartEmpty } from "@/ui/checkout/cart-empty";
-import { getCart } from "@/dbtesting/dbtesting";
 
 export default async function CartLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  //////////////// const cart = await getCartFromCookiesAction();
-  const cart = getCart();
+  const cart = await getCartFromCookiesAction();
+
   if (!cart) {
     return <CartEmpty />;
   }
