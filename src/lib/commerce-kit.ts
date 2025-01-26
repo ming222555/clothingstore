@@ -57,3 +57,24 @@ export const cartAdd = async ({
   });
   return ret;
 };
+
+export const cartUpdate = async ({
+  qty,
+  productId,
+  cartId,
+}: {
+  qty: number;
+  productId: string;
+  cartId: string;
+}): Promise<Db.CartAddReturn> => {
+  if (!productId || typeof productId !== "string") {
+    return { error: "Invalid product ID", meta: null };
+  }
+
+  const ret = await Db.cartUpdate({
+    qty,
+    productId,
+    cartId,
+  });
+  return ret;
+};

@@ -226,7 +226,21 @@ export async function getProduct(
   return resultset[0];
 }
 
-export async function cartAddUpdate(
+async function cartLinesCount(cartId: string): Promise<number> {
+  const stmtLinesCount = db.prepare(`
+    SELECT c.id, cl.product_id
+    FROM cart AS c
+    LEFT OUTER JOIN cart_line AS cl
+    ON c.id = cl.cart_id
+    LEFT OUTER JOIN product AS p
+    ON cl.product_id = p.id
+    WHERE c.id = ?`);
+  const resultset = stmtLinesCount.all(cartId);
+
+  return resultset.length;
+}
+
+async function cartAddUpdate(
   cartId: string,
   product: DbProduct
 ): Promise<CartAddReturn> {
@@ -293,19 +307,11 @@ export async function cartAddUpdate(
         product.unit_price
       );
 
-      const stmtLinesCount = db.prepare(`
-          SELECT c.id, cl.product_id
-          FROM cart AS c
-          LEFT OUTER JOIN cart_line AS cl
-          ON c.id = cl.cart_id
-          LEFT OUTER JOIN product AS p
-          ON cl.product_id = p.id
-          WHERE c.id = ?`);
-      const resultset = stmtLinesCount.all(cartId);
+      const linesCount = await cartLinesCount(cartId);
 
       return {
         error: "",
-        meta: { id: cartId, linesCount: resultset.length },
+        meta: { id: cartId, linesCount },
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -320,45 +326,6 @@ export async function cartAddUpdate(
   }
 
   if (resultset.length === 1) {
-    // if (resultset[0].product_id === null) {
-    //   // create cart line for cart found
-    //   try {
-    //     const stmt = db.prepare(`
-    //       INSERT INTO cart_line (cart_id, product_id, qty, unit_price)
-    //       VALUES (?, ?, ?, ?)`);
-    //     stmt.run(
-    //       cartId,
-    //       product.id,
-    //       DEFAULT_QTY_TO_ADD_TO_CART,
-    //       product.unit_price
-    //     );
-    //
-    //     const stmtLinesCount = db.prepare(`
-    //       SELECT c.id, cl.product_id
-    //       FROM cart AS c
-    //       LEFT OUTER JOIN cart_line AS cl
-    //       ON c.id = cl.cart_id
-    //       LEFT OUTER JOIN product AS p
-    //       ON cl.product_id = p.id
-    //       WHERE c.id = ?`);
-    //     const resultset = stmtLinesCount.all(cartId);
-    //
-    //     return {
-    //       error: "",
-    //       meta: { id: cartId, linesCount: resultset.length },
-    //     };
-    //
-    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //   } catch (e: any) {
-    //     console.log(e.message);
-    //
-    //     return {
-    //       error: "Failed to create cart line",
-    //       meta: null,
-    //     };
-    //   }
-    // }
-
     // update cart line for cart found
     try {
       const stmt = db.prepare(`
@@ -368,19 +335,11 @@ export async function cartAddUpdate(
       AND product_id = ?`);
       stmt.run(cartId, product.id);
 
-      const stmtLinesCount = db.prepare(`
-        SELECT c.id, cl.product_id
-        FROM cart AS c
-        LEFT OUTER JOIN cart_line AS cl
-        ON c.id = cl.cart_id
-        LEFT OUTER JOIN product AS p
-        ON cl.product_id = p.id
-        WHERE c.id = ?`);
-      const resultset = stmtLinesCount.all(cartId);
+      const linesCount = await cartLinesCount(cartId);
 
       return {
         error: "",
-        meta: { id: cartId, linesCount: resultset.length },
+        meta: { id: cartId, linesCount },
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -400,9 +359,7 @@ export async function cartAddUpdate(
   };
 }
 
-export async function cartAddCreate(
-  product: DbProduct
-): Promise<CartAddReturn> {
+async function cartAddCreate(product: DbProduct): Promise<CartAddReturn> {
   const TRIES = 2;
   let insertCartOk = false;
   let newCartId = "";
@@ -441,21 +398,13 @@ export async function cartAddCreate(
       product.unit_price
     );
 
-    const stmtLinesCount = db.prepare(`
-      SELECT c.id, cl.product_id
-      FROM cart AS c
-      LEFT OUTER JOIN cart_line AS cl
-      ON c.id = cl.cart_id
-      LEFT OUTER JOIN product AS p
-      ON cl.product_id = p.id
-      WHERE c.id = ?`);
-    const resultset = stmtLinesCount.all(newCartId);
-    console.log(resultset, 111111111);
+    const linesCount = await cartLinesCount(newCartId);
+
     return {
       error: "",
       meta: {
         id: newCartId,
-        linesCount: resultset.length,
+        linesCount,
       },
     };
 
@@ -493,4 +442,150 @@ export async function cartAdd({
 
   const ret = await cartAddUpdate(cartId, product);
   return ret;
+}
+
+async function cartExists(id: string): Promise<boolean> {
+  const stmt = db.prepare(`
+    SELECT c.id
+    FROM cart AS c
+    WHERE c.id = ?`);
+
+  const resultset = stmt.all(id);
+
+  if (resultset.length === 0) {
+    return false;
+  }
+
+  return true;
+}
+
+export async function cartUpdate({
+  qty,
+  productId,
+  cartId,
+}: {
+  qty: number;
+  productId: string;
+  cartId: string;
+}): Promise<CartAddReturn> {
+  const product = await getProduct(productId);
+
+  if (!product) {
+    return {
+      error: "No such product",
+      meta: null,
+    };
+  }
+
+  const isCartExists = await cartExists(cartId);
+
+  if (!isCartExists) {
+    return {
+      error: "Cart not found",
+      meta: null,
+    };
+  }
+
+  if (qty === 0) {
+    // DELETE cart line
+    try {
+      const stmt = db.prepare(`
+        DELETE FROM cart_line
+        WHERE cart_id = ?
+        AND product_id = ?`);
+      stmt.run(cartId, productId);
+
+      const linesCount = await cartLinesCount(cartId);
+
+      return {
+        error: "",
+        meta: { id: cartId, linesCount },
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        error: "Failed to delete cart line",
+        meta: null,
+      };
+    }
+  }
+
+  const stmt = db.prepare(`
+    SELECT c.id, cl.product_id
+    FROM cart AS c
+    LEFT OUTER JOIN cart_line AS cl
+    ON c.id = cl.cart_id
+    LEFT OUTER JOIN product AS p
+    ON cl.product_id = p.id
+    WHERE c.id = ?
+    AND cl.product_id = ?`);
+
+  console.log("cartId", cartId);
+  const resultset = stmt.all(cartId, product.id);
+
+  if (resultset.length === 0) {
+    // return {
+    //   error: "Failed to find cart with given id",
+    //   meta: null,
+    // };
+    // create cart line for cart, assuming cart already exists
+    try {
+      const stmt = db.prepare(`
+          INSERT INTO cart_line (cart_id, product_id, qty, unit_price)
+          VALUES (?, ?, ?, ?)`);
+      stmt.run(cartId, product.id, qty, product.unit_price);
+
+      const linesCount = await cartLinesCount(cartId);
+
+      return {
+        error: "",
+        meta: { id: cartId, linesCount },
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        error: "Failed to create cart line",
+        meta: null,
+      };
+    }
+  }
+
+  if (resultset.length === 1) {
+    // update cart line for cart found
+    try {
+      const stmt = db.prepare(`
+      UPDATE cart_line
+      SET qty = ?
+      WHERE cart_id = ?
+      AND product_id = ?`);
+      stmt.run(qty, cartId, product.id);
+
+      const linesCount = await cartLinesCount(cartId);
+
+      return {
+        error: "",
+        meta: { id: cartId, linesCount },
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        error: "Failed to update cart line",
+        meta: null,
+      };
+    }
+  }
+
+  return {
+    error: "Add to cart aborted: multiple cart lines found for given product",
+    meta: null,
+  };
 }

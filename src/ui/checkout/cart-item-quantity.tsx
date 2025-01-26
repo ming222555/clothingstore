@@ -34,9 +34,8 @@ export default function CartItemQuantity({
 
     const remoteCartUpdate = async () => {
       const rc = await cartUpdateAction(
-        "cart123",
-        productId,
-        qty + (delta === "INCREASE" ? 1 : -1)
+        qty + (delta === "INCREASE" ? 1 : -1),
+        productId
       );
 
       // Update failed
