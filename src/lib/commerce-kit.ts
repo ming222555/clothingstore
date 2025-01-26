@@ -8,6 +8,7 @@ export type Cart = {
     name: string;
     unit_price: number;
     img_src: string;
+    line_total: number;
   }[];
   currency: string;
 };

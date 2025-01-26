@@ -15,7 +15,13 @@ export type OptimisticCartActionType = {
   delta: Delta;
 };
 
-export default function CartSummaryTable({ cart }: { cart: Cart }) {
+export default function CartSummaryTable({
+  cart,
+  total,
+}: {
+  cart: Cart;
+  total: number;
+}) {
   console.log("CartSummaryTable cart", cart);
   const actionProductId = useRef("");
   const [optimisticCart, dispatchOptimisticCartAction] = useOptimistic<
@@ -84,7 +90,7 @@ export default function CartSummaryTable({ cart }: { cart: Cart }) {
                 />
               </td>
               <td className="text-end" width={16}>
-                $201.00 TODO
+                {formatMoney(line.line_total, cart.currency)}
               </td>
             </tr>
           ))}
@@ -93,7 +99,7 @@ export default function CartSummaryTable({ cart }: { cart: Cart }) {
             <td colSpan={3} className="text-end pe-3">
               TOTAL
             </td>
-            <td className="text-end">$45.00 TODO</td>
+            <td className="text-end">{formatMoney(total, cart.currency)}</td>
           </tr>
         </tbody>
       </table>

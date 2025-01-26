@@ -85,7 +85,7 @@ export async function cartGet(id: string): Promise<Cart | null> {
   //   WHERE c.id = ?`);
 
   const stmt = db.prepare(`
-    SELECT c.id, c.currency, cl.product_id, cl.qty, p.name, p.unit_price, p.img_src
+    SELECT c.id, c.currency, cl.product_id, cl.qty, p.name, p.unit_price, p.img_src, cl.qty * p.unit_price AS line_total
     FROM cart AS c
     LEFT OUTER JOIN cart_line AS cl
     ON c.id = cl.cart_id

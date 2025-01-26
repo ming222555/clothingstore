@@ -1,5 +1,6 @@
 import CartSummaryTable from "@/ui/checkout/cart-summary-table";
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
+import * as Commerce from "@/lib/commerce-kit";
 import { CartEmpty } from "@/ui/checkout/cart-empty";
 
 export default async function CartLayout({
@@ -15,6 +16,12 @@ export default async function CartLayout({
   if (!cart.lines.length) {
     return <CartEmpty />;
   }
+
+  const cartTotalNetWithoutShipping =
+    await Commerce.calculateCartTotalNetWithoutShipping(cart);
+  // const cartShippingRate = await Commerce.getCartShippingRate(cart);
+  const total = cartTotalNetWithoutShipping; // + cartShippingRate.rate
+
   return (
     <div className="Page row g-0 bg-warning">
       <div className="col-xl-7">
@@ -23,7 +30,7 @@ export default async function CartLayout({
           style={{ background: "lightgreen" }}
         >
           <h2 className="h2 pb-2">Your cart</h2>
-          <CartSummaryTable cart={cart} />
+          <CartSummaryTable cart={cart} total={total} />
         </div>
       </div>
       <div className="col-xl-5" style={{ background: "lightgreen" }}>
