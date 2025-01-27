@@ -36,8 +36,11 @@ export default async function CartLayout({
           <CartSummaryTable cart={cart} shippingRate={sr} total={total} />
         </div>
       </div>
-      <div className="col-xl-5" style={{ background: "lightgreen" }}>
-        {children}
+      <div className="col-xl-5" style={{ background: "lightblue" }}>
+        <div style={{ background: "lightgreen" }}>
+          <h2 className="h2 pb-2">Checkout</h2>
+          {children}
+        </div>
       </div>
     </div>
   );
