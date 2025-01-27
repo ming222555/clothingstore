@@ -9,6 +9,13 @@ type DbProduct = {
   img_src: string;
 };
 
+export type DbShippingRate = {
+  id: string;
+  rate: number;
+  agency: string;
+  duration: string;
+};
+
 export interface CartAddReturn {
   error: string;
   meta: {
@@ -45,6 +52,55 @@ function initDb() {
       FOREIGN KEY(cart_id) REFERENCES cart(id) ON DELETE CASCADE, 
       FOREIGN KEY(product_id) REFERENCES product(id) ON DELETE CASCADE
     )`);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS shipping_rate (
+      id TEXT PRIMARY KEY, 
+      rate REAL,
+      agency TEXT,
+      duration TEXT
+    )`);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS cart_checkout (
+      id TEXT PRIMARY KEY, 
+      shipping_rate_id TEXT,
+      FOREIGN KEY(id) REFERENCES cart(id) ON DELETE CASCADE,
+      FOREIGN KEY(shipping_rate_id) REFERENCES shipping_rate(id) ON DELETE CASCADE
+    )`);
+
+  // Creating shipping rates
+  const stmt2 = db.prepare("SELECT COUNT(*) AS count FROM shipping_rate");
+
+  if (stmt2.get().count === 0) {
+    db.exec(`
+    INSERT INTO shipping_rate (id, rate, agency, duration)
+    VALUES ('USPS-3-33', 1.99, 'USPS', '3-33 days')
+  `);
+
+    db.exec(`
+    INSERT INTO shipping_rate (id, rate, agency, duration)
+    VALUES ('USPS-4-44', 0.99, 'USPS', '4-44 days')
+    `);
+
+    db.exec(`
+    INSERT INTO shipping_rate (id, rate, agency, duration)
+    VALUES ('USPS2-3-33', 10.99, 'USPS2', '3-33 days')
+    `);
+
+    db.exec(`
+    INSERT INTO shipping_rate (id, rate, agency, duration)
+    VALUES ('USPS2-4-44', 9.99, 'USPS2', '4-44 days')
+    `);
+
+    db.exec(`
+    INSERT INTO shipping_rate (id, rate, agency, duration)
+    VALUES ('SPACE', 21.37, 'Space shipping', '1 hour')
+    `);
+
+    db.exec(`
+    INSERT INTO shipping_rate (id, rate, agency, duration)
+    VALUES ('GROUND', 20.00, 'Ground shipping', '3-5 business days')
+    `);
+  }
 
   // Creating products
   const stmt = db.prepare("SELECT COUNT(*) AS count FROM product");
@@ -206,6 +262,36 @@ export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {
     return 0;
   }
   return cart_total;
+}
+
+export async function cartShippingRate(
+  cart: Cart
+): Promise<DbShippingRate | null> {
+  const cart_id = cart.id;
+
+  const stmt = db.prepare(`
+    SELECT sr.id, sr.rate, sr.agency, sr.duration
+    FROM cart AS c
+    INNER JOIN cart_checkout AS ck
+    ON c.id = ck.id
+    INNER JOIN shipping_rate AS sr
+    ON ck.shipping_rate_id = sr.id
+    WHERE c.id = ?`);
+
+  const resultset = stmt.all(cart_id);
+
+  if (resultset.length === 0) {
+    return null;
+  }
+
+  const rec = resultset[0];
+
+  return {
+    id: rec.id,
+    rate: rec.rate,
+    agency: rec.agency,
+    duration: rec.duration,
+  };
 }
 
 export async function getProduct(

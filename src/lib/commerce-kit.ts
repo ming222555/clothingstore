@@ -41,6 +41,18 @@ export const calculateCartTotalNetWithoutShipping = async (
   return total;
 };
 
+export const getCartShippingRate = async (
+  cart: Cart
+): Promise<Db.DbShippingRate | null> => {
+  if (!cart) {
+    return null;
+  }
+
+  const sr = await Db.cartShippingRate(cart);
+
+  return sr;
+};
+
 export const cartAdd = async ({
   productId,
   cartId,

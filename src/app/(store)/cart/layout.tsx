@@ -19,8 +19,11 @@ export default async function CartLayout({
 
   const cartTotalNetWithoutShipping =
     await Commerce.calculateCartTotalNetWithoutShipping(cart);
-  // const cartShippingRate = await Commerce.getCartShippingRate(cart);
-  const total = cartTotalNetWithoutShipping; // + cartShippingRate.rate
+
+  const sr = await Commerce.getCartShippingRate(cart);
+  const rate = sr ? sr.rate : 0;
+
+  const total = cartTotalNetWithoutShipping + rate;
 
   return (
     <div className="Page row g-0 bg-warning">
@@ -30,7 +33,7 @@ export default async function CartLayout({
           style={{ background: "lightgreen" }}
         >
           <h2 className="h2 pb-2">Your cart</h2>
-          <CartSummaryTable cart={cart} total={total} />
+          <CartSummaryTable cart={cart} shippingRate={sr} total={total} />
         </div>
       </div>
       <div className="col-xl-5" style={{ background: "lightgreen" }}>
