@@ -13,6 +13,31 @@ export type Cart = {
   currency: string;
 };
 
+export type Checkout = {
+  id: string;
+  cust_email: string;
+  cust_shipping_fullname: string;
+  cust_shipping_address: string;
+  cust_shipping_postalcode: string;
+  cust_shipping_city: string;
+  cust_shipping_state: string;
+  cust_shipping_country: string;
+  shipping_rate_id: string;
+  shipping_rate_rate: number;
+  shipping_rate_agency: string;
+  shipping_rate_duration: string;
+  cust_billing_fullname: string;
+  cust_billing_address: string;
+  cust_billing_postalcode: string;
+  cust_billing_city: string;
+  cust_billing_state: string;
+  cust_billing_country: string;
+  cust_billing_phone: string;
+  cust_credit_card_nbr: string;
+  cust_card_expiration_date: string;
+  cust_card_cvc: string;
+};
+
 export const cartGet = async (cartId: string): Promise<Cart | null> => {
   // Retrieve cart from db with cartId
 
@@ -27,6 +52,22 @@ export const cartGet = async (cartId: string): Promise<Cart | null> => {
   const cart = await Db.cartGet(cartId);
 
   return cart;
+};
+
+export const checkoutGet = async (cartId: string): Promise<Checkout | null> => {
+  // Retrieve checkout from db with cartId
+
+  if (!cartId) {
+    return null;
+  }
+
+  if (typeof cartId !== "string") {
+    return null;
+  }
+
+  const checkout = await Db.checkoutGet(cartId);
+
+  return checkout;
 };
 
 export const calculateCartTotalNetWithoutShipping = async (

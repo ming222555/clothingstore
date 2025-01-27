@@ -1,6 +1,6 @@
 import sql from "better-sqlite3";
 
-import type { Cart } from "@/lib/commerce-kit";
+import type { Cart, Checkout } from "@/lib/commerce-kit";
 
 type DbProduct = {
   id: string;
@@ -62,9 +62,26 @@ function initDb() {
   db.exec(`
     CREATE TABLE IF NOT EXISTS cart_checkout (
       id TEXT PRIMARY KEY, 
+      cust_email TEXT,
+      cust_shipping_fullname TEXT,
+      cust_shipping_address TEXT,
+      cust_shipping_postalcode TEXT,
+      cust_shipping_city TEXT,
+      cust_shipping_state TEXT,
+      cust_shipping_country TEXT,
       shipping_rate_id TEXT,
+      cust_billing_fullname TEXT,
+      cust_billing_address TEXT,
+      cust_billing_postalcode TEXT,
+      cust_billing_city TEXT,
+      cust_billing_state TEXT,
+      cust_billing_country TEXT,
+      cust_billing_phone TEXT,
+      cust_credit_card_nbr TEXT,
+      cust_card_expiration_date TEXT,
+      cust_card_cvc TEXT,
       FOREIGN KEY(id) REFERENCES cart(id) ON DELETE CASCADE,
-      FOREIGN KEY(shipping_rate_id) REFERENCES shipping_rate(id) ON DELETE CASCADE
+      FOREIGN KEY(shipping_rate_id) REFERENCES shipping_rate(id) ON DELETE SET NULL
     )`);
 
   // Creating shipping rates
@@ -197,6 +214,51 @@ export async function cartGet(id: string): Promise<Cart | null> {
     lines: resultset,
     currency,
   };
+}
+
+export async function checkoutGet(id: string): Promise<Checkout | null> {
+  const stmt = db.prepare(`
+    SELECT 
+      cust_email,
+      cust_shipping_fullname,
+      cust_shipping_address,
+      cust_shipping_postalcode,
+      cust_shipping_city,
+      cust_shipping_state,
+      cust_shipping_country,
+      IFNULL( sr.id, '') AS shipping_rate_id,
+      IFNULL( sr.rate, 0) AS shipping_rate_rate,
+      IFNULL( sr.agency, '') AS shipping_rate_agency,
+      IFNULL( sr.duration, '') AS shipping_rate_duration,
+      cust_billing_fullname,
+      cust_billing_address,
+      cust_billing_postalcode,
+      cust_billing_city,
+      cust_billing_state,
+      cust_billing_country,
+      cust_billing_phone,
+      cust_credit_card_nbr,
+      cust_card_expiration_date,
+      cust_card_cvc
+    FROM cart AS c
+    INNER JOIN cart_checkout AS ck
+    ON c.id = ck.id
+    LEFT OUTER JOIN shipping_rate AS sr
+    ON ck.shipping_rate_id = sr.id
+    WHERE c.id = ?`);
+
+  const resultset = stmt.all(id);
+
+  if (resultset.length === 0) {
+    return null;
+  }
+
+  if (resultset.length === 1) {
+    return resultset[0];
+  }
+
+  // shouldn't reach here
+  return null;
 }
 
 export async function cartTotalNetWithoutShipping(cart: Cart): Promise<number> {

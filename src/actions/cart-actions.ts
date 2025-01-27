@@ -15,6 +15,17 @@ export const getCartFromCookiesAction =
     return cart;
   };
 
+export const getCheckoutFromCookiesAction =
+  async (): Promise<Commerce.Checkout | null> => {
+    const cartCookieJson = await getCartCookieJson();
+    if (!cartCookieJson) {
+      return null;
+    }
+
+    const checkout = await Commerce.checkoutGet(cartCookieJson.id);
+    return checkout;
+  };
+
 export const addToCartAction = async (
   productId: string
 ): Promise<{ error: string }> => {
