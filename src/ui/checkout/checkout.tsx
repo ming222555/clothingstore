@@ -1,6 +1,37 @@
 "use client";
 
-export default function Checkout() {
+import * as Commerce from "@/lib/commerce-kit";
+import { useMemo, useReducer } from "react";
+
+type FormState = Commerce.Checkout;
+
+function reducer(
+  state: FormState,
+  action: { type: keyof FormState; payload: string }
+): FormState {
+  return { ...state, [action.type]: action.payload };
+}
+
+export default function Checkout({
+  checkout,
+}: {
+  checkout: Commerce.Checkout;
+}) {
+  console.log("checkout111111111111", checkout);
+
+  const [formValues, dispatcher] = useReducer(reducer, checkout);
+  console.log("formValues", formValues);
+  const onValueChange = useMemo(
+    () =>
+      function (evt: React.ChangeEvent<HTMLInputElement>) {
+        dispatcher({
+          type: evt.target.name as keyof FormState,
+          payload: evt.target.value,
+        });
+      },
+    []
+  );
+
   return (
     <form>
       <input
@@ -9,14 +40,17 @@ export default function Checkout() {
         name="cust_email"
         id="cust_email"
         placeholder="you@example.com"
+        value={formValues.cust_email}
+        onChange={onValueChange}
       />
       <input
         type="text"
         name="cust_shipping_fullname"
-        id="cust_shipping_fullname"
         placeholder="cust_shipping_fullname"
+        value={formValues.cust_shipping_fullname}
+        onChange={onValueChange}
       />
-      <input
+      {/* <input
         type="text"
         name="cust_shipping_address"
         id="cust_shipping_address"
@@ -45,15 +79,16 @@ export default function Checkout() {
         name="cust_shipping_country"
         id="cust_shipping_country"
         placeholder="cust_shipping_country"
-      />
+      /> */}
       <fieldset>
         <legend>Shipping method</legend>
         <div role="radiodroup">
           <input
             type="radio"
-            name="shippingRate"
-            id="shippingRate-USPS-3-33"
+            name="shipping_rate_id"
             value="USPS-3-33"
+            checked={formValues.shipping_rate_id === "USPS-3-33"}
+            onChange={onValueChange}
           />
           <label htmlFor="shippingRate-USPS-3-33">
             USPS-3-33 | 1.99 | 3-33 days
@@ -61,9 +96,10 @@ export default function Checkout() {
           <br />
           <input
             type="radio"
-            name="shippingRate"
-            id="shippingRate-USPS-4-44"
+            name="shipping_rate_id"
             value="USPS-4-44"
+            checked={formValues.shipping_rate_id === "USPS-4-44"}
+            onChange={onValueChange}
           />
           <label htmlFor="shippingRate-USPS-4-44">
             USPS-4-44 | 0.99 | 4-44 days
@@ -71,7 +107,7 @@ export default function Checkout() {
         </div>
       </fieldset>
       <p>Billing address same as shipping</p>
-      <fieldset>
+      {/* <fieldset>
         <legend>Billing address</legend>
         <input
           type="text"
@@ -156,7 +192,7 @@ export default function Checkout() {
       </p>
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
-      </p>
+      </p> */}
     </form>
   );
 }

@@ -220,16 +220,13 @@ export async function checkoutGet(id: string): Promise<Checkout | null> {
   const stmt = db.prepare(`
     SELECT 
       cust_email,
-      cust_shipping_fullname,
+      IFNULL( cust_shipping_fullname, '') AS cust_shipping_fullname,
       cust_shipping_address,
       cust_shipping_postalcode,
       cust_shipping_city,
       cust_shipping_state,
       cust_shipping_country,
-      IFNULL( sr.id, '') AS shipping_rate_id,
-      IFNULL( sr.rate, 0) AS shipping_rate_rate,
-      IFNULL( sr.agency, '') AS shipping_rate_agency,
-      IFNULL( sr.duration, '') AS shipping_rate_duration,
+      sr.id AS shipping_rate_id,
       cust_billing_fullname,
       cust_billing_address,
       cust_billing_postalcode,
