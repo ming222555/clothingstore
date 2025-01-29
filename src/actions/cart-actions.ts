@@ -107,3 +107,36 @@ export const cartUpdateAction = async (
     error: "Failed to set cart cookie",
   };
 };
+
+export const checkoutUpdateOrInsertShippingRateAction = async (
+  shippingRateId: string
+): Promise<{ error: string }> => {
+  if (!shippingRateId || typeof shippingRateId !== "string") {
+    return { error: "Invalid Shipping Rate ID" };
+  }
+
+  const cart = await getCartFromCookiesAction();
+
+  if (!cart) {
+    return { error: "Cart not found" };
+  }
+
+  const updatedOrInserted = await Commerce.checkoutUpdateOrInsertShippingRateId(
+    {
+      shippingRateId,
+      cartId: cart.id,
+    }
+  );
+
+  if (updatedOrInserted.error) {
+    return {
+      error: updatedOrInserted.error,
+    };
+  }
+
+  await new Promise((resolv) => setTimeout(resolv, 2000));
+
+  return {
+    error: "",
+  };
+};

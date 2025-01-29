@@ -1,7 +1,11 @@
 "use client";
 
+import { useMemo, useReducer, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 import * as Commerce from "@/lib/commerce-kit";
-import { useMemo, useReducer } from "react";
+import { checkoutUpdateOrInsertShippingRateAction } from "@/actions/cart-actions";
 
 type FormState = Commerce.Checkout;
 
@@ -12,18 +16,31 @@ function reducer(
   return { ...state, [action.type]: action.payload };
 }
 
+const initialFormValues: FormState = {
+  cust_email: "",
+  cust_shipping_fullname: "",
+  shipping_rate_id: "",
+};
+
 export default function Checkout({
   checkout,
 }: {
-  checkout: Commerce.Checkout;
+  checkout: Commerce.Checkout | null;
 }) {
   console.log("checkout111111111111", checkout);
 
-  const [formValues, dispatcher] = useReducer(reducer, checkout);
+  const [formValues, dispatcher] = useReducer(
+    reducer,
+    checkout || initialFormValues
+  );
   console.log("formValues", formValues);
+
+  const currentFieldId = useRef("");
+
   const onValueChange = useMemo(
     () =>
       function (evt: React.ChangeEvent<HTMLInputElement>) {
+        currentFieldId.current = evt.target.id;
         dispatcher({
           type: evt.target.name as keyof FormState,
           payload: evt.target.value,
@@ -32,8 +49,36 @@ export default function Checkout({
     []
   );
 
+  const [pending, setPending] = useState(false);
+  const [pendingShippingRate, setPendingShippingRate] = useState(false);
+
+  const router = useRouter();
+
+  const formActionCheckoutUpdateOrInsertShippingRate = useMemo(
+    () =>
+      async function (evt: React.ChangeEvent<HTMLInputElement>) {
+        setPendingShippingRate(true);
+        setPending(true);
+
+        const res = await checkoutUpdateOrInsertShippingRateAction(
+          evt.target.value
+        );
+
+        setPendingShippingRate(false);
+        setPending(false);
+
+        if (res.error) {
+          toast(res.error);
+        } else {
+          router.refresh();
+        }
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   return (
-    <form>
+    <form className="Checkout position-relative">
       <input
         type="text"
         inputMode="email"
@@ -88,10 +133,22 @@ export default function Checkout({
             name="shipping_rate_id"
             value="USPS-3-33"
             checked={formValues.shipping_rate_id === "USPS-3-33"}
-            onChange={onValueChange}
+            onChange={(evt) => {
+              onValueChange(evt);
+              formActionCheckoutUpdateOrInsertShippingRate(evt);
+            }}
+            disabled={pending}
+            id="shipping_rate_id_USPS-3-33"
           />
-          <label htmlFor="shippingRate-USPS-3-33">
-            USPS-3-33 | 1.99 | 3-33 days
+          <label
+            htmlFor="shippingRate-USPS-3-33"
+            className="Checkout__label-for-shipping_rate_id"
+          >
+            USPS-3-33 | 1.99 | 3-33 days{" "}
+            {pendingShippingRate &&
+            currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
+              <span className="loader"></span>
+            ) : null}
           </label>
           <br />
           <input
@@ -99,10 +156,22 @@ export default function Checkout({
             name="shipping_rate_id"
             value="USPS-4-44"
             checked={formValues.shipping_rate_id === "USPS-4-44"}
-            onChange={onValueChange}
+            onChange={(evt) => {
+              onValueChange(evt);
+              formActionCheckoutUpdateOrInsertShippingRate(evt);
+            }}
+            disabled={pending}
+            id="shipping_rate_id_USPS-4-44"
           />
-          <label htmlFor="shippingRate-USPS-4-44">
-            USPS-4-44 | 0.99 | 4-44 days
+          <label
+            htmlFor="shippingRate-USPS-4-44"
+            className="Checkout__label-for-shipping_rate_id"
+          >
+            USPS-4-44 | 0.99 | 4-44 days{" "}
+            {pendingShippingRate &&
+            currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
+              <span className="loader"></span>
+            ) : null}
           </label>
         </div>
       </fieldset>
@@ -193,6 +262,11 @@ export default function Checkout({
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p> */}
+      <div
+        className={`${
+          pending ? "d-block" : "d-none"
+        } position-absolute top-0 bottom-0 start-0 end-0 bg-dark opacity-25`}
+      ></div>
     </form>
   );
 }

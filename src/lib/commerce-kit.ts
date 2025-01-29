@@ -129,3 +129,21 @@ export const cartUpdate = async ({
   });
   return ret;
 };
+
+export const checkoutUpdateOrInsertShippingRateId = async ({
+  shippingRateId,
+  cartId,
+}: {
+  shippingRateId: string;
+  cartId: string;
+}): Promise<{ error: string }> => {
+  if (!shippingRateId || typeof shippingRateId !== "string") {
+    return { error: "Invalid shipping rate id" };
+  }
+
+  const ret = await Db.checkoutUpdateOrInsertShippingRateId({
+    shippingRateId,
+    cartId,
+  });
+  return ret;
+};

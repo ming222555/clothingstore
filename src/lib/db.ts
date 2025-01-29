@@ -219,24 +219,24 @@ export async function cartGet(id: string): Promise<Cart | null> {
 export async function checkoutGet(id: string): Promise<Checkout | null> {
   const stmt = db.prepare(`
     SELECT 
-      cust_email,
+      IFNULL( cust_email, '') AS cust_email,
       IFNULL( cust_shipping_fullname, '') AS cust_shipping_fullname,
-      cust_shipping_address,
-      cust_shipping_postalcode,
-      cust_shipping_city,
-      cust_shipping_state,
-      cust_shipping_country,
-      sr.id AS shipping_rate_id,
-      cust_billing_fullname,
-      cust_billing_address,
-      cust_billing_postalcode,
-      cust_billing_city,
-      cust_billing_state,
-      cust_billing_country,
-      cust_billing_phone,
-      cust_credit_card_nbr,
-      cust_card_expiration_date,
-      cust_card_cvc
+      IFNULL( cust_shipping_address, '') AS cust_shipping_address,
+      IFNULL( cust_shipping_postalcode, '') AS cust_shipping_postalcode,
+      IFNULL( cust_shipping_city, '') AS cust_shipping_city,
+      IFNULL( cust_shipping_state, '') AS cust_shipping_state,
+      IFNULL( cust_shipping_country, '') AS cust_shipping_country,
+      IFNULL( sr.id, '') AS shipping_rate_id,
+      IFNULL( cust_billing_fullname, '') AS cust_billing_fullname,
+      IFNULL( cust_billing_address, '') AS cust_billing_address,
+      IFNULL( cust_billing_postalcode, '') AS cust_billing_postalcode,
+      IFNULL( cust_billing_city, '') AS cust_billing_city,
+      IFNULL( cust_billing_state, '') AS cust_billing_state,
+      IFNULL( cust_billing_country, '') AS cust_billing_country,
+      IFNULL( cust_billing_phone, '') AS cust_billing_phone,
+      IFNULL( cust_credit_card_nbr, '') AS cust_credit_card_nbr,
+      IFNULL( cust_card_expiration_date, '') AS cust_card_expiration_date,
+      IFNULL( cust_card_cvc, '') AS cust_card_cvc
     FROM cart AS c
     INNER JOIN cart_checkout AS ck
     ON c.id = ck.id
@@ -604,6 +604,21 @@ async function cartExists(id: string): Promise<boolean> {
   return true;
 }
 
+async function shippingRateExists(id: string): Promise<boolean> {
+  const stmt = db.prepare(`
+    SELECT sr.id
+    FROM shipping_rate AS sr
+    WHERE sr.id = ?`);
+
+  const resultset = stmt.all(id);
+
+  if (resultset.length === 0) {
+    return false;
+  }
+
+  return true;
+}
+
 export async function cartUpdate({
   qty,
   productId,
@@ -732,5 +747,84 @@ export async function cartUpdate({
   return {
     error: "Add to cart aborted: multiple cart lines found for given product",
     meta: null,
+  };
+}
+
+export async function checkoutUpdateOrInsertShippingRateId({
+  shippingRateId,
+  cartId,
+}: {
+  shippingRateId: string;
+  cartId: string;
+}): Promise<{ error: string }> {
+  const exists = await shippingRateExists(shippingRateId);
+
+  if (!exists) {
+    return {
+      error: "No such shipping rate",
+    };
+  }
+
+  const stmt = db.prepare(`
+    SELECT ck.id AS checkout_id
+    FROM cart AS c
+    LEFT OUTER JOIN cart_checkout AS ck
+    ON c.id = ck.id
+    WHERE c.id = ?`);
+
+  console.log("cartId", cartId);
+  const resultset = stmt.all(cartId);
+
+  if (resultset.length === 0) {
+    return {
+      error: "Cart not found for checkout",
+    };
+  }
+
+  if (resultset.length === 1) {
+    if (resultset[0].checkout_id === null) {
+      try {
+        const stmt = db.prepare(`
+          INSERT INTO cart_checkout (id, shipping_rate_id)
+          VALUES (?, ?)`);
+        stmt.run(cartId, shippingRateId);
+
+        return {
+          error: "",
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e.message);
+
+        return {
+          error: "Failed to create cart checkout",
+        };
+      }
+    }
+
+    try {
+      const stmt = db.prepare(`
+        UPDATE cart_checkout
+        SET shipping_rate_id = ?
+        WHERE id = ?`);
+      stmt.run(shippingRateId, cartId);
+
+      return {
+        error: "",
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        error: "Failed to update cart checkout",
+      };
+    }
+  }
+
+  return {
+    error: "Update cart checkout aborted: multiple checkouts found for cart",
   };
 }

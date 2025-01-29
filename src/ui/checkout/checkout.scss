@@ -1,0 +1,5 @@
+.Checkout {
+  &__label-for-shipping_rate_id > .loader {
+    @include loader();
+  }
+}
