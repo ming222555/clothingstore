@@ -45,6 +45,7 @@ export default function Checkout({
     () =>
       function (evt: React.ChangeEvent<HTMLInputElement>) {
         currentFieldId.current = evt.target.id;
+
         dispatcher({
           type: evt.target.name as keyof FormState,
           payload: evt.target.value,
@@ -124,18 +125,24 @@ export default function Checkout({
   formValuesRef.current = formValues;
   errorsRef.current = errors;
 
-  function getFieldError(fieldname: string) {
-    if (errorsRef.current.length) {
-      const pos = errorsRef.current.findIndex((err) => err.field === fieldname);
+  const getFieldError = useMemo(
+    () =>
+      function (fieldname: string) {
+        if (errorsRef.current.length) {
+          const pos = errorsRef.current.findIndex(
+            (err) => err.field === fieldname
+          );
 
-      if (pos > -1) {
-        return errorsRef.current[pos].errormsg;
-      }
-      return "";
-    } else {
-      return "";
-    }
-  }
+          if (pos > -1) {
+            return errorsRef.current[pos].errormsg;
+          }
+          return "";
+        } else {
+          return "";
+        }
+      },
+    []
+  );
 
   return (
     <form className="Checkout position-relative">

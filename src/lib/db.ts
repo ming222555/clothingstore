@@ -857,7 +857,7 @@ export async function validateCheckoutUpdateOrInsert(
   if (!input_shipping_rate_id) {
     errors.push({
       field: "shipping_rate_id",
-      errormsg: "Please select a Shipping Rate option",
+      errormsg: "Please select a Shipping method option",
     });
   }
 
