@@ -46,6 +46,21 @@ export default function Checkout({
       function (evt: React.ChangeEvent<HTMLInputElement>) {
         currentFieldId.current = evt.target.id;
 
+        if (evt.target.name === "shipping_rate_id") {
+          // radio button
+          const pos = errorsRef.current.findIndex(
+            (err) =>
+              err.field === "shipping_rate_id" &&
+              err.errormsg.includes("lease select") // "Please select a Shipping method option"
+          );
+
+          if (pos > -1) {
+            const dupErrors = [...errorsRef.current];
+            dupErrors.splice(pos, 1);
+            setErrors(dupErrors);
+          }
+        }
+
         dispatcher({
           type: evt.target.name as keyof FormState,
           payload: evt.target.value,
