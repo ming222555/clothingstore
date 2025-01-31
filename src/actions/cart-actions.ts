@@ -140,3 +140,40 @@ export const checkoutUpdateOrInsertShippingRateAction = async (
     error: "",
   };
 };
+
+export const checkoutUpdateOrInsertAction = async (
+  formValues: Commerce.Checkout
+): Promise<{
+  errors: {
+    field: string;
+    errormsg: string;
+  }[];
+}> => {
+  const cart = await getCartFromCookiesAction();
+
+  if (!cart) {
+    return {
+      errors: [
+        {
+          field: "checkout",
+          errormsg: "Cart not found",
+        },
+      ],
+    };
+  }
+
+  const updatedOrInserted = await Commerce.checkoutUpdateOrInsert({
+    formValues,
+    cartId: cart.id,
+  });
+
+  if (updatedOrInserted.errors.length) {
+    return updatedOrInserted;
+  }
+
+  await new Promise((resolv) => setTimeout(resolv, 2000));
+
+  return {
+    errors: [],
+  };
+};

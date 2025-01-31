@@ -147,3 +147,22 @@ export const checkoutUpdateOrInsertShippingRateId = async ({
   });
   return ret;
 };
+
+export const checkoutUpdateOrInsert = async ({
+  formValues,
+  cartId,
+}: {
+  formValues: Checkout;
+  cartId: string;
+}): Promise<{
+  errors: {
+    field: string;
+    errormsg: string;
+  }[];
+}> => {
+  const ret = await Db.checkoutUpdateOrInsert({
+    checkout: formValues,
+    cartId,
+  });
+  return ret;
+};

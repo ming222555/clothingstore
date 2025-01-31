@@ -828,3 +828,122 @@ export async function checkoutUpdateOrInsertShippingRateId({
     error: "Update cart checkout aborted: multiple checkouts found for cart",
   };
 }
+
+export async function validateCheckoutUpdateOrInsert(
+  checkout: Checkout
+): Promise<{ errors: { field: string; errormsg: string }[] }> {
+  // if (!checkout.shipping_rate_id) {
+  //   return {
+  //     errors: [
+  //       { field: "shipping_rate_id", errormsg: "Shipping Rate is required" },
+  //     ],
+  //   };
+  // }
+
+  // const exists = await shippingRateExists(checkout.shipping_rate_id);
+  //
+  // if (!exists) {
+  //   return {
+  //     errors: [
+  //       { field: "shipping_rate_id", errormsg: "No such shipping rate" },
+  //     ],
+  //   };
+  // }
+
+  return {
+    errors: [],
+  };
+}
+
+export async function checkoutUpdateOrInsert({
+  checkout,
+  cartId,
+}: {
+  checkout: Checkout;
+  cartId: string;
+}): Promise<{ errors: { field: string; errormsg: string }[] }> {
+  const validationErrors = await validateCheckoutUpdateOrInsert(checkout);
+
+  if (validationErrors.errors.length) {
+    return validationErrors;
+  }
+
+  const stmt = db.prepare(`
+    SELECT ck.id AS checkout_id
+    FROM cart AS c
+    LEFT OUTER JOIN cart_checkout AS ck
+    ON c.id = ck.id
+    WHERE c.id = ?`);
+
+  console.log("cartId", cartId);
+  const resultset = stmt.all(cartId);
+
+  if (resultset.length === 0) {
+    return {
+      errors: [{ field: "checkout", errormsg: "Cart not found for checkout" }],
+    };
+  }
+
+  if (resultset.length === 1) {
+    if (resultset[0].checkout_id === null) {
+      try {
+        // const stmt = db.prepare(`
+        //   INSERT INTO cart_checkout (id, cust_email, shipping_rate_id)
+        //   VALUES (?, ?)`);
+        // stmt.run(cartId, checkout.cust_email, checkout.shipping_rate_id);
+        const stmt = db.prepare(`
+          INSERT INTO cart_checkout (id, cust_email)
+          VALUES (?, ?)`);
+        stmt.run(cartId, checkout.cust_email);
+
+        return {
+          errors: [],
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        console.log(e.message);
+
+        return {
+          errors: [
+            { field: "checkout", errormsg: "Failed to create cart checkout" },
+          ],
+        };
+      }
+    }
+
+    try {
+      const stmt = db.prepare(`
+        UPDATE cart_checkout
+        SET
+          cust_email = ?,
+          shipping_rate_id = ?
+        WHERE id = ?`);
+      stmt.run(checkout.cust_email, checkout.shipping_rate_id, cartId);
+
+      return {
+        errors: [],
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      console.log(e.message);
+
+      return {
+        errors: [
+          { field: "checkout", errormsg: "Failed to update cart checkout" },
+        ],
+      };
+    }
+  }
+
+  return {
+    errors: [
+      {
+        field: "checkout",
+        errormsg:
+          "Update cart checkout aborted: multiple checkouts found for cart",
+      },
+    ],
+  };
+}

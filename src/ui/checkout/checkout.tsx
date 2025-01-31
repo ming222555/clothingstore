@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import * as Commerce from "@/lib/commerce-kit";
-import { checkoutUpdateOrInsertShippingRateAction } from "@/actions/cart-actions";
+import {
+  checkoutUpdateOrInsertShippingRateAction,
+  checkoutUpdateOrInsertAction,
+} from "@/actions/cart-actions";
 
 type FormState = Commerce.Checkout;
 
@@ -36,6 +39,7 @@ export default function Checkout({
   console.log("formValues", formValues);
 
   const currentFieldId = useRef("");
+  const formValuesRef = useRef(initialFormValues);
 
   const onValueChange = useMemo(
     () =>
@@ -76,6 +80,28 @@ export default function Checkout({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  const formActionPaynow = useMemo(
+    () =>
+      async function () {
+        setPending(true);
+
+        const res = await checkoutUpdateOrInsertAction(formValuesRef.current);
+
+        setPending(false);
+
+        if (res.errors.length) {
+          toast(JSON.stringify(res));
+          return;
+        }
+
+        router.refresh();
+        // todo braintree payment
+      },
+    []
+  );
+
+  formValuesRef.current = formValues;
 
   return (
     <form className="Checkout position-relative">
@@ -262,6 +288,9 @@ export default function Checkout({
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p> */}
+      <button type="button" onClick={formActionPaynow}>
+        Pay now
+      </button>
       <div
         className={`${
           pending ? "d-block" : "d-none"
