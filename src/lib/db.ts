@@ -832,23 +832,32 @@ export async function checkoutUpdateOrInsertShippingRateId({
 export async function validateCheckoutUpdateOrInsert(
   checkout: Checkout
 ): Promise<{ errors: { field: string; errormsg: string }[] }> {
-  // if (!checkout.shipping_rate_id) {
-  //   return {
-  //     errors: [
-  //       { field: "shipping_rate_id", errormsg: "Shipping Rate is required" },
-  //     ],
-  //   };
-  // }
+  if (!checkout.cust_email) {
+    return {
+      errors: [{ field: "cust_email", errormsg: "Email is required" }],
+    };
+  }
 
-  // const exists = await shippingRateExists(checkout.shipping_rate_id);
-  //
-  // if (!exists) {
-  //   return {
-  //     errors: [
-  //       { field: "shipping_rate_id", errormsg: "No such shipping rate" },
-  //     ],
-  //   };
-  // }
+  if (!checkout.shipping_rate_id) {
+    return {
+      errors: [
+        {
+          field: "shipping_rate_id",
+          errormsg: "Please select a Shipping Rate option",
+        },
+      ],
+    };
+  }
+
+  const exists = await shippingRateExists(checkout.shipping_rate_id);
+
+  if (!exists) {
+    return {
+      errors: [
+        { field: "shipping_rate_id", errormsg: "No such shipping rate" },
+      ],
+    };
+  }
 
   return {
     errors: [],
@@ -887,14 +896,10 @@ export async function checkoutUpdateOrInsert({
   if (resultset.length === 1) {
     if (resultset[0].checkout_id === null) {
       try {
-        // const stmt = db.prepare(`
-        //   INSERT INTO cart_checkout (id, cust_email, shipping_rate_id)
-        //   VALUES (?, ?)`);
-        // stmt.run(cartId, checkout.cust_email, checkout.shipping_rate_id);
         const stmt = db.prepare(`
-          INSERT INTO cart_checkout (id, cust_email)
-          VALUES (?, ?)`);
-        stmt.run(cartId, checkout.cust_email);
+          INSERT INTO cart_checkout (id, cust_email, shipping_rate_id)
+          VALUES (?, ?, ?)`);
+        stmt.run(cartId, checkout.cust_email, checkout.shipping_rate_id);
 
         return {
           errors: [],
