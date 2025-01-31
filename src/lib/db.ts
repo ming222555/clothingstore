@@ -761,7 +761,7 @@ export async function checkoutUpdateOrInsertShippingRateId({
 
   if (!exists) {
     return {
-      error: "No such shipping rate",
+      error: "Invalid shipping rate",
     };
   }
 
@@ -834,22 +834,37 @@ export async function validateCheckoutUpdateOrInsert(
 ): Promise<{ errors: { field: string; errormsg: string }[] }> {
   const errors: { field: string; errormsg: string }[] = [];
 
-  if (!checkout.cust_email) {
+  const input_email = checkout.cust_email.trim();
+  if (!input_email) {
     errors.push({ field: "cust_email", errormsg: "Email is required" });
   }
 
-  if (!checkout.cust_shipping_fullname) {
+  const input_shipping_fullname = checkout.cust_shipping_fullname.trim();
+  if (!input_shipping_fullname) {
     errors.push({
       field: "cust_shipping_fullname",
       errormsg: "Full name is required",
     });
   }
 
-  if (!checkout.shipping_rate_id) {
+  if (errors.length) {
+    return {
+      errors,
+    };
+  }
+
+  const input_shipping_rate_id = checkout.shipping_rate_id.trim();
+  if (!input_shipping_rate_id) {
     errors.push({
       field: "shipping_rate_id",
       errormsg: "Please select a Shipping Rate option",
     });
+  }
+
+  if (errors.length) {
+    return {
+      errors,
+    };
   }
 
   const exists = await shippingRateExists(checkout.shipping_rate_id);
@@ -857,7 +872,7 @@ export async function validateCheckoutUpdateOrInsert(
   if (!exists) {
     errors.push({
       field: "shipping_rate_id",
-      errormsg: "No such shipping rate",
+      errormsg: "Invalid shipping rate",
     });
   }
 
@@ -909,9 +924,9 @@ export async function checkoutUpdateOrInsert({
           VALUES (?, ?, ?, ?)`);
         stmt.run(
           cartId,
-          checkout.cust_email,
-          checkout.cust_shipping_fullname,
-          checkout.shipping_rate_id
+          checkout.cust_email.trim(),
+          checkout.cust_shipping_fullname.trim(),
+          checkout.shipping_rate_id.trim()
         );
 
         return {
@@ -939,9 +954,9 @@ export async function checkoutUpdateOrInsert({
           shipping_rate_id = ?
         WHERE id = ?`);
       stmt.run(
-        checkout.cust_email,
-        checkout.cust_shipping_fullname,
-        checkout.shipping_rate_id,
+        checkout.cust_email.trim(),
+        checkout.cust_shipping_fullname.trim(),
+        checkout.shipping_rate_id.trim(),
         cartId
       );
 
