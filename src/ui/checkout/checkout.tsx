@@ -55,6 +55,11 @@ export default function Checkout({
 
   const [pending, setPending] = useState(false);
   const [pendingShippingRate, setPendingShippingRate] = useState(false);
+  const [errors, setErrors] = useState<{ field: string; errormsg: string }[]>(
+    []
+  );
+
+  const errorsRef = useRef(errors);
 
   const router = useRouter();
 
@@ -91,7 +96,22 @@ export default function Checkout({
         setPending(false);
 
         if (res.errors.length) {
-          toast(JSON.stringify(res));
+          // toast(JSON.stringify(res));
+          const pos = res.errors.findIndex((err) => err.field === "checkout");
+          if (pos > -1) {
+            toast(res.errors[pos].errormsg);
+
+            const filteredErrors = res.errors.filter(
+              (err) => err.field !== "checkout"
+            );
+
+            if (filteredErrors.length) {
+              setErrors(filteredErrors);
+            }
+          } else {
+            setErrors(res.errors);
+          }
+
           return;
         }
 
@@ -102,6 +122,20 @@ export default function Checkout({
   );
 
   formValuesRef.current = formValues;
+  errorsRef.current = errors;
+
+  function getFieldError(fieldname: string) {
+    if (errorsRef.current.length) {
+      const pos = errorsRef.current.findIndex((err) => err.field === fieldname);
+
+      if (pos > -1) {
+        return errorsRef.current[pos].errormsg;
+      }
+      return "";
+    } else {
+      return "";
+    }
+  }
 
   return (
     <form className="Checkout position-relative">
@@ -114,6 +148,9 @@ export default function Checkout({
         value={formValues.cust_email}
         onChange={onValueChange}
       />
+      {getFieldError("cust_email") ? (
+        <span>{getFieldError("cust_email")}</span>
+      ) : null}
       <input
         type="text"
         name="cust_shipping_fullname"
@@ -121,6 +158,9 @@ export default function Checkout({
         value={formValues.cust_shipping_fullname}
         onChange={onValueChange}
       />
+      {getFieldError("cust_shipping_fullname") ? (
+        <span>{getFieldError("cust_shipping_fullname")}</span>
+      ) : null}
       {/* <input
         type="text"
         name="cust_shipping_address"
@@ -151,6 +191,10 @@ export default function Checkout({
         id="cust_shipping_country"
         placeholder="cust_shipping_country"
       /> */}
+
+      {getFieldError("shipping_rate_id") ? (
+        <span>{getFieldError("shipping_rate_id")}</span>
+      ) : null}
       <fieldset>
         <legend>Shipping method</legend>
         <div role="radiodroup">
@@ -288,7 +332,7 @@ export default function Checkout({
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p> */}
-      <button type="button" onClick={formActionPaynow}>
+      <button type="button" disabled={pending} onClick={formActionPaynow}>
         Pay now
       </button>
       <div

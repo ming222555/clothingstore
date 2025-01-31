@@ -832,30 +832,38 @@ export async function checkoutUpdateOrInsertShippingRateId({
 export async function validateCheckoutUpdateOrInsert(
   checkout: Checkout
 ): Promise<{ errors: { field: string; errormsg: string }[] }> {
+  const errors: { field: string; errormsg: string }[] = [];
+
   if (!checkout.cust_email) {
-    return {
-      errors: [{ field: "cust_email", errormsg: "Email is required" }],
-    };
+    errors.push({ field: "cust_email", errormsg: "Email is required" });
+  }
+
+  if (!checkout.cust_shipping_fullname) {
+    errors.push({
+      field: "cust_shipping_fullname",
+      errormsg: "Full name is required",
+    });
   }
 
   if (!checkout.shipping_rate_id) {
-    return {
-      errors: [
-        {
-          field: "shipping_rate_id",
-          errormsg: "Please select a Shipping Rate option",
-        },
-      ],
-    };
+    errors.push({
+      field: "shipping_rate_id",
+      errormsg: "Please select a Shipping Rate option",
+    });
   }
 
   const exists = await shippingRateExists(checkout.shipping_rate_id);
 
   if (!exists) {
+    errors.push({
+      field: "shipping_rate_id",
+      errormsg: "No such shipping rate",
+    });
+  }
+
+  if (errors.length) {
     return {
-      errors: [
-        { field: "shipping_rate_id", errormsg: "No such shipping rate" },
-      ],
+      errors,
     };
   }
 
@@ -897,9 +905,14 @@ export async function checkoutUpdateOrInsert({
     if (resultset[0].checkout_id === null) {
       try {
         const stmt = db.prepare(`
-          INSERT INTO cart_checkout (id, cust_email, shipping_rate_id)
-          VALUES (?, ?, ?)`);
-        stmt.run(cartId, checkout.cust_email, checkout.shipping_rate_id);
+          INSERT INTO cart_checkout (id, cust_email, cust_shipping_fullname, shipping_rate_id)
+          VALUES (?, ?, ?, ?)`);
+        stmt.run(
+          cartId,
+          checkout.cust_email,
+          checkout.cust_shipping_fullname,
+          checkout.shipping_rate_id
+        );
 
         return {
           errors: [],
@@ -922,9 +935,15 @@ export async function checkoutUpdateOrInsert({
         UPDATE cart_checkout
         SET
           cust_email = ?,
+          cust_shipping_fullname = ?,
           shipping_rate_id = ?
         WHERE id = ?`);
-      stmt.run(checkout.cust_email, checkout.shipping_rate_id, cartId);
+      stmt.run(
+        checkout.cust_email,
+        checkout.cust_shipping_fullname,
+        checkout.shipping_rate_id,
+        cartId
+      );
 
       return {
         errors: [],
