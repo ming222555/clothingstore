@@ -849,7 +849,7 @@ export async function validateCheckoutUpdateOrInsert(
   if (!input_shipping_fullname) {
     errors.push({
       field: "cust_shipping_fullname",
-      errormsg: "Full name is required",
+      errormsg: "Name is required",
     });
   }
 

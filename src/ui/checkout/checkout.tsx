@@ -4,9 +4,11 @@ import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ip3country from "ip3country";
-////////////////////// import { getCodeList } from "country-list";
+import { getCodeList } from "country-list";
 
 ip3country.init();
+
+const countrylist = getCodeList();
 
 import * as Commerce from "@/lib/commerce-kit";
 import {
@@ -49,7 +51,7 @@ export default function Checkout({
 
   const onValueChange = useMemo(
     () =>
-      function (evt: React.ChangeEvent<HTMLInputElement>) {
+      function (evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         currentFieldId.current = evt.target.id;
 
         if (evt.target.name === "shipping_rate_id") {
@@ -90,22 +92,27 @@ export default function Checkout({
         const data = await response.json();
 
         // Lookup using ip4 str
-        const countryCode = ip3country.lookupStr(data.ip);
+        const country_code = ip3country.lookupStr(data.ip);
 
-        if (!countryCode) {
+        if (!country_code) {
+          return;
+        }
+
+        const countryCode = country_code.toLowerCase();
+
+        if (!countrylist[countryCode]) {
           return;
         }
 
         dispatcher({
           type: "cust_shipping_country",
-          payload: countryCode.toLowerCase(),
+          payload: countryCode,
         });
       } catch (error) {
         console.error("Error fetching IP address:", error);
       }
     }
     ip2Country();
-    ////////////////////// console.log(JSON.stringify(getCodeList()));
   }, []);
 
   const router = useRouter();
@@ -215,7 +222,7 @@ export default function Checkout({
       {getFieldError("cust_shipping_fullname") ? (
         <span>{getFieldError("cust_shipping_fullname")}</span>
       ) : null}
-      <input
+      {/* <input
         type="text"
         name="cust_shipping_country"
         id="cust_shipping_country"
@@ -223,6 +230,22 @@ export default function Checkout({
         value={formValues.cust_shipping_country}
         onChange={onValueChange}
       />
+      {getFieldError("cust_shipping_country") ? (
+        <span>{getFieldError("cust_shipping_country")}</span>
+      ) : null} */}
+      <select
+        name="cust_shipping_country"
+        id="cust_shipping_country"
+        value={formValues.cust_shipping_country}
+        onChange={onValueChange}
+      >
+        <option value=""></option>
+        {Object.entries(countrylist).map((keyVal) => (
+          <option value={keyVal[0]} key={keyVal[0]}>
+            {keyVal[1]}
+          </option>
+        ))}
+      </select>
       {getFieldError("cust_shipping_country") ? (
         <span>{getFieldError("cust_shipping_country")}</span>
       ) : null}
