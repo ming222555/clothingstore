@@ -3,13 +3,16 @@
 import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import ip3country from "ip3country";
+////////////////////// import { getCodeList } from "country-list";
+
+ip3country.init();
 
 import * as Commerce from "@/lib/commerce-kit";
 import {
   checkoutUpdateOrInsertShippingRateAction,
   checkoutUpdateOrInsertAction,
 } from "@/actions/cart-actions";
-import { ip2CountryAction } from "@/actions/util-actions";
 
 type FormState = Commerce.Checkout;
 
@@ -85,13 +88,24 @@ export default function Checkout({
       try {
         const response = await fetch("https://api.ipify.org?format=json");
         const data = await response.json();
-        const country = await ip2CountryAction(data.ip);
-        console.log("mycountry", country);
+
+        // Lookup using ip4 str
+        const countryCode = ip3country.lookupStr(data.ip);
+
+        if (!countryCode) {
+          return;
+        }
+
+        dispatcher({
+          type: "cust_shipping_country",
+          payload: countryCode.toLowerCase(),
+        });
       } catch (error) {
         console.error("Error fetching IP address:", error);
       }
     }
     ip2Country();
+    ////////////////////// console.log(JSON.stringify(getCodeList()));
   }, []);
 
   const router = useRouter();
