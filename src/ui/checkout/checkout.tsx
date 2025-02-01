@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useReducer, useRef, useState } from "react";
+import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ import {
   checkoutUpdateOrInsertShippingRateAction,
   checkoutUpdateOrInsertAction,
 } from "@/actions/cart-actions";
+import { ip2CountryAction } from "@/actions/util-actions";
 
 type FormState = Commerce.Checkout;
 
@@ -22,6 +23,8 @@ function reducer(
 const initialFormValues: FormState = {
   cust_email: "",
   cust_shipping_fullname: "",
+  cust_shipping_country: "",
+  cust_shipping_address: "",
   shipping_rate_id: "",
 };
 
@@ -76,6 +79,20 @@ export default function Checkout({
   );
 
   const errorsRef = useRef(errors);
+
+  useEffect(() => {
+    async function ip2Country() {
+      try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        const country = await ip2CountryAction(data.ip);
+        console.log("mycountry", country);
+      } catch (error) {
+        console.error("Error fetching IP address:", error);
+      }
+    }
+    ip2Country();
+  }, []);
 
   const router = useRouter();
 
@@ -176,6 +193,7 @@ export default function Checkout({
       <input
         type="text"
         name="cust_shipping_fullname"
+        id="cust_shipping_fullname"
         placeholder="cust_shipping_fullname"
         value={formValues.cust_shipping_fullname}
         onChange={onValueChange}
@@ -183,13 +201,29 @@ export default function Checkout({
       {getFieldError("cust_shipping_fullname") ? (
         <span>{getFieldError("cust_shipping_fullname")}</span>
       ) : null}
-      {/* <input
+      <input
+        type="text"
+        name="cust_shipping_country"
+        id="cust_shipping_country"
+        placeholder="cust_shipping_country"
+        value={formValues.cust_shipping_country}
+        onChange={onValueChange}
+      />
+      {getFieldError("cust_shipping_country") ? (
+        <span>{getFieldError("cust_shipping_country")}</span>
+      ) : null}
+      <input
         type="text"
         name="cust_shipping_address"
         id="cust_shipping_address"
         placeholder="cust_shipping_address"
+        value={formValues.cust_shipping_address}
+        onChange={onValueChange}
       />
-      <input
+      {getFieldError("cust_shipping_address") ? (
+        <span>{getFieldError("cust_shipping_address")}</span>
+      ) : null}
+      {/* <input
         type="text"
         name="cust_shipping_postalcode"
         id="cust_shipping_postalcode"
@@ -206,14 +240,7 @@ export default function Checkout({
         name="cust_shipping_state"
         id="cust_shipping_state"
         placeholder="cust_shipping_state"
-      />
-      <input
-        type="text"
-        name="cust_shipping_country"
-        id="cust_shipping_country"
-        placeholder="cust_shipping_country"
       /> */}
-
       {getFieldError("shipping_rate_id") ? (
         <span>{getFieldError("shipping_rate_id")}</span>
       ) : null}
@@ -278,6 +305,12 @@ export default function Checkout({
         />
         <input
           type="text"
+          name="cust_billing_country"
+          id="cust_billing_country"
+          placeholder="cust_billing_country"
+        />
+        <input
+          type="text"
           name="cust_billing_address"
           id="cust_billing_address"
           placeholder="cust_billing_address"
@@ -299,12 +332,6 @@ export default function Checkout({
           name="cust_billing_state"
           id="cust_billing_state"
           placeholder="cust_billing_state"
-        />
-        <input
-          type="text"
-          name="cust_billing_country"
-          id="cust_billing_country"
-          placeholder="cust_billing_country"
         />
         <input
           type="text"

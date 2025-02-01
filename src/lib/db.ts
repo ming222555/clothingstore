@@ -1,4 +1,5 @@
 import sql from "better-sqlite3";
+import { validate as emailValidate } from "email-validator";
 
 import type { Cart, Checkout } from "@/lib/commerce-kit";
 
@@ -28,6 +29,7 @@ const db = new sql("cart.db");
 
 const DEFAULT_CURRENCY = "USD";
 const DEFAULT_QTY_TO_ADD_TO_CART = 1;
+const INPUT_MIN_LENGTH = 6;
 
 function initDb() {
   db.exec(`
@@ -64,18 +66,18 @@ function initDb() {
       id TEXT PRIMARY KEY, 
       cust_email TEXT,
       cust_shipping_fullname TEXT,
+      cust_shipping_country TEXT,
       cust_shipping_address TEXT,
       cust_shipping_postalcode TEXT,
       cust_shipping_city TEXT,
       cust_shipping_state TEXT,
-      cust_shipping_country TEXT,
       shipping_rate_id TEXT,
       cust_billing_fullname TEXT,
+      cust_billing_country TEXT,
       cust_billing_address TEXT,
       cust_billing_postalcode TEXT,
       cust_billing_city TEXT,
       cust_billing_state TEXT,
-      cust_billing_country TEXT,
       cust_billing_phone TEXT,
       cust_credit_card_nbr TEXT,
       cust_card_expiration_date TEXT,
@@ -221,18 +223,18 @@ export async function checkoutGet(id: string): Promise<Checkout | null> {
     SELECT 
       IFNULL( cust_email, '') AS cust_email,
       IFNULL( cust_shipping_fullname, '') AS cust_shipping_fullname,
+      IFNULL( cust_shipping_country, '') AS cust_shipping_country,
       IFNULL( cust_shipping_address, '') AS cust_shipping_address,
       IFNULL( cust_shipping_postalcode, '') AS cust_shipping_postalcode,
       IFNULL( cust_shipping_city, '') AS cust_shipping_city,
       IFNULL( cust_shipping_state, '') AS cust_shipping_state,
-      IFNULL( cust_shipping_country, '') AS cust_shipping_country,
       IFNULL( sr.id, '') AS shipping_rate_id,
       IFNULL( cust_billing_fullname, '') AS cust_billing_fullname,
+      IFNULL( cust_billing_country, '') AS cust_billing_country,
       IFNULL( cust_billing_address, '') AS cust_billing_address,
       IFNULL( cust_billing_postalcode, '') AS cust_billing_postalcode,
       IFNULL( cust_billing_city, '') AS cust_billing_city,
       IFNULL( cust_billing_state, '') AS cust_billing_state,
-      IFNULL( cust_billing_country, '') AS cust_billing_country,
       IFNULL( cust_billing_phone, '') AS cust_billing_phone,
       IFNULL( cust_credit_card_nbr, '') AS cust_credit_card_nbr,
       IFNULL( cust_card_expiration_date, '') AS cust_card_expiration_date,
@@ -839,11 +841,47 @@ export async function validateCheckoutUpdateOrInsert(
     errors.push({ field: "cust_email", errormsg: "Email is required" });
   }
 
+  if (!emailValidate(input_email)) {
+    errors.push({ field: "cust_email", errormsg: "Email is invalid" });
+  }
+
   const input_shipping_fullname = checkout.cust_shipping_fullname.trim();
   if (!input_shipping_fullname) {
     errors.push({
       field: "cust_shipping_fullname",
       errormsg: "Full name is required",
+    });
+  }
+
+  if (input_shipping_fullname.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_shipping_fullname",
+      errormsg:
+        "Full name must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  // dropdown for country
+  const input_shipping_country = checkout.cust_shipping_country.trim();
+  if (!input_shipping_country) {
+    errors.push({
+      field: "cust_shipping_country",
+      errormsg: "Country is required",
+    });
+  }
+
+  const input_shipping_address = checkout.cust_shipping_address.trim();
+  if (!input_shipping_address) {
+    errors.push({
+      field: "cust_shipping_address",
+      errormsg: "Address is required",
+    });
+  }
+
+  if (input_shipping_address.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_shipping_address",
+      errormsg: "Address must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
     });
   }
 
@@ -857,7 +895,7 @@ export async function validateCheckoutUpdateOrInsert(
   if (!input_shipping_rate_id) {
     errors.push({
       field: "shipping_rate_id",
-      errormsg: "Please select a Shipping method option",
+      errormsg: "Please select a Shipping method",
     });
   }
 
@@ -920,12 +958,20 @@ export async function checkoutUpdateOrInsert({
     if (resultset[0].checkout_id === null) {
       try {
         const stmt = db.prepare(`
-          INSERT INTO cart_checkout (id, cust_email, cust_shipping_fullname, shipping_rate_id)
-          VALUES (?, ?, ?, ?)`);
+          INSERT INTO cart_checkout (
+            id,
+            cust_email,
+            cust_shipping_fullname,
+            cust_shipping_country,
+            cust_shipping_address,shipping_rate_id
+          )
+          VALUES (?, ?, ?, ?, ?, ?)`);
         stmt.run(
           cartId,
           checkout.cust_email.trim(),
           checkout.cust_shipping_fullname.trim(),
+          checkout.cust_shipping_country.trim(),
+          checkout.cust_shipping_address.trim(),
           checkout.shipping_rate_id.trim()
         );
 
@@ -951,11 +997,15 @@ export async function checkoutUpdateOrInsert({
         SET
           cust_email = ?,
           cust_shipping_fullname = ?,
+          cust_shipping_country = ?,
+          cust_shipping_address = ?,
           shipping_rate_id = ?
         WHERE id = ?`);
       stmt.run(
         checkout.cust_email.trim(),
         checkout.cust_shipping_fullname.trim(),
+        checkout.cust_shipping_country.trim(),
+        checkout.cust_shipping_address.trim(),
         checkout.shipping_rate_id.trim(),
         cartId
       );
