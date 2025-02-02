@@ -34,6 +34,12 @@ const initialFormValues: FormState = {
   cust_shipping_state: "",
   cust_shipping_country: "",
   shipping_rate_id: "",
+  cust_billing_fullname: "",
+  cust_billing_address: "",
+  cust_billing_postalcode: "",
+  cust_billing_city: "",
+  cust_billing_state: "",
+  cust_billing_country: "",
 };
 
 export default function Checkout({
@@ -310,7 +316,7 @@ export default function Checkout({
           />
           <label
             htmlFor="shipping_rate_id_USPS-3-33"
-            className="Checkout__label-for-shipping_rate_id"
+            className="Checkout__label-for-shipping-rate-id"
           >
             USPS-3-33 | 1.99 | 3-33 days{" "}
             {pendingShippingRate &&
@@ -333,7 +339,7 @@ export default function Checkout({
           />
           <label
             htmlFor="shipping_rate_id_USPS-4-44"
-            className="Checkout__label-for-shipping_rate_id"
+            className="Checkout__label-for-shipping-rate-id"
           >
             USPS-4-44 | 0.99 | 4-44 days{" "}
             {pendingShippingRate &&
@@ -357,52 +363,91 @@ export default function Checkout({
       >
         Billing address same as shipping
       </label>
-      {/* <fieldset>
+      <div
+        className={`bg-warning Checkout__fieldset-billing-address${
+          billingAddrEqShipping ? " billingAddrEqShipping" : ""
+        }`}
+      >
         <legend>Billing address</legend>
         <input
           type="text"
           name="cust_billing_fullname"
           id="cust_billing_fullname"
           placeholder="cust_billing_fullname"
+          value={formValues.cust_billing_fullname}
+          onChange={onValueChange}
         />
-        <input
-          type="text"
-          name="cust_billing_country"
-          id="cust_billing_country"
-          placeholder="cust_billing_country"
-        />
+        {getFieldError("cust_billing_fullname") ? (
+          <span>{getFieldError("cust_billing_fullname")}</span>
+        ) : null}
         <input
           type="text"
           name="cust_billing_address"
           id="cust_billing_address"
           placeholder="cust_billing_address"
+          value={formValues.cust_billing_address}
+          onChange={onValueChange}
         />
+        {getFieldError("cust_billing_address") ? (
+          <span>{getFieldError("cust_billing_address")}</span>
+        ) : null}
         <input
           type="text"
           name="cust_billing_postalcode"
           id="cust_billing_postalcode"
           placeholder="cust_billing_postalcode"
+          value={formValues.cust_billing_postalcode}
+          onChange={onValueChange}
         />
+        {getFieldError("cust_billing_postalcode") ? (
+          <span>{getFieldError("cust_billing_postalcode")}</span>
+        ) : null}
         <input
           type="text"
           name="cust_billing_city"
           id="cust_billing_city"
           placeholder="cust_billing_city"
+          value={formValues.cust_billing_city}
+          onChange={onValueChange}
         />
+        {getFieldError("cust_billing_city") ? (
+          <span>{getFieldError("cust_billing_city")}</span>
+        ) : null}
         <input
           type="text"
           name="cust_billing_state"
           id="cust_billing_state"
           placeholder="cust_billing_state"
+          value={formValues.cust_billing_state}
+          onChange={onValueChange}
         />
+        {getFieldError("cust_billing_state") ? (
+          <span>{getFieldError("cust_billing_state")}</span>
+        ) : null}
+        <select
+          name="cust_billing_country"
+          id="cust_billing_country"
+          value={formValues.cust_billing_country}
+          onChange={onValueChange}
+        >
+          <option value=""></option>
+          {Object.entries(countrylist).map((keyVal) => (
+            <option value={keyVal[0]} key={keyVal[0]}>
+              {keyVal[1]}
+            </option>
+          ))}
+        </select>
+        {getFieldError("cust_billing_country") ? (
+          <span>{getFieldError("cust_billing_country")}</span>
+        ) : null}
         <input
           type="text"
           name="cust_billing_phone"
           id="cust_billing_phone"
           placeholder="cust_billing_phone"
         />
-      </fieldset>
-      <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
+      </div>
+      {/* <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
         PayPal
       </span>
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>

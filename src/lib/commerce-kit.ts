@@ -23,12 +23,12 @@ export type Checkout = {
   cust_shipping_state: string;
   cust_shipping_country: string;
   shipping_rate_id: string;
-  // cust_billing_fullname: string;
-  // cust_billing_country: string;
-  // cust_billing_address: string;
-  // cust_billing_postalcode: string;
-  // cust_billing_city: string;
-  // cust_billing_state: string;
+  cust_billing_fullname: string;
+  cust_billing_address: string;
+  cust_billing_postalcode: string;
+  cust_billing_city: string;
+  cust_billing_state: string;
+  cust_billing_country: string;
   // cust_billing_phone: string;
   // cust_credit_card_nbr: string;
   // cust_card_expiration_date: string;

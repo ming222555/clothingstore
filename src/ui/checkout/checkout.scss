@@ -1,5 +1,15 @@
 .Checkout {
-  &__label-for-shipping_rate_id > .loader {
+  &__label-for-shipping-rate-id > .loader {
     @include loader();
+  }
+
+  &__fieldset-billing-address {
+    max-height: 999px;
+    transition: all 0.2s;
+    overflow: hidden;
+
+    &.billingAddrEqShipping {
+      max-height: 0;
+    }
   }
 }

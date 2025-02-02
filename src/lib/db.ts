@@ -73,11 +73,11 @@ function initDb() {
       cust_shipping_country TEXT,
       shipping_rate_id TEXT,
       cust_billing_fullname TEXT,
-      cust_billing_country TEXT,
       cust_billing_address TEXT,
       cust_billing_postalcode TEXT,
       cust_billing_city TEXT,
       cust_billing_state TEXT,
+      cust_billing_country TEXT,
       cust_billing_phone TEXT,
       cust_credit_card_nbr TEXT,
       cust_card_expiration_date TEXT,
@@ -230,11 +230,11 @@ export async function checkoutGet(id: string): Promise<Checkout | null> {
       IFNULL( cust_shipping_country, '') AS cust_shipping_country,
       IFNULL( sr.id, '') AS shipping_rate_id,
       IFNULL( cust_billing_fullname, '') AS cust_billing_fullname,
-      IFNULL( cust_billing_country, '') AS cust_billing_country,
       IFNULL( cust_billing_address, '') AS cust_billing_address,
       IFNULL( cust_billing_postalcode, '') AS cust_billing_postalcode,
       IFNULL( cust_billing_city, '') AS cust_billing_city,
       IFNULL( cust_billing_state, '') AS cust_billing_state,
+      IFNULL( cust_billing_country, '') AS cust_billing_country,
       IFNULL( cust_billing_phone, '') AS cust_billing_phone,
       IFNULL( cust_credit_card_nbr, '') AS cust_credit_card_nbr,
       IFNULL( cust_card_expiration_date, '') AS cust_card_expiration_date,
@@ -856,8 +856,7 @@ export async function validateCheckoutUpdateOrInsert(
   if (input_shipping_fullname.length < INPUT_MIN_LENGTH) {
     errors.push({
       field: "cust_shipping_fullname",
-      errormsg:
-        "Full name must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+      errormsg: "Name must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
     });
   }
 
@@ -912,6 +911,76 @@ export async function validateCheckoutUpdateOrInsert(
   if (!input_shipping_country) {
     errors.push({
       field: "cust_shipping_country",
+      errormsg: "Country is required",
+    });
+  }
+
+  const input_billing_fullname = checkout.cust_billing_fullname.trim();
+  if (!input_billing_fullname) {
+    errors.push({
+      field: "cust_billing_fullname",
+      errormsg: "Name is required",
+    });
+  }
+
+  if (input_billing_fullname.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_billing_fullname",
+      errormsg: "Name must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  const input_billing_address = checkout.cust_billing_address.trim();
+  if (!input_billing_address) {
+    errors.push({
+      field: "cust_billing_address",
+      errormsg: "Address is required",
+    });
+  }
+
+  if (input_billing_address.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_billing_address",
+      errormsg: "Address must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  const input_billing_postalcode = checkout.cust_billing_postalcode.trim();
+  if (!input_billing_postalcode) {
+    errors.push({
+      field: "cust_billing_postalcode",
+      errormsg: "Postal code is required",
+    });
+  }
+
+  if (input_billing_postalcode.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_billing_postalcode",
+      errormsg:
+        "Postal code must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  const input_billing_city = checkout.cust_billing_city.trim();
+  if (!input_billing_city) {
+    errors.push({
+      field: "cust_billing_city",
+      errormsg: "City is required",
+    });
+  }
+
+  if (input_billing_city.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_billing_city",
+      errormsg: "City must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  // dropdown for country
+  const input_billing_country = checkout.cust_billing_country.trim();
+  if (!input_billing_country) {
+    errors.push({
+      field: "cust_billing_country",
       errormsg: "Country is required",
     });
   }
@@ -998,9 +1067,15 @@ export async function checkoutUpdateOrInsert({
             cust_shipping_city,
             cust_shipping_state,
             cust_shipping_country,
-            shipping_rate_id
+            shipping_rate_id,
+            cust_billing_fullname,
+            cust_billing_address,
+            cust_billing_postalcode,
+            cust_billing_city,
+            cust_billing_state,
+            cust_billing_country
           )
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
         stmt.run(
           cartId,
           checkout.cust_email.trim(),
@@ -1010,7 +1085,13 @@ export async function checkoutUpdateOrInsert({
           checkout.cust_shipping_city.trim(),
           checkout.cust_shipping_state.trim(),
           checkout.cust_shipping_country.trim(),
-          checkout.shipping_rate_id.trim()
+          checkout.shipping_rate_id.trim(),
+          checkout.cust_billing_fullname.trim(),
+          checkout.cust_billing_address.trim(),
+          checkout.cust_billing_postalcode.trim(),
+          checkout.cust_billing_city.trim(),
+          checkout.cust_billing_state.trim(),
+          checkout.cust_billing_country.trim()
         );
 
         return {
@@ -1040,7 +1121,13 @@ export async function checkoutUpdateOrInsert({
           cust_shipping_city = ?,
           cust_shipping_state = ?,
           cust_shipping_country = ?,
-          shipping_rate_id = ?
+          shipping_rate_id = ?,
+          cust_billing_fullname = ?
+          cust_billing_address = ?
+          cust_billing_postalcode = ?
+          cust_billing_city = ?
+          cust_billing_state = ?
+          cust_billing_country = ?
         WHERE id = ?`);
       stmt.run(
         checkout.cust_email.trim(),
@@ -1051,6 +1138,12 @@ export async function checkoutUpdateOrInsert({
         checkout.cust_shipping_state.trim(),
         checkout.cust_shipping_country.trim(),
         checkout.shipping_rate_id.trim(),
+        checkout.cust_billing_fullname.trim(),
+        checkout.cust_billing_address.trim(),
+        checkout.cust_billing_postalcode.trim(),
+        checkout.cust_billing_city.trim(),
+        checkout.cust_billing_state.trim(),
+        checkout.cust_billing_country.trim(),
         cartId
       );
 
