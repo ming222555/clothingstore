@@ -66,11 +66,11 @@ function initDb() {
       id TEXT PRIMARY KEY, 
       cust_email TEXT,
       cust_shipping_fullname TEXT,
-      cust_shipping_country TEXT,
       cust_shipping_address TEXT,
       cust_shipping_postalcode TEXT,
       cust_shipping_city TEXT,
       cust_shipping_state TEXT,
+      cust_shipping_country TEXT,
       shipping_rate_id TEXT,
       cust_billing_fullname TEXT,
       cust_billing_country TEXT,
@@ -223,11 +223,11 @@ export async function checkoutGet(id: string): Promise<Checkout | null> {
     SELECT 
       IFNULL( cust_email, '') AS cust_email,
       IFNULL( cust_shipping_fullname, '') AS cust_shipping_fullname,
-      IFNULL( cust_shipping_country, '') AS cust_shipping_country,
       IFNULL( cust_shipping_address, '') AS cust_shipping_address,
       IFNULL( cust_shipping_postalcode, '') AS cust_shipping_postalcode,
       IFNULL( cust_shipping_city, '') AS cust_shipping_city,
       IFNULL( cust_shipping_state, '') AS cust_shipping_state,
+      IFNULL( cust_shipping_country, '') AS cust_shipping_country,
       IFNULL( sr.id, '') AS shipping_rate_id,
       IFNULL( cust_billing_fullname, '') AS cust_billing_fullname,
       IFNULL( cust_billing_country, '') AS cust_billing_country,
@@ -861,15 +861,6 @@ export async function validateCheckoutUpdateOrInsert(
     });
   }
 
-  // dropdown for country
-  const input_shipping_country = checkout.cust_shipping_country.trim();
-  if (!input_shipping_country) {
-    errors.push({
-      field: "cust_shipping_country",
-      errormsg: "Country is required",
-    });
-  }
-
   const input_shipping_address = checkout.cust_shipping_address.trim();
   if (!input_shipping_address) {
     errors.push({
@@ -913,6 +904,15 @@ export async function validateCheckoutUpdateOrInsert(
     errors.push({
       field: "cust_shipping_city",
       errormsg: "City must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  // dropdown for country
+  const input_shipping_country = checkout.cust_shipping_country.trim();
+  if (!input_shipping_country) {
+    errors.push({
+      field: "cust_shipping_country",
+      errormsg: "Country is required",
     });
   }
 
@@ -993,10 +993,10 @@ export async function checkoutUpdateOrInsert({
             id,
             cust_email,
             cust_shipping_fullname,
-            cust_shipping_country,
             cust_shipping_address,
             cust_shipping_postalcode,
             cust_shipping_city,
+            cust_shipping_country,
             shipping_rate_id
           )
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
@@ -1004,10 +1004,10 @@ export async function checkoutUpdateOrInsert({
           cartId,
           checkout.cust_email.trim(),
           checkout.cust_shipping_fullname.trim(),
-          checkout.cust_shipping_country.trim(),
           checkout.cust_shipping_address.trim(),
           checkout.cust_shipping_postalcode.trim(),
           checkout.cust_shipping_city.trim(),
+          checkout.cust_shipping_country.trim(),
           checkout.shipping_rate_id.trim()
         );
 
@@ -1033,19 +1033,19 @@ export async function checkoutUpdateOrInsert({
         SET
           cust_email = ?,
           cust_shipping_fullname = ?,
-          cust_shipping_country = ?,
           cust_shipping_address = ?,
           cust_shipping_postalcode = ?,
           cust_shipping_city = ?,
+          cust_shipping_country = ?,
           shipping_rate_id = ?
         WHERE id = ?`);
       stmt.run(
         checkout.cust_email.trim(),
         checkout.cust_shipping_fullname.trim(),
-        checkout.cust_shipping_country.trim(),
         checkout.cust_shipping_address.trim(),
         checkout.cust_shipping_postalcode.trim(),
         checkout.cust_shipping_city.trim(),
+        checkout.cust_shipping_country.trim(),
         checkout.shipping_rate_id.trim(),
         cartId
       );

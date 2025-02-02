@@ -28,10 +28,10 @@ function reducer(
 const initialFormValues: FormState = {
   cust_email: "",
   cust_shipping_fullname: "",
-  cust_shipping_country: "",
   cust_shipping_address: "",
   cust_shipping_postalcode: "",
   cust_shipping_city: "",
+  cust_shipping_country: "",
   shipping_rate_id: "",
 };
 
@@ -229,33 +229,6 @@ export default function Checkout({
       {getFieldError("cust_shipping_fullname") ? (
         <span>{getFieldError("cust_shipping_fullname")}</span>
       ) : null}
-      {/* <input
-        type="text"
-        name="cust_shipping_country"
-        id="cust_shipping_country"
-        placeholder="cust_shipping_country"
-        value={formValues.cust_shipping_country}
-        onChange={onValueChange}
-      />
-      {getFieldError("cust_shipping_country") ? (
-        <span>{getFieldError("cust_shipping_country")}</span>
-      ) : null} */}
-      <select
-        name="cust_shipping_country"
-        id="cust_shipping_country"
-        value={formValues.cust_shipping_country}
-        onChange={onValueChange}
-      >
-        <option value=""></option>
-        {Object.entries(countrylist).map((keyVal) => (
-          <option value={keyVal[0]} key={keyVal[0]}>
-            {keyVal[1]}
-          </option>
-        ))}
-      </select>
-      {getFieldError("cust_shipping_country") ? (
-        <span>{getFieldError("cust_shipping_country")}</span>
-      ) : null}
       <input
         type="text"
         name="cust_shipping_address"
@@ -295,6 +268,22 @@ export default function Checkout({
         id="cust_shipping_state"
         placeholder="cust_shipping_state"
       /> */}
+      <select
+        name="cust_shipping_country"
+        id="cust_shipping_country"
+        value={formValues.cust_shipping_country}
+        onChange={onValueChange}
+      >
+        <option value=""></option>
+        {Object.entries(countrylist).map((keyVal) => (
+          <option value={keyVal[0]} key={keyVal[0]}>
+            {keyVal[1]}
+          </option>
+        ))}
+      </select>
+      {getFieldError("cust_shipping_country") ? (
+        <span>{getFieldError("cust_shipping_country")}</span>
+      ) : null}
       {getFieldError("shipping_rate_id") ? (
         <span>{getFieldError("shipping_rate_id")}</span>
       ) : null}
