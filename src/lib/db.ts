@@ -996,10 +996,11 @@ export async function checkoutUpdateOrInsert({
             cust_shipping_address,
             cust_shipping_postalcode,
             cust_shipping_city,
+            cust_shipping_state,
             cust_shipping_country,
             shipping_rate_id
           )
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
         stmt.run(
           cartId,
           checkout.cust_email.trim(),
@@ -1007,6 +1008,7 @@ export async function checkoutUpdateOrInsert({
           checkout.cust_shipping_address.trim(),
           checkout.cust_shipping_postalcode.trim(),
           checkout.cust_shipping_city.trim(),
+          checkout.cust_shipping_state.trim(),
           checkout.cust_shipping_country.trim(),
           checkout.shipping_rate_id.trim()
         );
@@ -1036,6 +1038,7 @@ export async function checkoutUpdateOrInsert({
           cust_shipping_address = ?,
           cust_shipping_postalcode = ?,
           cust_shipping_city = ?,
+          cust_shipping_state = ?,
           cust_shipping_country = ?,
           shipping_rate_id = ?
         WHERE id = ?`);
@@ -1045,6 +1048,7 @@ export async function checkoutUpdateOrInsert({
         checkout.cust_shipping_address.trim(),
         checkout.cust_shipping_postalcode.trim(),
         checkout.cust_shipping_city.trim(),
+        checkout.cust_shipping_state.trim(),
         checkout.cust_shipping_country.trim(),
         checkout.shipping_rate_id.trim(),
         cartId

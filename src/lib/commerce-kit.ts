@@ -20,7 +20,7 @@ export type Checkout = {
   cust_shipping_address: string;
   cust_shipping_postalcode: string;
   cust_shipping_city: string;
-  // cust_shipping_state: string;
+  cust_shipping_state: string;
   cust_shipping_country: string;
   shipping_rate_id: string;
   // cust_billing_fullname: string;

@@ -31,6 +31,7 @@ const initialFormValues: FormState = {
   cust_shipping_address: "",
   cust_shipping_postalcode: "",
   cust_shipping_city: "",
+  cust_shipping_state: "",
   cust_shipping_country: "",
   shipping_rate_id: "",
 };
@@ -262,12 +263,17 @@ export default function Checkout({
       {getFieldError("cust_shipping_city") ? (
         <span>{getFieldError("cust_shipping_city")}</span>
       ) : null}
-      {/* <input
+      <input
         type="text"
         name="cust_shipping_state"
         id="cust_shipping_state"
         placeholder="cust_shipping_state"
-      /> */}
+        value={formValues.cust_shipping_state}
+        onChange={onValueChange}
+      />
+      {getFieldError("cust_shipping_state") ? (
+        <span>{getFieldError("cust_shipping_state")}</span>
+      ) : null}
       <select
         name="cust_shipping_country"
         id="cust_shipping_country"
