@@ -885,6 +885,37 @@ export async function validateCheckoutUpdateOrInsert(
     });
   }
 
+  const input_shipping_postalcode = checkout.cust_shipping_postalcode.trim();
+  if (!input_shipping_postalcode) {
+    errors.push({
+      field: "cust_shipping_postalcode",
+      errormsg: "Postal code is required",
+    });
+  }
+
+  if (input_shipping_postalcode.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_shipping_postalcode",
+      errormsg:
+        "Postal code must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
+  const input_shipping_city = checkout.cust_shipping_city.trim();
+  if (!input_shipping_city) {
+    errors.push({
+      field: "cust_shipping_city",
+      errormsg: "City is required",
+    });
+  }
+
+  if (input_shipping_city.length < INPUT_MIN_LENGTH) {
+    errors.push({
+      field: "cust_shipping_city",
+      errormsg: "City must exceed " + (INPUT_MIN_LENGTH - 1) + " characters",
+    });
+  }
+
   if (errors.length) {
     return {
       errors,
@@ -963,15 +994,20 @@ export async function checkoutUpdateOrInsert({
             cust_email,
             cust_shipping_fullname,
             cust_shipping_country,
-            cust_shipping_address,shipping_rate_id
+            cust_shipping_address,
+            cust_shipping_postalcode,
+            cust_shipping_city,
+            shipping_rate_id
           )
-          VALUES (?, ?, ?, ?, ?, ?)`);
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
         stmt.run(
           cartId,
           checkout.cust_email.trim(),
           checkout.cust_shipping_fullname.trim(),
           checkout.cust_shipping_country.trim(),
           checkout.cust_shipping_address.trim(),
+          checkout.cust_shipping_postalcode.trim(),
+          checkout.cust_shipping_city.trim(),
           checkout.shipping_rate_id.trim()
         );
 
@@ -999,6 +1035,8 @@ export async function checkoutUpdateOrInsert({
           cust_shipping_fullname = ?,
           cust_shipping_country = ?,
           cust_shipping_address = ?,
+          cust_shipping_postalcode = ?,
+          cust_shipping_city = ?,
           shipping_rate_id = ?
         WHERE id = ?`);
       stmt.run(
@@ -1006,6 +1044,8 @@ export async function checkoutUpdateOrInsert({
         checkout.cust_shipping_fullname.trim(),
         checkout.cust_shipping_country.trim(),
         checkout.cust_shipping_address.trim(),
+        checkout.cust_shipping_postalcode.trim(),
+        checkout.cust_shipping_city.trim(),
         checkout.shipping_rate_id.trim(),
         cartId
       );

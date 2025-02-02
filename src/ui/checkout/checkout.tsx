@@ -30,6 +30,8 @@ const initialFormValues: FormState = {
   cust_shipping_fullname: "",
   cust_shipping_country: "",
   cust_shipping_address: "",
+  cust_shipping_postalcode: "",
+  cust_shipping_city: "",
   shipping_rate_id: "",
 };
 
@@ -82,6 +84,7 @@ export default function Checkout({
   const [errors, setErrors] = useState<{ field: string; errormsg: string }[]>(
     []
   );
+  const [billingAddrEqShipping, setBillingAddrEqShipping] = useState(true);
 
   const errorsRef = useRef(errors);
 
@@ -101,6 +104,10 @@ export default function Checkout({
         const countryCode = country_code.toLowerCase();
 
         if (!countrylist[countryCode]) {
+          return;
+        }
+
+        if (formValues.cust_shipping_country) {
           return;
         }
 
@@ -260,19 +267,29 @@ export default function Checkout({
       {getFieldError("cust_shipping_address") ? (
         <span>{getFieldError("cust_shipping_address")}</span>
       ) : null}
-      {/* <input
+      <input
         type="text"
         name="cust_shipping_postalcode"
         id="cust_shipping_postalcode"
         placeholder="cust_shipping_postalcode"
+        value={formValues.cust_shipping_postalcode}
+        onChange={onValueChange}
       />
+      {getFieldError("cust_shipping_postalcode") ? (
+        <span>{getFieldError("cust_shipping_postalcode")}</span>
+      ) : null}
       <input
         type="text"
         name="cust_shipping_city"
         id="cust_shipping_city"
         placeholder="cust_shipping_city"
+        value={formValues.cust_shipping_city}
+        onChange={onValueChange}
       />
-      <input
+      {getFieldError("cust_shipping_city") ? (
+        <span>{getFieldError("cust_shipping_city")}</span>
+      ) : null}
+      {/* <input
         type="text"
         name="cust_shipping_state"
         id="cust_shipping_state"
@@ -297,7 +314,7 @@ export default function Checkout({
             id="shipping_rate_id_USPS-3-33"
           />
           <label
-            htmlFor="shippingRate-USPS-3-33"
+            htmlFor="shipping_rate_id_USPS-3-33"
             className="Checkout__label-for-shipping_rate_id"
           >
             USPS-3-33 | 1.99 | 3-33 days{" "}
@@ -320,7 +337,7 @@ export default function Checkout({
             id="shipping_rate_id_USPS-4-44"
           />
           <label
-            htmlFor="shippingRate-USPS-4-44"
+            htmlFor="shipping_rate_id_USPS-4-44"
             className="Checkout__label-for-shipping_rate_id"
           >
             USPS-4-44 | 0.99 | 4-44 days{" "}
@@ -331,7 +348,20 @@ export default function Checkout({
           </label>
         </div>
       </fieldset>
-      <p>Billing address same as shipping</p>
+      <input
+        type="checkbox"
+        id="cbx-billing-addr-eq-shipping"
+        checked={billingAddrEqShipping}
+        onChange={() => {
+          setBillingAddrEqShipping((prev) => !prev);
+        }}
+      />
+      <label
+        htmlFor="cbx-billing-addr-eq-shipping"
+        className="Checkout__label-for-cbx-billing-addr-eq-shipping"
+      >
+        Billing address same as shipping
+      </label>
       {/* <fieldset>
         <legend>Billing address</legend>
         <input

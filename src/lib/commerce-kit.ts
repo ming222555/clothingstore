@@ -19,8 +19,8 @@ export type Checkout = {
   cust_shipping_fullname: string;
   cust_shipping_country: string;
   cust_shipping_address: string;
-  // cust_shipping_postalcode: string;
-  // cust_shipping_city: string;
+  cust_shipping_postalcode: string;
+  cust_shipping_city: string;
   // cust_shipping_state: string;
   shipping_rate_id: string;
   // cust_billing_fullname: string;
