@@ -1122,11 +1122,11 @@ export async function checkoutUpdateOrInsert({
           cust_shipping_state = ?,
           cust_shipping_country = ?,
           shipping_rate_id = ?,
-          cust_billing_fullname = ?
-          cust_billing_address = ?
-          cust_billing_postalcode = ?
-          cust_billing_city = ?
-          cust_billing_state = ?
+          cust_billing_fullname = ?,
+          cust_billing_address = ?,
+          cust_billing_postalcode = ?,
+          cust_billing_city = ?,
+          cust_billing_state = ?,
           cust_billing_country = ?
         WHERE id = ?`);
       stmt.run(

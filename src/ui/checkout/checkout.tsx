@@ -18,13 +18,6 @@ import {
 
 type FormState = Commerce.Checkout;
 
-function reducer(
-  state: FormState,
-  action: { type: keyof FormState; payload: string }
-): FormState {
-  return { ...state, [action.type]: action.payload };
-}
-
 const initialFormValues: FormState = {
   cust_email: "",
   cust_shipping_fullname: "",
@@ -49,6 +42,33 @@ export default function Checkout({
 }) {
   console.log("checkout111111111111", checkout);
 
+  const reducer = useMemo(() => {
+    return function (
+      state: FormState,
+      action: { type: keyof FormState; payload: string }
+    ): FormState {
+      const pos = action.type.indexOf("cust_shipping_");
+
+      if (pos < 0) {
+        // not "cust_shipping_"
+        return { ...state, [action.type]: action.payload };
+      }
+
+      if (!billingAddrEqShippingRef.current) {
+        return { ...state, [action.type]: action.payload };
+      }
+
+      const entity = action.type.substring("cust_shipping_".length);
+      const billingField = "cust_billing_" + entity;
+
+      return {
+        ...state,
+        [action.type]: action.payload,
+        [billingField]: action.payload,
+      };
+    };
+  }, []);
+
   const [formValues, dispatcher] = useReducer(
     reducer,
     checkout || initialFormValues
@@ -57,6 +77,7 @@ export default function Checkout({
 
   const currentFieldId = useRef("");
   const formValuesRef = useRef(initialFormValues);
+  const billingAddrEqShippingRef = useRef(true);
 
   const onValueChange = useMemo(
     () =>
@@ -96,7 +117,7 @@ export default function Checkout({
   const errorsRef = useRef(errors);
 
   useEffect(() => {
-    async function ip2Country() {
+    async function initShippingCountry() {
       try {
         const response = await fetch("https://api.ipify.org?format=json");
         const data = await response.json();
@@ -126,7 +147,7 @@ export default function Checkout({
         console.error("Error fetching IP address:", error);
       }
     }
-    ip2Country();
+    initShippingCountry();
   }, []);
 
   const router = useRouter();
@@ -163,8 +184,23 @@ export default function Checkout({
 
         setPending(false);
 
+        function revealBillingFieldErrors(
+          errors: {
+            field: string;
+            errormsg: string;
+          }[]
+        ) {
+          // reveal billing fields if they have errors
+          const pos = errors.findIndex(
+            (err) => err.field.indexOf("cust_billing_") > -1
+          );
+
+          if (pos > -1) {
+            setBillingAddrEqShipping(false);
+          }
+        }
+
         if (res.errors.length) {
-          // toast(JSON.stringify(res));
           const pos = res.errors.findIndex((err) => err.field === "checkout");
           if (pos > -1) {
             toast(res.errors[pos].errormsg);
@@ -175,9 +211,11 @@ export default function Checkout({
 
             if (filteredErrors.length) {
               setErrors(filteredErrors);
+              revealBillingFieldErrors(filteredErrors);
             }
           } else {
             setErrors(res.errors);
+            revealBillingFieldErrors(res.errors);
           }
 
           return;
@@ -191,6 +229,7 @@ export default function Checkout({
 
   formValuesRef.current = formValues;
   errorsRef.current = errors;
+  billingAddrEqShippingRef.current = billingAddrEqShipping;
 
   const getFieldError = useMemo(
     () =>
