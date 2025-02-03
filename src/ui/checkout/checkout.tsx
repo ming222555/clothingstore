@@ -328,7 +328,7 @@ export default function Checkout({
         <option value=""></option>
         {Object.entries(countrylist).map((keyVal) => (
           <option value={keyVal[0]} key={keyVal[0]}>
-            {keyVal[1]}
+            {keyVal[0]} &nbsp;{keyVal[1]}
           </option>
         ))}
       </select>
@@ -472,7 +472,7 @@ export default function Checkout({
           <option value=""></option>
           {Object.entries(countrylist).map((keyVal) => (
             <option value={keyVal[0]} key={keyVal[0]}>
-              {keyVal[1]}
+              {keyVal[0]} &nbsp;{keyVal[1]}
             </option>
           ))}
         </select>
