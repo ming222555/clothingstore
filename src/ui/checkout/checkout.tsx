@@ -3,6 +3,8 @@
 import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import braintree, { HostedFields } from "braintree-web";
+
 import ip3country from "ip3country";
 import { getCodeList } from "country-list";
 
@@ -252,6 +254,12 @@ export default function Checkout({
     []
   );
 
+  const hostedFieldsRef = useRef<HostedFields | null>(null);
+
+  function handlePayment() {
+    dddddddddddddd;
+  }
+
   return (
     <form className="Checkout position-relative">
       <input
@@ -488,7 +496,7 @@ export default function Checkout({
           placeholder="cust_billing_phone"
         />
       </div>
-      {/* <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
+      <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
         PayPal
       </span>
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
@@ -501,8 +509,10 @@ export default function Checkout({
         Security code
       </span>
       <br />
-      <button>Pay now</button>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
+      <button type="button" onClick={handlePayment}>
+        Pay now
+      </button>
+      {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p>
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
