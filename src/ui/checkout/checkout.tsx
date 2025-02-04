@@ -221,6 +221,8 @@ export default function Checkout({
           return;
         }
 
+        setErrors([]);
+
         router.refresh();
         // todo braintree payment
       },
