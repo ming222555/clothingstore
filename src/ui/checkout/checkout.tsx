@@ -4,9 +4,13 @@ import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import braintree, { HostedFields } from "braintree-web";
-
 import ip3country from "ip3country";
 import { getCodeList } from "country-list";
+
+import {
+  getBraintreeClientTokenAction,
+  braintreeMakePaymentAction,
+} from "@/actions/braintree-actions";
 
 ip3country.init();
 
@@ -39,8 +43,10 @@ const initialFormValues: FormState = {
 
 export default function Checkout({
   checkout,
+  preValidationOk,
 }: {
   checkout: Commerce.Checkout | null;
+  preValidationOk: boolean | null;
 }) {
   console.log("checkout111111111111", checkout);
 
@@ -177,7 +183,7 @@ export default function Checkout({
     []
   );
 
-  const formActionPaynow = useMemo(
+  const checkoutUpdateOrInsert = useMemo(
     () =>
       async function () {
         setPending(true);
@@ -192,12 +198,12 @@ export default function Checkout({
             errormsg: string;
           }[]
         ) {
-          // reveal billing fields if they have errors
           const pos = errors.findIndex(
             (err) => err.field.indexOf("cust_billing_") > -1
           );
 
           if (pos > -1) {
+            // reveal billing fields if they happen to have errors
             setBillingAddrEqShipping(false);
           }
         }
@@ -212,21 +218,41 @@ export default function Checkout({
             );
 
             if (filteredErrors.length) {
+              // append "checkout" error object to filteredErrors
+              filteredErrors.push({ ...res.errors[pos] });
               setErrors(filteredErrors);
               revealBillingFieldErrors(filteredErrors);
+            } else {
+              setErrors([{ ...res.errors[pos] }]);
             }
           } else {
             setErrors(res.errors);
             revealBillingFieldErrors(res.errors);
           }
 
-          return;
+          return -1;
         }
 
         setErrors([]);
+        return 0;
+      },
+    []
+  );
 
-        router.refresh();
-        // todo braintree payment
+  const formActionPaynow = useMemo(
+    () =>
+      async function () {
+        const rc = await checkoutUpdateOrInsert();
+
+        if (rc < 0) {
+          return;
+        }
+
+        if (checkout && preValidationOk) {
+          handlePayment();
+        } else {
+          router.refresh();
+        }
       },
     []
   );
@@ -256,9 +282,77 @@ export default function Checkout({
 
   const hostedFieldsRef = useRef<HostedFields | null>(null);
 
-  function handlePayment() {
-    dddddddddddddd;
-  }
+  useEffect(() => {
+    async function initializeBraintree() {
+      try {
+        const res = await getBraintreeClientTokenAction();
+
+        if (res.error) {
+          toast(res.error);
+          return;
+        }
+
+        const clientInstance = await braintree.client.create({
+          authorization: res.clientToken,
+        });
+
+        const hostedFields = await braintree.hostedFields.create({
+          fields: {
+            number: {
+              selector: "#card_number",
+              placeholder: "4111 1111 1111 1111",
+            },
+            ...(process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT ===
+              "Production" && {
+              cvv: {
+                selector: "#cvv",
+                placeholder: "123",
+              },
+            }),
+            expirationDate: {
+              selector: "#expiration_date",
+              placeholder: "Expiration",
+            },
+          },
+          client: clientInstance,
+        });
+        hostedFieldsRef.current = hostedFields;
+      } catch (err) {
+        console.log(err);
+        toast("Unexpected error while processing checkout");
+      }
+    }
+    initializeBraintree();
+  }, []);
+
+  const handlePayment = useMemo(
+    () =>
+      async function () {
+        if (!hostedFieldsRef.current) return;
+
+        try {
+          const { nonce } = await hostedFieldsRef.current.tokenize();
+
+          const res = await braintreeMakePaymentAction(nonce);
+
+          if (!res.ok) {
+            toast(res.message);
+            return;
+          }
+          // todo
+          // Congratulations!
+          // Your checkout was successful.
+          // An acknowledgement email for your placed order has been sent to following email address
+          //   youremail@yahoo.com
+          // Please take note of the following.
+          //   Notification of changes in the progress of your order's shipment status will be sent to above email address.
+        } catch (err) {
+          console.log(err);
+          toast("Unexpected error while processing checkout!");
+        }
+      },
+    []
+  );
 
   return (
     <form className="Checkout position-relative">
@@ -496,20 +590,29 @@ export default function Checkout({
           placeholder="cust_billing_phone"
         />
       </div>
-      <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        PayPal
-      </span>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Card number
-      </p>
-      <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Expiration date
-      </span>
-      <span style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Security code
-      </span>
+      <div
+        className={`${checkout && preValidationOk ? " d-block" : " d-none"}`}
+      >
+        <div>
+          <label htmlFor="card_number">Card Number</label>
+          <div id="card_number"></div>
+        </div>
+        {process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT === "Production" && (
+          <div>
+            <label htmlFor="cvv">CVV</label>
+            <div id="cvv"></div>
+          </div>
+        )}
+        <div>
+          <label htmlFor="expiration_date">Expiration Date</label>
+          <div id="expiration_date"></div>
+        </div>
+      </div>
       <br />
-      <button type="button" onClick={handlePayment}>
+      {getFieldError("checkout") ? (
+        <span>{getFieldError("checkout")}</span>
+      ) : null}
+      <button type="button" disabled={pending} onClick={formActionPaynow}>
         Pay now
       </button>
       {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
@@ -539,9 +642,6 @@ export default function Checkout({
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p> */}
-      <button type="button" disabled={pending} onClick={formActionPaynow}>
-        Pay now
-      </button>
       <div
         className={`${
           pending ? "d-block" : "d-none"

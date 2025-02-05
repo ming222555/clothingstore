@@ -831,7 +831,7 @@ export async function checkoutUpdateOrInsertShippingRateId({
   };
 }
 
-export async function validateCheckoutUpdateOrInsert(
+async function validateCheckoutUpdateOrInsert(
   checkout: Checkout
 ): Promise<{ errors: { field: string; errormsg: string }[] }> {
   const errors: { field: string; errormsg: string }[] = [];
@@ -1023,6 +1023,15 @@ export async function validateCheckoutUpdateOrInsert(
   return {
     errors: [],
   };
+}
+
+export async function validateCheckout(checkout: Checkout): Promise<number> {
+  const validationErrors = await validateCheckoutUpdateOrInsert(checkout);
+
+  if (validationErrors.errors.length) {
+    return -1;
+  }
+  return 0;
 }
 
 export async function checkoutUpdateOrInsert({

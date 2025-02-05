@@ -166,3 +166,8 @@ export const checkoutUpdateOrInsert = async ({
   });
   return ret;
 };
+
+export const validateCheckout = async (formValues: Checkout) => {
+  const rc = await Db.validateCheckout(formValues);
+  return rc;
+};

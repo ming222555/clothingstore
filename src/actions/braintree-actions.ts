@@ -2,20 +2,24 @@
 
 import { gateway } from "@/config/braintree";
 
-export async function getBraintreeClientToken() {
+export async function getBraintreeClientTokenAction() {
   try {
     const res = await gateway.clientToken.generate({});
-    return { clientToken: res.clientToken, ok: true };
+    return { clientToken: res.clientToken, error: "" };
   } catch (err) {
     console.log(err);
     return {
-      clientToken: "Error generating braintree client token",
-      ok: false,
+      clientToken: "",
+      error: "Error generating braintree client token",
     };
   }
 }
 
-export async function braintreeMakePayment(nonce: string, totalPrice: number) {
+export async function braintreeMakePaymentAction(nonce: string) {
+  // todo determine totalPrice
+  let totalPrice = 0;
+  totalPrice = totalPrice + 123456.66;
+
   if (!nonce || !totalPrice) {
     console.log("Nonce or totalPrice is missing");
     return { message: "Nonce or totalPrice is missing", ok: false };
@@ -30,6 +34,9 @@ export async function braintreeMakePayment(nonce: string, totalPrice: number) {
         submitForSettlement: true,
       },
     });
+
+    console.log("Payment Payment Payment", payment);
+
     if (!payment.success) {
       console.log("Payment failed", payment);
       return { message: "Payment failed", ok: false };

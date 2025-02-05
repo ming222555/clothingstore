@@ -177,3 +177,8 @@ export const checkoutUpdateOrInsertAction = async (
     errors: [],
   };
 };
+
+export const validateCheckoutAction = async (formValues: Commerce.Checkout) => {
+  const rc = await Commerce.validateCheckout(formValues);
+  return rc;
+};
