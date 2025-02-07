@@ -178,6 +178,8 @@ export default function Checkout({
   const formActionCheckoutUpdateOrInsertShippingRate = useMemo(
     () =>
       async function (evt: React.ChangeEvent<HTMLInputElement>) {
+        isShippingRateLastFieldChangedPriorUpdate.current = true;
+
         setPendingShippingRate(true);
         setPending(true);
 
@@ -473,7 +475,6 @@ export default function Checkout({
             value="USPS-3-33"
             checked={formValues.shipping_rate_id === "USPS-3-33"}
             onChange={(evt) => {
-              isShippingRateLastFieldChangedPriorUpdate.current = true;
               onValueChange(evt);
               formActionCheckoutUpdateOrInsertShippingRate(evt);
             }}
@@ -497,7 +498,6 @@ export default function Checkout({
             value="USPS-4-44"
             checked={formValues.shipping_rate_id === "USPS-4-44"}
             onChange={(evt) => {
-              isShippingRateLastFieldChangedPriorUpdate.current = true;
               onValueChange(evt);
               formActionCheckoutUpdateOrInsertShippingRate(evt);
             }}
