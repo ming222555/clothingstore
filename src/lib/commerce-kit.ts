@@ -29,7 +29,7 @@ export type Checkout = {
   cust_billing_city: string;
   cust_billing_state: string;
   cust_billing_country: string;
-  // cust_billing_phone: string;
+  cust_billing_phone: string;
   // cust_credit_card_nbr: string;
   // cust_card_expiration_date: string;
   // cust_card_cvc: string;

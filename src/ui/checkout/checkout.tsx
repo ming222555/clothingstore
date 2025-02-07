@@ -39,6 +39,7 @@ const initialFormValues: FormState = {
   cust_billing_city: "",
   cust_billing_state: "",
   cust_billing_country: "",
+  cust_billing_phone: "",
 };
 
 export default function Checkout({
@@ -84,6 +85,7 @@ export default function Checkout({
   console.log("formValues", formValues);
 
   const currentFieldId = useRef("");
+  const currentFieldName = useRef("");
   const formValuesRef = useRef(initialFormValues);
   const billingAddrEqShippingRef = useRef(true);
 
@@ -91,6 +93,7 @@ export default function Checkout({
     () =>
       function (evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         currentFieldId.current = evt.target.id;
+        currentFieldName.current = evt.target.name;
 
         if (evt.target.name === "shipping_rate_id") {
           // radio button
@@ -161,9 +164,14 @@ export default function Checkout({
 
   useEffect(() => {
     if (checkout && preValidationOk) {
+      if (currentFieldName.current === "shipping_rate_id") {
+        console.log("ttttttttt00000");
+        setModeUpdate(true);
+        return;
+      }
       setModeUpdate(false);
     }
-    // these props will come again upon refresh
+    // these props will come again to re-render upon refresh
   }, [checkout, preValidationOk]);
 
   const router = useRouter();
@@ -454,7 +462,7 @@ export default function Checkout({
       {getFieldError("shipping_rate_id") ? (
         <span>{getFieldError("shipping_rate_id")}</span>
       ) : null}
-      <fieldset>
+      <fieldset disabled={!modeUpdate}>
         <legend>Shipping method</legend>
         <div role="radiodroup">
           <input
@@ -518,7 +526,8 @@ export default function Checkout({
       >
         Billing address same as shipping
       </label>
-      <div
+      <fieldset
+        disabled={!modeUpdate}
         className={`bg-warning Checkout__fieldset-billing-address${
           billingAddrEqShipping ? " billingAddrEqShipping" : ""
         }`}
@@ -600,8 +609,14 @@ export default function Checkout({
           name="cust_billing_phone"
           id="cust_billing_phone"
           placeholder="cust_billing_phone"
+          value={formValues.cust_billing_phone}
+          onChange={onValueChange}
         />
-      </div>
+        {getFieldError("cust_billing_phone") ? (
+          <span>{getFieldError("cust_billing_phone")}</span>
+        ) : null}
+      </fieldset>
+
       {/* <div>
         <div className="form-group">
           <label className="control-label" htmlFor="hosted-field-number">

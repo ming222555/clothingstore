@@ -1082,9 +1082,10 @@ export async function checkoutUpdateOrInsert({
             cust_billing_postalcode,
             cust_billing_city,
             cust_billing_state,
-            cust_billing_country
+            cust_billing_country,
+            cust_billing_phone
           )
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
         stmt.run(
           cartId,
           checkout.cust_email.trim(),
@@ -1100,7 +1101,8 @@ export async function checkoutUpdateOrInsert({
           checkout.cust_billing_postalcode.trim(),
           checkout.cust_billing_city.trim(),
           checkout.cust_billing_state.trim(),
-          checkout.cust_billing_country.trim()
+          checkout.cust_billing_country.trim(),
+          checkout.cust_billing_phone.trim()
         );
 
         return {
@@ -1136,7 +1138,8 @@ export async function checkoutUpdateOrInsert({
           cust_billing_postalcode = ?,
           cust_billing_city = ?,
           cust_billing_state = ?,
-          cust_billing_country = ?
+          cust_billing_country = ?,
+          cust_billing_phone = ?
         WHERE id = ?`);
       stmt.run(
         checkout.cust_email.trim(),
@@ -1153,6 +1156,7 @@ export async function checkoutUpdateOrInsert({
         checkout.cust_billing_city.trim(),
         checkout.cust_billing_state.trim(),
         checkout.cust_billing_country.trim(),
+        checkout.cust_billing_phone.trim(),
         cartId
       );
 
