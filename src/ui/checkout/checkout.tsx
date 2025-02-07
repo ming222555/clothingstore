@@ -85,7 +85,7 @@ export default function Checkout({
   console.log("formValues", formValues);
 
   const currentFieldId = useRef("");
-  const currentFieldName = useRef("");
+  const isShippingRateLastFieldChangedPriorUpdate = useRef<true | null>(null);
   const formValuesRef = useRef(initialFormValues);
   const billingAddrEqShippingRef = useRef(true);
 
@@ -93,7 +93,6 @@ export default function Checkout({
     () =>
       function (evt: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         currentFieldId.current = evt.target.id;
-        currentFieldName.current = evt.target.name;
 
         if (evt.target.name === "shipping_rate_id") {
           // radio button
@@ -164,7 +163,7 @@ export default function Checkout({
 
   useEffect(() => {
     if (checkout && preValidationOk) {
-      if (currentFieldName.current === "shipping_rate_id") {
+      if (isShippingRateLastFieldChangedPriorUpdate.current) {
         console.log("ttttttttt00000");
         setModeUpdate(true);
         return;
@@ -202,6 +201,9 @@ export default function Checkout({
   const checkoutUpdateOrInsert = useMemo(
     () =>
       async function () {
+        // reset
+        isShippingRateLastFieldChangedPriorUpdate.current = null;
+
         setPending(true);
 
         const res = await checkoutUpdateOrInsertAction(formValuesRef.current);
@@ -471,6 +473,7 @@ export default function Checkout({
             value="USPS-3-33"
             checked={formValues.shipping_rate_id === "USPS-3-33"}
             onChange={(evt) => {
+              isShippingRateLastFieldChangedPriorUpdate.current = true;
               onValueChange(evt);
               formActionCheckoutUpdateOrInsertShippingRate(evt);
             }}
@@ -494,6 +497,7 @@ export default function Checkout({
             value="USPS-4-44"
             checked={formValues.shipping_rate_id === "USPS-4-44"}
             onChange={(evt) => {
+              isShippingRateLastFieldChangedPriorUpdate.current = true;
               onValueChange(evt);
               formActionCheckoutUpdateOrInsertShippingRate(evt);
             }}
