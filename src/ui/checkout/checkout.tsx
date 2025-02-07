@@ -3,14 +3,14 @@
 import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import braintree, { HostedFields } from "braintree-web";
+// import braintree, { HostedFields } from "braintree-web";
 import ip3country from "ip3country";
 import { getCodeList } from "country-list";
 
-import {
-  getBraintreeClientTokenAction,
-  braintreeMakePaymentAction,
-} from "@/actions/braintree-actions";
+// import {
+// getBraintreeClientTokenAction,
+//  braintreeMakePaymentAction,
+// } from "@/actions/braintree-actions";
 
 ip3country.init();
 
@@ -121,6 +121,7 @@ export default function Checkout({
     []
   );
   const [billingAddrEqShipping, setBillingAddrEqShipping] = useState(true);
+  const [modeUpdate, setModeUpdate] = useState(true);
 
   const errorsRef = useRef(errors);
 
@@ -157,6 +158,13 @@ export default function Checkout({
     }
     initShippingCountry();
   }, []);
+
+  useEffect(() => {
+    if (checkout && preValidationOk) {
+      setModeUpdate(false);
+    }
+    // these props will come again upon refresh
+  }, [checkout, preValidationOk]);
 
   const router = useRouter();
 
@@ -239,7 +247,7 @@ export default function Checkout({
     []
   );
 
-  const formActionPaynow = useMemo(
+  const formActionCheckoutUpdateOrInsert = useMemo(
     () =>
       async function () {
         const rc = await checkoutUpdateOrInsert();
@@ -248,11 +256,14 @@ export default function Checkout({
           return;
         }
 
-        if (checkout && preValidationOk) {
-          handlePayment();
-        } else {
-          router.refresh();
-        }
+        router.refresh();
+
+        // handlePayment();
+        // if (checkout && preValidationOk) {
+        //   handlePayment();
+        // } else {
+        //   router.refresh();
+        // }
       },
     []
   );
@@ -280,79 +291,79 @@ export default function Checkout({
     []
   );
 
-  const hostedFieldsRef = useRef<HostedFields | null>(null);
+  // const hostedFieldsRef = useRef<HostedFields | null>(null);
+  //
+  // useEffect(() => {
+  //   async function initializeBraintree() {
+  //     try {
+  //       const res = await getBraintreeClientTokenAction();
+  //
+  //       if (res.error) {
+  //         toast(res.error);
+  //         return;
+  //       }
+  //
+  //       const clientInstance = await braintree.client.create({
+  //         authorization: res.clientToken,
+  //       });
+  //
+  //       const hostedFields = await braintree.hostedFields.create({
+  //         fields: {
+  //           number: {
+  //             selector: "#hosted-field-number",
+  //             placeholder: "4111 1111 1111 1111",
+  //           },
+  //           ...(process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT ===
+  //             "Production" && {
+  //             cvv: {
+  //               selector: "#hosted-field-cvv",
+  //               placeholder: "123",
+  //             },
+  //           }),
+  //           expirationDate: {
+  //             selector: "#hosted-field-expiration-date",
+  //             placeholder: "Expiration",
+  //           },
+  //         },
+  //         client: clientInstance,
+  //       });
+  //       hostedFieldsRef.current = hostedFields;
+  //     } catch (err) {
+  //       console.log(err);
+  //       toast("Unexpected error while processing checkout");
+  //     }
+  //   }
+  //   initializeBraintree();
+  // }, []);
 
-  useEffect(() => {
-    async function initializeBraintree() {
-      try {
-        const res = await getBraintreeClientTokenAction();
-
-        if (res.error) {
-          toast(res.error);
-          return;
-        }
-
-        const clientInstance = await braintree.client.create({
-          authorization: res.clientToken,
-        });
-
-        const hostedFields = await braintree.hostedFields.create({
-          fields: {
-            number: {
-              selector: "#card_number",
-              placeholder: "4111 1111 1111 1111",
-            },
-            ...(process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT ===
-              "Production" && {
-              cvv: {
-                selector: "#cvv",
-                placeholder: "123",
-              },
-            }),
-            expirationDate: {
-              selector: "#expiration_date",
-              placeholder: "Expiration",
-            },
-          },
-          client: clientInstance,
-        });
-        hostedFieldsRef.current = hostedFields;
-      } catch (err) {
-        console.log(err);
-        toast("Unexpected error while processing checkout");
-      }
-    }
-    initializeBraintree();
-  }, []);
-
-  const handlePayment = useMemo(
-    () =>
-      async function () {
-        if (!hostedFieldsRef.current) return;
-
-        try {
-          const { nonce } = await hostedFieldsRef.current.tokenize();
-
-          const res = await braintreeMakePaymentAction(nonce);
-
-          if (!res.ok) {
-            toast(res.message);
-            return;
-          }
-          // todo
-          // Congratulations!
-          // Your checkout was successful.
-          // An acknowledgement email for your placed order has been sent to following email address
-          //   youremail@yahoo.com
-          // Please take note of the following.
-          //   Notification of changes in the progress of your order's shipment status will be sent to above email address.
-        } catch (err) {
-          console.log(err);
-          toast("Unexpected error while processing checkout!");
-        }
-      },
-    []
-  );
+  // const handlePayment = useMemo(
+  //   () =>
+  //     async function () {
+  //       if (!hostedFieldsRef.current) return;
+  //
+  //       try {
+  //         const { nonce } = await hostedFieldsRef.current.tokenize();
+  //
+  //         const res = await braintreeMakePaymentAction(nonce);
+  //
+  //         if (!res.ok) {
+  //           toast(res.message);
+  //           return;
+  //         }
+  //         // todo
+  //         // Congratulations!
+  //         // Your checkout was successful.
+  //         // An acknowledgement email for your placed order has been sent to following email address
+  //         //   youremail@yahoo.com
+  //         // Please take note of the following.
+  //         //   Notification of changes in the progress of your order's shipment status will be sent to above email address.
+  //       } catch (err) {
+  //         console.log(err);
+  //         toast("Unexpected error while processing checkout!");
+  //       }
+  //     },
+  //   []
+  // );
 
   return (
     <form className="Checkout position-relative">
@@ -364,6 +375,7 @@ export default function Checkout({
         placeholder="you@example.com"
         value={formValues.cust_email}
         onChange={onValueChange}
+        disabled={!modeUpdate}
       />
       {getFieldError("cust_email") ? (
         <span>{getFieldError("cust_email")}</span>
@@ -590,53 +602,45 @@ export default function Checkout({
           placeholder="cust_billing_phone"
         />
       </div>
-      <div
-        className={`${checkout && preValidationOk ? " d-block" : " d-none"}`}
-      >
-        <div>
-          <label htmlFor="card_number">Card Number</label>
-          <div id="card_number"></div>
+      {/* <div>
+        <div className="form-group">
+          <label className="control-label" htmlFor="hosted-field-number">
+            Credit Card Number
+          </label>
+          <div id="hosted-field-number"></div>
         </div>
         {process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT === "Production" && (
-          <div>
-            <label htmlFor="cvv">CVV</label>
-            <div id="cvv"></div>
+          <div className="form-group">
+            <label className="control-label" htmlFor="hosted-field-cvv">
+              CVV
+            </label>
+            <div id="hosted-field-cvv"></div>
           </div>
         )}
-        <div>
-          <label htmlFor="expiration_date">Expiration Date</label>
-          <div id="expiration_date"></div>
+        <div className="form-group">
+          <label
+            className="control-label"
+            htmlFor="hosted-field-expiration-date"
+          >
+            Expiration Date
+          </label>
+          <div id="hosted-field-expiration-date"></div>
         </div>
-      </div>
+      </div> */}
       <br />
       {getFieldError("checkout") ? (
         <span>{getFieldError("checkout")}</span>
       ) : null}
-      <button type="button" disabled={pending} onClick={formActionPaynow}>
-        Pay now
+      <button
+        type="button"
+        disabled={pending}
+        onClick={() =>
+          modeUpdate ? formActionCheckoutUpdateOrInsert() : setModeUpdate(true)
+        }
+      >
+        {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
       </button>
       {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p>
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
