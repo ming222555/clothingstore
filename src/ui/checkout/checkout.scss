@@ -8,7 +8,7 @@
     transition: all 0.2s;
     overflow: hidden;
 
-    &.billingAddrEqShipping {
+    &.hide {
       max-height: 0;
     }
   }

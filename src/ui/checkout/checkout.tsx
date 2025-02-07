@@ -533,7 +533,7 @@ export default function Checkout({
       <fieldset
         disabled={!modeUpdate}
         className={`bg-warning Checkout__fieldset-billing-address${
-          billingAddrEqShipping ? " billingAddrEqShipping" : ""
+          billingAddrEqShipping ? " hide" : ""
         }`}
       >
         <legend>Billing address</legend>
@@ -659,6 +659,10 @@ export default function Checkout({
       >
         {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
       </button>
+      <div className={modeUpdate ? "d-none" : "d-block"}>
+        TODO... replace these fake braintree stuff with a component for
+        braintree drop in.
+      </div>
       {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p>
