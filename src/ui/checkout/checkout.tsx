@@ -3,9 +3,11 @@
 import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-// import braintree, { HostedFields } from "braintree-web";
 import ip3country from "ip3country";
 import { getCodeList } from "country-list";
+// import braintree, { HostedFields } from "braintree-web";
+
+import CheckoutBraintree from "./checkout-braintree";
 
 // import {
 // getBraintreeClientTokenAction,
@@ -659,10 +661,7 @@ export default function Checkout({
       >
         {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
       </button>
-      <div className={modeUpdate ? "d-none" : "d-block"}>
-        TODO... replace these fake braintree stuff with a component for
-        braintree drop in.
-      </div>
+      {modeUpdate ? null : <CheckoutBraintree />}
       {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p>
