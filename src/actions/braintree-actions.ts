@@ -3,6 +3,9 @@
 import { redirect } from "next/navigation";
 import { gateway } from "@/config/braintree";
 
+import { getCartFromCookiesAction } from "@/actions/cart-actions";
+import * as Commerce from "@/lib/commerce-kit";
+
 export async function getBraintreeClientTokenAction() {
   try {
     const res = await gateway.clientToken.generate({});
@@ -20,15 +23,33 @@ export async function braintreeMakePaymentAction(
   nonce: string,
   custEmail: string
 ) {
-  // todo determine totalPrice
-  let totalPrice = 0;
-  totalPrice = totalPrice + 123456.66;
+  if (!nonce) {
+    console.log("Nonce is missing");
+    redirect("/checkout-error?error=" + encodeURIComponent("Nonce is missing"));
+  }
+  const cart = await getCartFromCookiesAction();
 
-  if (!nonce || !totalPrice) {
-    console.log("Nonce or totalPrice is missing");
+  if (!cart) {
+    redirect("/checkout-error?error=" + encodeURIComponent("Cart not found"));
+  }
+  if (!cart.lines.length) {
     redirect(
-      "/checkout-error?error=" +
-        encodeURIComponent("Nonce or totalPrice is missing")
+      "/checkout-error?error=" + encodeURIComponent("Cart has no items")
+    );
+  }
+
+  const cartTotalNetWithoutShipping =
+    await Commerce.calculateCartTotalNetWithoutShipping(cart);
+
+  const sr = await Commerce.getCartShippingRate(cart);
+  const rate = sr ? sr.rate : 0;
+
+  const total = cartTotalNetWithoutShipping + rate;
+
+  if (!total) {
+    console.log("TotalPrice is missing");
+    redirect(
+      "/checkout-error?error=" + encodeURIComponent("TotalPrice is missing")
     );
   }
 
@@ -38,7 +59,7 @@ export async function braintreeMakePaymentAction(
   try {
     // Create payment
     const payment = await gateway.transaction.sale({
-      amount: totalPrice.toFixed(2),
+      amount: total.toFixed(2),
       paymentMethodNonce: nonce,
       options: {
         submitForSettlement: true,
@@ -47,8 +68,6 @@ export async function braintreeMakePaymentAction(
 
     message = payment.message;
     isSuccess = payment.success;
-
-    console.log("Payment", payment);
   } catch (err) {
     console.log("Checkout failed", err);
     redirect("/checkout-error?error=" + encodeURIComponent(err as string));
