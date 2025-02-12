@@ -5,14 +5,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ip3country from "ip3country";
 import { getCodeList } from "country-list";
-// import braintree, { HostedFields } from "braintree-web";
 
-import CheckoutBraintree from "./checkout-braintree";
-
-// import {
-// getBraintreeClientTokenAction,
-//  braintreeMakePaymentAction,
-// } from "@/actions/braintree-actions";
+import BraintreeDropIn from "./checkout-braintreedropin";
 
 ip3country.init();
 
@@ -126,6 +120,7 @@ export default function Checkout({
   );
   const [billingAddrEqShipping, setBillingAddrEqShipping] = useState(true);
   const [modeUpdate, setModeUpdate] = useState(true);
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   const errorsRef = useRef(errors);
 
@@ -304,80 +299,6 @@ export default function Checkout({
       },
     []
   );
-
-  // const hostedFieldsRef = useRef<HostedFields | null>(null);
-  //
-  // useEffect(() => {
-  //   async function initializeBraintree() {
-  //     try {
-  //       const res = await getBraintreeClientTokenAction();
-  //
-  //       if (res.error) {
-  //         toast(res.error);
-  //         return;
-  //       }
-  //
-  //       const clientInstance = await braintree.client.create({
-  //         authorization: res.clientToken,
-  //       });
-  //
-  //       const hostedFields = await braintree.hostedFields.create({
-  //         fields: {
-  //           number: {
-  //             selector: "#hosted-field-number",
-  //             placeholder: "4111 1111 1111 1111",
-  //           },
-  //           ...(process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT ===
-  //             "Production" && {
-  //             cvv: {
-  //               selector: "#hosted-field-cvv",
-  //               placeholder: "123",
-  //             },
-  //           }),
-  //           expirationDate: {
-  //             selector: "#hosted-field-expiration-date",
-  //             placeholder: "Expiration",
-  //           },
-  //         },
-  //         client: clientInstance,
-  //       });
-  //       hostedFieldsRef.current = hostedFields;
-  //     } catch (err) {
-  //       console.log(err);
-  //       toast("Unexpected error while processing checkout");
-  //     }
-  //   }
-  //   initializeBraintree();
-  // }, []);
-
-  // const handlePayment = useMemo(
-  //   () =>
-  //     async function () {
-  //       if (!hostedFieldsRef.current) return;
-  //
-  //       try {
-  //         const { nonce } = await hostedFieldsRef.current.tokenize();
-  //
-  //         const res = await braintreeMakePaymentAction(nonce);
-  //
-  //         if (!res.ok) {
-  //           toast(res.message);
-  //           return;
-  //         }
-  //         // todo
-  //         // Congratulations!
-  //         // Your checkout was successful.
-  //         // An acknowledgement email for your placed order has been sent to following email address
-  //         //   youremail@yahoo.com
-  //         // Please take note of the following.
-  //         //   Notification of changes in the progress of your order's shipment status will be sent to above email address.
-  //       } catch (err) {
-  //         console.log(err);
-  //         toast("Unexpected error while processing checkout!");
-  //       }
-  //     },
-  //   []
-  // );
 
   return (
     <form className="Checkout position-relative">
@@ -623,45 +544,25 @@ export default function Checkout({
         ) : null}
       </fieldset>
 
-      {/* <div>
-        <div className="form-group">
-          <label className="control-label" htmlFor="hosted-field-number">
-            Credit Card Number
-          </label>
-          <div id="hosted-field-number"></div>
-        </div>
-        {process.env.NEXT_PUBLIC_BRAINTREE_ENVIRONMENT === "Production" && (
-          <div className="form-group">
-            <label className="control-label" htmlFor="hosted-field-cvv">
-              CVV
-            </label>
-            <div id="hosted-field-cvv"></div>
-          </div>
-        )}
-        <div className="form-group">
-          <label
-            className="control-label"
-            htmlFor="hosted-field-expiration-date"
-          >
-            Expiration Date
-          </label>
-          <div id="hosted-field-expiration-date"></div>
-        </div>
-      </div> */}
       <br />
       {getFieldError("checkout") ? (
         <span>{getFieldError("checkout")}</span>
       ) : null}
       <button
         type="button"
-        disabled={pending}
+        disabled={pending || processingPayment}
         onClick={() =>
           modeUpdate ? formActionCheckoutUpdateOrInsert() : setModeUpdate(true)
         }
       >
         {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
       </button>
-      {modeUpdate ? null : <CheckoutBraintree />}
+      <BraintreeDropIn
+        show={modeUpdate ? false : true}
+        processingPayment={processingPayment}
+        setProcessingPayment={setProcessingPayment}
+        custEmail={checkout?.cust_email || formValues.cust_email}
+      />
       {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p>

@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { gateway } from "@/config/braintree";
 
 export async function getBraintreeClientTokenAction() {
@@ -15,15 +16,24 @@ export async function getBraintreeClientTokenAction() {
   }
 }
 
-export async function braintreeMakePaymentAction(nonce: string) {
+export async function braintreeMakePaymentAction(
+  nonce: string,
+  custEmail: string
+) {
   // todo determine totalPrice
   let totalPrice = 0;
   totalPrice = totalPrice + 123456.66;
 
   if (!nonce || !totalPrice) {
     console.log("Nonce or totalPrice is missing");
-    return { message: "Nonce or totalPrice is missing", ok: false };
+    redirect(
+      "/checkout-error?error=" +
+        encodeURIComponent("Nonce or totalPrice is missing")
+    );
   }
+
+  let message = "";
+  let isSuccess = false;
 
   try {
     // Create payment
@@ -35,15 +45,18 @@ export async function braintreeMakePaymentAction(nonce: string) {
       },
     });
 
-    console.log("Payment Payment Payment", payment);
+    message = payment.message;
+    isSuccess = payment.success;
 
-    if (!payment.success) {
-      console.log("Payment failed", payment);
-      return { message: "Payment failed", ok: false };
-    }
-    return { message: "Checkout successful", ok: true };
+    console.log("Payment", payment);
   } catch (err) {
-    console.log(err);
-    return { message: "Failed to checkout", ok: false };
+    console.log("Checkout failed", err);
+    redirect("/checkout-error?error=" + encodeURIComponent(err as string));
   }
+
+  if (!isSuccess) {
+    console.log("Payment failed", message);
+    redirect("/checkout-error?error=" + encodeURIComponent(message));
+  }
+  redirect("/checkout-success?cust_email=" + encodeURIComponent(custEmail));
 }

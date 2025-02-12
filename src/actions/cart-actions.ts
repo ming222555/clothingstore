@@ -1,5 +1,7 @@
 "use server";
 
+import { cookies } from "next/headers";
+
 import { getCartCookieJson } from "@/lib/cart";
 import * as Commerce from "@/lib/commerce-kit";
 import { setCartCookieJson } from "@/lib/cart";
@@ -25,6 +27,10 @@ export const getCheckoutFromCookiesAction =
     const checkout = await Commerce.checkoutGet(cartCookieJson.id);
     return checkout;
   };
+
+export const clearYnsCartCookieAction = async () => {
+  (await cookies()).delete("yns_cart");
+};
 
 export const addToCartAction = async (
   productId: string
