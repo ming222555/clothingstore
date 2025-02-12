@@ -167,6 +167,25 @@ export const checkoutUpdateOrInsert = async ({
   return ret;
 };
 
+export const insertPayment = async ({
+  total,
+  nonce,
+  cartId,
+}: {
+  total: number;
+  nonce: string;
+  cartId: string;
+}): Promise<{
+  error: string;
+}> => {
+  const ret = await Db.insertPayment({
+    total,
+    nonce,
+    cartId,
+  });
+  return ret;
+};
+
 export const validateCheckout = async (formValues: Checkout) => {
   const rc = await Db.validateCheckout(formValues);
   return rc;

@@ -1,12 +1,13 @@
 import YnsLink from "@/ui/yns-link";
 import ClearYnsCartCookie from "@/ui/checkout/clear-yns-cart-cookie";
+import ToastClient from "@/ui/checkout/toast-client";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function CheckoutSuccessPage(props: {
   searchParams: SearchParams;
 }) {
-  const { cust_email } = await props.searchParams;
+  const { cust_email, dberror } = await props.searchParams;
 
   return (
     <>
@@ -29,6 +30,7 @@ export default async function CheckoutSuccessPage(props: {
         <YnsLink href="/">Back to shopping</YnsLink>
       </div>
       <ClearYnsCartCookie />
+      {dberror ? <ToastClient msg={dberror as string} /> : null}
     </>
   );
 }

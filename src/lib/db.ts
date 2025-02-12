@@ -85,6 +85,13 @@ function initDb() {
       FOREIGN KEY(id) REFERENCES cart(id) ON DELETE CASCADE,
       FOREIGN KEY(shipping_rate_id) REFERENCES shipping_rate(id) ON DELETE SET NULL
     )`);
+  db.exec(`
+      CREATE TABLE IF NOT EXISTS checkout_payment (
+        id TEXT PRIMARY KEY, 
+        payment_nonce TEXT,
+        amount REAL,
+        FOREIGN KEY(id) REFERENCES cart_checkout(id) ON DELETE CASCADE
+      )`);
 
   // Creating shipping rates
   const stmt2 = db.prepare("SELECT COUNT(*) AS count FROM shipping_rate");
@@ -1185,4 +1192,37 @@ export async function checkoutUpdateOrInsert({
       },
     ],
   };
+}
+
+export async function insertPayment({
+  total,
+  nonce,
+  cartId,
+}: {
+  total: number;
+  nonce: string;
+  cartId: string;
+}): Promise<{ error: string }> {
+  try {
+    const stmt = db.prepare(`
+      INSERT INTO checkout_payment (
+        id,
+        payment_nonce,
+        amount
+      )
+      VALUES (?, ?, ?)`);
+    stmt.run(cartId, nonce, total);
+
+    return {
+      error: "",
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to create payment record",
+    };
+  }
 }

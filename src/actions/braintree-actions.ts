@@ -77,5 +77,22 @@ export async function braintreeMakePaymentAction(
     console.log("Payment failed", message);
     redirect("/checkout-error?error=" + encodeURIComponent(message));
   }
-  redirect("/checkout-success?cust_email=" + encodeURIComponent(custEmail));
+
+  const { error } = await Commerce.insertPayment({
+    total,
+    nonce,
+    cartId: cart.id,
+  });
+
+  if (!error) {
+    redirect("/checkout-success?cust_email=" + encodeURIComponent(custEmail));
+  }
+
+  console.log("INSERT payment record failed", error);
+  redirect(
+    "/checkout-success?cust_email=" +
+      encodeURIComponent(custEmail) +
+      "&dberror=" +
+      encodeURIComponent("INSERT payment record failed")
+  );
 }
