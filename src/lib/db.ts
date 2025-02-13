@@ -25,7 +25,7 @@ export interface CartAddReturn {
   } | null;
 }
 
-const db = new sql("cart.db");
+export const db = new sql("cart.db");
 
 const DEFAULT_CURRENCY = "USD";
 const DEFAULT_QTY_TO_ADD_TO_CART = 1;
@@ -33,10 +33,15 @@ const INPUT_MIN_LENGTH = 6;
 
 function initDb() {
   db.exec(`
-    CREATE TABLE IF NOT EXISTS cart (
-      id TEXT PRIMARY KEY, 
-      currency TEXT
+    CREATE TABLE IF NOT EXISTS clist (
+      name TEXT PRIMARY KEY, 
+      code TEXT
     )`);
+  db.exec(`
+      CREATE TABLE IF NOT EXISTS cart (
+        id TEXT PRIMARY KEY, 
+        currency TEXT
+      )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS product (
       id TEXT PRIMARY KEY, 
@@ -108,9 +113,9 @@ function initDb() {
     `);
 
     db.exec(`
-    INSERT INTO shipping_rate (id, rate, agency, duration)
-    VALUES ('USPS2-3-33', 10.99, 'USPS2', '3-33 days')
-    `);
+      INSERT INTO shipping_rate (id, rate, agency, duration)
+      VALUES ('USPS2-3-33', 10.99, 'USPS2', '3-33 days')
+      `);
 
     db.exec(`
     INSERT INTO shipping_rate (id, rate, agency, duration)

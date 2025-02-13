@@ -4,13 +4,14 @@ import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ip3country from "ip3country";
-import { getCodeList } from "country-list";
+////////////import { getCodeList } from "country-list";
 
 import BraintreeDropIn from "./checkout-braintreedropin";
+import countrylist from "@/dat/countries.json";
 
 ip3country.init();
 
-const countrylist = getCodeList();
+//////////// const countrylist = getCodeList();
 
 import * as Commerce from "@/lib/commerce-kit";
 import {
@@ -139,7 +140,9 @@ export default function Checkout({
 
         const countryCode = country_code.toLowerCase();
 
-        if (!countrylist[countryCode]) {
+        const pos = countrylist.findIndex((ctry) => ctry.code === countryCode);
+
+        if (pos < 0) {
           return;
         }
 
@@ -377,9 +380,14 @@ export default function Checkout({
         onChange={onValueChange}
       >
         <option value=""></option>
-        {Object.entries(countrylist).map((keyVal) => (
+        {/* {Object.entries(countrylist).map((keyVal) => (
           <option value={keyVal[0]} key={keyVal[0]}>
             {keyVal[0]} &nbsp;{keyVal[1]}
+          </option>
+        ))} */}
+        {countrylist.map((ctry) => (
+          <option value={ctry.code} key={ctry.code}>
+            {ctry.name}
           </option>
         ))}
       </select>
@@ -522,9 +530,14 @@ export default function Checkout({
           onChange={onValueChange}
         >
           <option value=""></option>
-          {Object.entries(countrylist).map((keyVal) => (
+          {/* {Object.entries(countrylist).map((keyVal) => (
             <option value={keyVal[0]} key={keyVal[0]}>
               {keyVal[0]} &nbsp;{keyVal[1]}
+            </option>
+          ))} */}
+          {countrylist.map((ctry) => (
+            <option value={ctry.code} key={ctry.code}>
+              {ctry.name}
             </option>
           ))}
         </select>
