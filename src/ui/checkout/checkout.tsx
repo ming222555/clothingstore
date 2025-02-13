@@ -4,14 +4,11 @@ import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ip3country from "ip3country";
-////////////import { getCodeList } from "country-list";
 
 import BraintreeDropIn from "./checkout-braintreedropin";
 import countrylist from "@/dat/countries.json";
 
 ip3country.init();
-
-//////////// const countrylist = getCodeList();
 
 import * as Commerce from "@/lib/commerce-kit";
 import {
@@ -380,11 +377,6 @@ export default function Checkout({
         onChange={onValueChange}
       >
         <option value=""></option>
-        {/* {Object.entries(countrylist).map((keyVal) => (
-          <option value={keyVal[0]} key={keyVal[0]}>
-            {keyVal[0]} &nbsp;{keyVal[1]}
-          </option>
-        ))} */}
         {countrylist.map((ctry) => (
           <option value={ctry.code} key={ctry.code}>
             {ctry.name}
@@ -530,11 +522,6 @@ export default function Checkout({
           onChange={onValueChange}
         >
           <option value=""></option>
-          {/* {Object.entries(countrylist).map((keyVal) => (
-            <option value={keyVal[0]} key={keyVal[0]}>
-              {keyVal[0]} &nbsp;{keyVal[1]}
-            </option>
-          ))} */}
           {countrylist.map((ctry) => (
             <option value={ctry.code} key={ctry.code}>
               {ctry.name}

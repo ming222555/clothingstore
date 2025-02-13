@@ -1,13 +1,10 @@
 "use server";
 
-import fs from "fs";
 import { redirect } from "next/navigation";
 import { gateway } from "@/config/braintree";
-import { getCodeList } from "country-list";
 
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
 import * as Commerce from "@/lib/commerce-kit";
-import { db } from "@/lib/db";
 
 export async function getBraintreeClientTokenAction() {
   try {
@@ -99,48 +96,3 @@ export async function braintreeMakePaymentAction(
       encodeURIComponent("INSERT payment record failed")
   );
 }
-
-export const ttt = async () => {
-  const stmt = db.prepare(`
-    SELECT name, code 
-    FROM clist
-    ORDER BY name ASC`);
-
-  const resultset = stmt.all();
-
-  fs.writeFile(
-    "/home/ming/clisting.txt",
-    JSON.stringify(resultset),
-    {
-      encoding: "utf8",
-      flag: "w",
-      mode: 0o666,
-    },
-    (err) => {
-      if (err) console.log(err);
-      else {
-        console.log("File written successfully\n");
-        console.log("The written file has the following contents:");
-        console.log(fs.readFileSync("movies.txt", "utf8"));
-      }
-    }
-  );
-  // const countrylist = getCodeList();
-  // console.log(countrylist);
-  // const codes: string[] = [];
-  // const names: string[] = [];
-  // Object.entries(countrylist).map((keyVal) => {
-  //   codes.push(keyVal[0]);
-  //   names.push(keyVal[1]);
-  // });
-  //
-  // for (let index = 0; index < codes.length; index++) {
-  //   const code = codes[index];
-  //   const name = names[index];
-  //
-  //   const stmt = db.prepare(`
-  //     INSERT INTO clist (name, code)
-  //     VALUES (?, ?)`);
-  //   stmt.run(name, code);
-  // }
-};

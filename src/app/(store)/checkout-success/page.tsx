@@ -1,7 +1,6 @@
 import YnsLink from "@/ui/yns-link";
 import ClearYnsCartCookie from "@/ui/checkout/clear-yns-cart-cookie";
 import ToastClient from "@/ui/checkout/toast-client";
-import TstLst from "./tstlst";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -31,7 +30,6 @@ export default async function CheckoutSuccessPage(props: {
         <YnsLink href="/">Back to shopping</YnsLink>
       </div>
       <ClearYnsCartCookie />
-      <TstLst />
       {dberror ? <ToastClient msg={dberror as string} /> : null}
     </>
   );

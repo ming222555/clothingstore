@@ -25,18 +25,13 @@ export interface CartAddReturn {
   } | null;
 }
 
-export const db = new sql("cart.db");
+const db = new sql("cart.db");
 
 const DEFAULT_CURRENCY = "USD";
 const DEFAULT_QTY_TO_ADD_TO_CART = 1;
 const INPUT_MIN_LENGTH = 6;
 
 function initDb() {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS clist (
-      name TEXT PRIMARY KEY, 
-      code TEXT
-    )`);
   db.exec(`
       CREATE TABLE IF NOT EXISTS cart (
         id TEXT PRIMARY KEY, 
