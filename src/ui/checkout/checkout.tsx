@@ -580,59 +580,177 @@ export default function Checkout({
         {getFieldError("shipping_rate_id") ? (
           <span>{getFieldError("shipping_rate_id")}</span>
         ) : null}
-        <fieldset
-          disabled={!modeUpdate}
-          className="border rounded border-2 mt-3"
-        >
+        <fieldset disabled={!modeUpdate} className="mt-3">
           <legend className="h6">Shipping method</legend>
-          <div role="radiodroup">
-            <label
-              htmlFor="shipping_rate_id_USPS-3-33"
-              className="Checkout__label-for-shipping-rate-id"
-            >
-              <input
-                type="radio"
-                name="shipping_rate_id"
-                value="USPS-3-33"
-                checked={formValues.shipping_rate_id === "USPS-3-33"}
-                onChange={(evt) => {
-                  onValueChange(evt);
-                  formActionCheckoutUpdateOrInsertShippingRate(evt);
-                }}
-                disabled={pending}
-                id="shipping_rate_id_USPS-3-33"
-                className="d-none"
-              />
-              USPS-3-33 | 1.99 | 3-33 days{" "}
-              {pendingShippingRate &&
-              currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
-                <span className="loader"></span>
-              ) : null}
-            </label>
-            <br />
-            <label
-              htmlFor="shipping_rate_id_USPS-4-44"
-              className="Checkout__label-for-shipping-rate-id"
-            >
-              <input
-                type="radio"
-                name="shipping_rate_id"
-                value="USPS-4-44"
-                checked={formValues.shipping_rate_id === "USPS-4-44"}
-                onChange={(evt) => {
-                  onValueChange(evt);
-                  formActionCheckoutUpdateOrInsertShippingRate(evt);
-                }}
-                disabled={pending}
-                id="shipping_rate_id_USPS-4-44"
-                className="d-none"
-              />
-              USPS-4-44 | 0.99 | 4-44 days{" "}
-              {pendingShippingRate &&
-              currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
-                <span className="loader"></span>
-              ) : null}
-            </label>
+          <div className="row row-cols-3">
+            <div className="col">
+              <label
+                htmlFor="shipping_rate_id_USPS-3-33"
+                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
+                role="button"
+              >
+                <input
+                  type="radio"
+                  name="shipping_rate_id"
+                  value="USPS-3-33"
+                  checked={formValues.shipping_rate_id === "USPS-3-33"}
+                  onChange={(evt) => {
+                    onValueChange(evt);
+                    formActionCheckoutUpdateOrInsertShippingRate(evt);
+                  }}
+                  disabled={pending}
+                  id="shipping_rate_id_USPS-3-33"
+                  className="d-none"
+                />
+                <span>USPS-3-33</span>
+                <span>1.99</span>
+                <span>3-33 days</span>
+                {pendingShippingRate &&
+                currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
+                  <span className="loader align-self-center"></span>
+                ) : null}
+              </label>
+            </div>
+            <div className="col">
+              <label
+                htmlFor="shipping_rate_id_USPS-4-44"
+                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
+                role="button"
+              >
+                <input
+                  type="radio"
+                  name="shipping_rate_id"
+                  value="USPS-4-44"
+                  checked={formValues.shipping_rate_id === "USPS-4-44"}
+                  onChange={(evt) => {
+                    onValueChange(evt);
+                    formActionCheckoutUpdateOrInsertShippingRate(evt);
+                  }}
+                  disabled={pending}
+                  id="shipping_rate_id_USPS-4-44"
+                  className="d-none"
+                />
+                <span>USPS-4-44</span>
+                <span>0.99</span>
+                <span>4-44 days</span>
+                {pendingShippingRate &&
+                currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
+                  <span className="loader align-self-center"></span>
+                ) : null}
+              </label>
+            </div>
+            <div className="col">
+              <label
+                htmlFor="shipping_rate_id_USPS-4-44a"
+                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
+                role="button"
+              >
+                <input
+                  type="radio"
+                  name="shipping_rate_id"
+                  value="USPS-4-44a"
+                  checked={formValues.shipping_rate_id === "USPS-4-44a"}
+                  onChange={(evt) => {
+                    onValueChange(evt);
+                    formActionCheckoutUpdateOrInsertShippingRate(evt);
+                  }}
+                  disabled={pending}
+                  id="shipping_rate_id_USPS-4-44a"
+                  className="d-none"
+                />
+                <span>USPS-4-44</span>
+                <span>0.99</span>
+                <span>4-44 days</span>
+                {pendingShippingRate &&
+                currentFieldId.current === "shipping_rate_id_USPS-4-44a" ? (
+                  <span className="loader align-self-center"></span>
+                ) : null}
+              </label>
+            </div>
+            <div className="col">
+              <label
+                htmlFor="shipping_rate_id_USPS-4-44b"
+                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
+                role="button"
+              >
+                <input
+                  type="radio"
+                  name="shipping_rate_id"
+                  value="USPS-4-44b"
+                  checked={formValues.shipping_rate_id === "USPS-4-44b"}
+                  onChange={(evt) => {
+                    onValueChange(evt);
+                    formActionCheckoutUpdateOrInsertShippingRate(evt);
+                  }}
+                  disabled={pending}
+                  id="shipping_rate_id_USPS-4-44b"
+                  className="d-none"
+                />
+                <span>USPS-4-44</span>
+                <span>0.99</span>
+                <span>4-44 days</span>
+                {pendingShippingRate &&
+                currentFieldId.current === "shipping_rate_id_USPS-4-44b" ? (
+                  <span className="loader align-self-center"></span>
+                ) : null}
+              </label>
+            </div>
+            <div className="col">
+              <label
+                htmlFor="shipping_rate_id_USPS-4-44c"
+                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
+                role="button"
+              >
+                <input
+                  type="radio"
+                  name="shipping_rate_id"
+                  value="USPS-4-44c"
+                  checked={formValues.shipping_rate_id === "USPS-4-44c"}
+                  onChange={(evt) => {
+                    onValueChange(evt);
+                    formActionCheckoutUpdateOrInsertShippingRate(evt);
+                  }}
+                  disabled={pending}
+                  id="shipping_rate_id_USPS-4-44c"
+                  className="d-none"
+                />
+                <span>USPS-4-44</span>
+                <span>0.99</span>
+                <span>4-44 days</span>
+                {pendingShippingRate &&
+                currentFieldId.current === "shipping_rate_id_USPS-4-44c" ? (
+                  <span className="loader align-self-center"></span>
+                ) : null}
+              </label>
+            </div>
+            <div className="col">
+              <label
+                htmlFor="shipping_rate_id_USPS-4-44d"
+                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
+                role="button"
+              >
+                <input
+                  type="radio"
+                  name="shipping_rate_id"
+                  value="USPS-4-44d"
+                  checked={formValues.shipping_rate_id === "USPS-4-44d"}
+                  onChange={(evt) => {
+                    onValueChange(evt);
+                    formActionCheckoutUpdateOrInsertShippingRate(evt);
+                  }}
+                  disabled={pending}
+                  id="shipping_rate_id_USPS-4-44d"
+                  className="d-none"
+                />
+                <span>USPS-4-44</span>
+                <span>0.99</span>
+                <span>4-44 days</span>
+                {pendingShippingRate &&
+                currentFieldId.current === "shipping_rate_id_USPS-4-44d" ? (
+                  <span className="loader align-self-center"></span>
+                ) : null}
+              </label>
+            </div>
           </div>
         </fieldset>
         <input
