@@ -301,8 +301,12 @@ export default function Checkout({
   );
 
   return (
-    <form className="Checkout position-relative">
-      <input
+    <>
+      <p className="form-text mb-3">
+        Provide billing and shipping details below.
+      </p>
+      <form className="Checkout position-relative">
+        {/* <input
         type="text"
         inputMode="email"
         name="cust_email"
@@ -314,211 +318,222 @@ export default function Checkout({
       />
       {getFieldError("cust_email") ? (
         <span>{getFieldError("cust_email")}</span>
-      ) : null}
-      <input
-        type="text"
-        name="cust_shipping_fullname"
-        id="cust_shipping_fullname"
-        placeholder="cust_shipping_fullname"
-        value={formValues.cust_shipping_fullname}
-        onChange={onValueChange}
-      />
-      {getFieldError("cust_shipping_fullname") ? (
-        <span>{getFieldError("cust_shipping_fullname")}</span>
-      ) : null}
-      <input
-        type="text"
-        name="cust_shipping_address"
-        id="cust_shipping_address"
-        placeholder="cust_shipping_address"
-        value={formValues.cust_shipping_address}
-        onChange={onValueChange}
-      />
-      {getFieldError("cust_shipping_address") ? (
-        <span>{getFieldError("cust_shipping_address")}</span>
-      ) : null}
-      <input
-        type="text"
-        name="cust_shipping_postalcode"
-        id="cust_shipping_postalcode"
-        placeholder="cust_shipping_postalcode"
-        value={formValues.cust_shipping_postalcode}
-        onChange={onValueChange}
-      />
-      {getFieldError("cust_shipping_postalcode") ? (
-        <span>{getFieldError("cust_shipping_postalcode")}</span>
-      ) : null}
-      <input
-        type="text"
-        name="cust_shipping_city"
-        id="cust_shipping_city"
-        placeholder="cust_shipping_city"
-        value={formValues.cust_shipping_city}
-        onChange={onValueChange}
-      />
-      {getFieldError("cust_shipping_city") ? (
-        <span>{getFieldError("cust_shipping_city")}</span>
-      ) : null}
-      <input
-        type="text"
-        name="cust_shipping_state"
-        id="cust_shipping_state"
-        placeholder="cust_shipping_state"
-        value={formValues.cust_shipping_state}
-        onChange={onValueChange}
-      />
-      {getFieldError("cust_shipping_state") ? (
-        <span>{getFieldError("cust_shipping_state")}</span>
-      ) : null}
-      <select
-        name="cust_shipping_country"
-        id="cust_shipping_country"
-        value={formValues.cust_shipping_country}
-        onChange={onValueChange}
-      >
-        <option value=""></option>
-        {countrylist.map((ctry) => (
-          <option value={ctry.code} key={ctry.code}>
-            {ctry.name}
-          </option>
-        ))}
-      </select>
-      {getFieldError("cust_shipping_country") ? (
-        <span>{getFieldError("cust_shipping_country")}</span>
-      ) : null}
-      {getFieldError("shipping_rate_id") ? (
-        <span>{getFieldError("shipping_rate_id")}</span>
-      ) : null}
-      <fieldset disabled={!modeUpdate}>
-        <legend>Shipping method</legend>
-        <div role="radiodroup">
-          <input
-            type="radio"
-            name="shipping_rate_id"
-            value="USPS-3-33"
-            checked={formValues.shipping_rate_id === "USPS-3-33"}
-            onChange={(evt) => {
-              onValueChange(evt);
-              formActionCheckoutUpdateOrInsertShippingRate(evt);
-            }}
-            disabled={pending}
-            id="shipping_rate_id_USPS-3-33"
-          />
-          <label
-            htmlFor="shipping_rate_id_USPS-3-33"
-            className="Checkout__label-for-shipping-rate-id"
-          >
-            USPS-3-33 | 1.99 | 3-33 days{" "}
-            {pendingShippingRate &&
-            currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
-              <span className="loader"></span>
-            ) : null}
+      ) : null} */}
+        <div className="mb-3">
+          <label htmlFor="cust_email" className="form-label mb-1">
+            Email{" "}
+            <span id="emailHelp" className="form-text text-danger ps-1">
+              {getFieldError("cust_email") ? getFieldError("cust_email") : null}
+            </span>
           </label>
-          <br />
           <input
-            type="radio"
-            name="shipping_rate_id"
-            value="USPS-4-44"
-            checked={formValues.shipping_rate_id === "USPS-4-44"}
-            onChange={(evt) => {
-              onValueChange(evt);
-              formActionCheckoutUpdateOrInsertShippingRate(evt);
-            }}
-            disabled={pending}
-            id="shipping_rate_id_USPS-4-44"
+            type="text"
+            inputMode="email"
+            name="cust_email"
+            id="cust_email"
+            placeholder="you@example.com"
+            value={formValues.cust_email}
+            onChange={onValueChange}
+            disabled={!modeUpdate}
+            className={`form-control${
+              getFieldError("cust_email") ? " border-warning" : ""
+            }`}
+            aria-describedby="emailHelp"
           />
-          <label
-            htmlFor="shipping_rate_id_USPS-4-44"
-            className="Checkout__label-for-shipping-rate-id"
-          >
-            USPS-4-44 | 0.99 | 4-44 days{" "}
-            {pendingShippingRate &&
-            currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
-              <span className="loader"></span>
-            ) : null}
-          </label>
         </div>
-      </fieldset>
-      <input
-        type="checkbox"
-        id="cbx-billing-addr-eq-shipping"
-        checked={billingAddrEqShipping}
-        onChange={() => {
-          setBillingAddrEqShipping((prev) => !prev);
-        }}
-      />
-      <label
-        htmlFor="cbx-billing-addr-eq-shipping"
-        className="Checkout__label-for-cbx-billing-addr-eq-shipping"
-      >
-        Billing address same as shipping
-      </label>
-      <fieldset
-        disabled={!modeUpdate}
-        className={`bg-warning Checkout__fieldset-billing-address${
-          billingAddrEqShipping ? " hide" : ""
-        }`}
-      >
-        <legend>Billing address</legend>
-        <input
+        <fieldset disabled={!modeUpdate} className="border rounded border-2">
+          <legend className="h6">Shipping</legend>
+          {/* <input
           type="text"
-          name="cust_billing_fullname"
-          id="cust_billing_fullname"
-          placeholder="cust_billing_fullname"
-          value={formValues.cust_billing_fullname}
+          name="cust_shipping_fullname"
+          id="cust_shipping_fullname"
+          placeholder="cust_shipping_fullname"
+          value={formValues.cust_shipping_fullname}
           onChange={onValueChange}
         />
-        {getFieldError("cust_billing_fullname") ? (
-          <span>{getFieldError("cust_billing_fullname")}</span>
-        ) : null}
-        <input
+        {getFieldError("cust_shipping_fullname") ? (
+          <span>{getFieldError("cust_shipping_fullname")}</span>
+        ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_shipping_fullname" className="form-label mb-1">
+              Full name{" "}
+              <span
+                id="custShippingFullnameHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_shipping_fullname")
+                  ? getFieldError("cust_shipping_fullname")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_shipping_fullname"
+              id="cust_shipping_fullname"
+              value={formValues.cust_shipping_fullname}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_shipping_fullname") ? " border-warning" : ""
+              }`}
+              aria-describedby="custShippingFullnameHelp"
+            />
+          </div>
+
+          {/* <input
           type="text"
-          name="cust_billing_address"
-          id="cust_billing_address"
-          placeholder="cust_billing_address"
-          value={formValues.cust_billing_address}
+          name="cust_shipping_address"
+          id="cust_shipping_address"
+          placeholder="cust_shipping_address"
+          value={formValues.cust_shipping_address}
           onChange={onValueChange}
         />
-        {getFieldError("cust_billing_address") ? (
-          <span>{getFieldError("cust_billing_address")}</span>
-        ) : null}
-        <input
+        {getFieldError("cust_shipping_address") ? (
+          <span>{getFieldError("cust_shipping_address")}</span>
+        ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_shipping_address" className="form-label mb-1">
+              Address{" "}
+              <span
+                id="custShippingAddressHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_shipping_address")
+                  ? getFieldError("cust_shipping_address")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_shipping_address"
+              id="cust_shipping_address"
+              value={formValues.cust_shipping_address}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_shipping_address") ? " border-warning" : ""
+              }`}
+              aria-describedby="custShippingAddressHelp"
+            />
+          </div>
+
+          <div className="d-flex justify-content-between">
+            {/* <input
           type="text"
-          name="cust_billing_postalcode"
-          id="cust_billing_postalcode"
-          placeholder="cust_billing_postalcode"
-          value={formValues.cust_billing_postalcode}
+          name="cust_shipping_postalcode"
+          id="cust_shipping_postalcode"
+          placeholder="cust_shipping_postalcode"
+          value={formValues.cust_shipping_postalcode}
           onChange={onValueChange}
         />
-        {getFieldError("cust_billing_postalcode") ? (
-          <span>{getFieldError("cust_billing_postalcode")}</span>
-        ) : null}
-        <input
+        {getFieldError("cust_shipping_postalcode") ? (
+          <span>{getFieldError("cust_shipping_postalcode")}</span>
+        ) : null} */}
+            <div className="mb-3">
+              <label
+                htmlFor="cust_shipping_postalcode"
+                className="form-label mb-1"
+              >
+                Postal Code{" "}
+                <p
+                  id="custShippingPostalCodeHelp"
+                  className="form-text text-danger my-0"
+                >
+                  {getFieldError("cust_shipping_postalcode")
+                    ? getFieldError("cust_shipping_postalcode")
+                    : null}
+                </p>
+              </label>
+              <input
+                type="text"
+                name="cust_shipping_postalcode"
+                id="cust_shipping_postalcode"
+                value={formValues.cust_shipping_postalcode}
+                onChange={onValueChange}
+                className={`form-control${
+                  getFieldError("cust_shipping_postalcode")
+                    ? " border-warning"
+                    : ""
+                }`}
+                aria-describedby="custShippingPostalCodeHelp"
+              />
+            </div>
+
+            {/* <input
           type="text"
-          name="cust_billing_city"
-          id="cust_billing_city"
-          placeholder="cust_billing_city"
-          value={formValues.cust_billing_city}
+          name="cust_shipping_city"
+          id="cust_shipping_city"
+          placeholder="cust_shipping_city"
+          value={formValues.cust_shipping_city}
           onChange={onValueChange}
         />
-        {getFieldError("cust_billing_city") ? (
-          <span>{getFieldError("cust_billing_city")}</span>
-        ) : null}
-        <input
+        {getFieldError("cust_shipping_city") ? (
+          <span>{getFieldError("cust_shipping_city")}</span>
+        ) : null} */}
+            <div className="mb-3">
+              <label htmlFor="cust_shipping_city" className="form-label mb-1">
+                City{" "}
+                <span
+                  id="custShippingCityCodeHelp"
+                  className="form-text text-danger ps-1"
+                >
+                  {getFieldError("cust_shipping_city")
+                    ? getFieldError("cust_shipping_city")
+                    : null}
+                </span>
+              </label>
+              <input
+                type="text"
+                name="cust_shipping_city"
+                id="cust_shipping_city"
+                value={formValues.cust_shipping_city}
+                onChange={onValueChange}
+                className={`form-control${
+                  getFieldError("cust_shipping_city") ? " border-warning" : ""
+                }`}
+                aria-describedby="custShippingCityCodeHelp"
+              />
+            </div>
+          </div>
+
+          {/* <input
           type="text"
-          name="cust_billing_state"
-          id="cust_billing_state"
-          placeholder="cust_billing_state"
-          value={formValues.cust_billing_state}
+          name="cust_shipping_state"
+          id="cust_shipping_state"
+          placeholder="cust_shipping_state"
+          value={formValues.cust_shipping_state}
           onChange={onValueChange}
         />
-        {getFieldError("cust_billing_state") ? (
-          <span>{getFieldError("cust_billing_state")}</span>
-        ) : null}
-        <select
-          name="cust_billing_country"
-          id="cust_billing_country"
-          value={formValues.cust_billing_country}
+        {getFieldError("cust_shipping_state") ? (
+          <span>{getFieldError("cust_shipping_state")}</span>
+        ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_shipping_state" className="form-label mb-1">
+              State / Region{" "}
+              <span
+                id="custShippingStateHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_shipping_state")
+                  ? getFieldError("cust_shipping_state")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_shipping_state"
+              id="cust_shipping_state"
+              value={formValues.cust_shipping_state}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_shipping_state") ? " border-warning" : ""
+              }`}
+              aria-describedby="custShippingStateHelp"
+            />
+          </div>
+
+          {/* <select
+          name="cust_shipping_country"
+          id="cust_shipping_country"
+          value={formValues.cust_shipping_country}
           onChange={onValueChange}
         >
           <option value=""></option>
@@ -528,52 +543,234 @@ export default function Checkout({
             </option>
           ))}
         </select>
-        {getFieldError("cust_billing_country") ? (
-          <span>{getFieldError("cust_billing_country")}</span>
+        {getFieldError("cust_shipping_country") ? (
+          <span>{getFieldError("cust_shipping_country")}</span>
+        ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_shipping_country" className="form-label mb-1">
+              Country{" "}
+              <span
+                id="custShippingCountryHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_shipping_country")
+                  ? getFieldError("cust_shipping_country")
+                  : null}
+              </span>
+            </label>
+            <select
+              name="cust_shipping_country"
+              id="cust_shipping_country"
+              value={formValues.cust_shipping_country}
+              onChange={onValueChange}
+              className={`form-select form-select-sm${
+                getFieldError("cust_shipping_country") ? " border-warning" : ""
+              }`}
+              aria-describedby="custShippingCountryHelp"
+            >
+              <option value=""></option>
+              {countrylist.map((ctry) => (
+                <option value={ctry.code} key={ctry.code}>
+                  {ctry.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </fieldset>
+        {getFieldError("shipping_rate_id") ? (
+          <span>{getFieldError("shipping_rate_id")}</span>
         ) : null}
+        <fieldset
+          disabled={!modeUpdate}
+          className="border rounded border-2 mt-3"
+        >
+          <legend className="h6">Shipping method</legend>
+          <div role="radiodroup">
+            <input
+              type="radio"
+              name="shipping_rate_id"
+              value="USPS-3-33"
+              checked={formValues.shipping_rate_id === "USPS-3-33"}
+              onChange={(evt) => {
+                onValueChange(evt);
+                formActionCheckoutUpdateOrInsertShippingRate(evt);
+              }}
+              disabled={pending}
+              id="shipping_rate_id_USPS-3-33"
+            />
+            <label
+              htmlFor="shipping_rate_id_USPS-3-33"
+              className="Checkout__label-for-shipping-rate-id"
+            >
+              USPS-3-33 | 1.99 | 3-33 days{" "}
+              {pendingShippingRate &&
+              currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
+                <span className="loader"></span>
+              ) : null}
+            </label>
+            <br />
+            <input
+              type="radio"
+              name="shipping_rate_id"
+              value="USPS-4-44"
+              checked={formValues.shipping_rate_id === "USPS-4-44"}
+              onChange={(evt) => {
+                onValueChange(evt);
+                formActionCheckoutUpdateOrInsertShippingRate(evt);
+              }}
+              disabled={pending}
+              id="shipping_rate_id_USPS-4-44"
+            />
+            <label
+              htmlFor="shipping_rate_id_USPS-4-44"
+              className="Checkout__label-for-shipping-rate-id"
+            >
+              USPS-4-44 | 0.99 | 4-44 days{" "}
+              {pendingShippingRate &&
+              currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
+                <span className="loader"></span>
+              ) : null}
+            </label>
+          </div>
+        </fieldset>
         <input
-          type="text"
-          name="cust_billing_phone"
-          id="cust_billing_phone"
-          placeholder="cust_billing_phone"
-          value={formValues.cust_billing_phone}
-          onChange={onValueChange}
+          type="checkbox"
+          id="cbx-billing-addr-eq-shipping"
+          checked={billingAddrEqShipping}
+          onChange={() => {
+            setBillingAddrEqShipping((prev) => !prev);
+          }}
         />
-        {getFieldError("cust_billing_phone") ? (
-          <span>{getFieldError("cust_billing_phone")}</span>
-        ) : null}
-      </fieldset>
+        <label
+          htmlFor="cbx-billing-addr-eq-shipping"
+          className="Checkout__label-for-cbx-billing-addr-eq-shipping"
+        >
+          Billing address same as shipping
+        </label>
+        <fieldset
+          disabled={!modeUpdate}
+          className={`bg-warning Checkout__fieldset-billing-address${
+            billingAddrEqShipping ? " hide" : ""
+          }`}
+        >
+          <legend>Billing address</legend>
+          <input
+            type="text"
+            name="cust_billing_fullname"
+            id="cust_billing_fullname"
+            placeholder="cust_billing_fullname"
+            value={formValues.cust_billing_fullname}
+            onChange={onValueChange}
+          />
+          {getFieldError("cust_billing_fullname") ? (
+            <span>{getFieldError("cust_billing_fullname")}</span>
+          ) : null}
+          <input
+            type="text"
+            name="cust_billing_address"
+            id="cust_billing_address"
+            placeholder="cust_billing_address"
+            value={formValues.cust_billing_address}
+            onChange={onValueChange}
+          />
+          {getFieldError("cust_billing_address") ? (
+            <span>{getFieldError("cust_billing_address")}</span>
+          ) : null}
+          <input
+            type="text"
+            name="cust_billing_postalcode"
+            id="cust_billing_postalcode"
+            placeholder="cust_billing_postalcode"
+            value={formValues.cust_billing_postalcode}
+            onChange={onValueChange}
+          />
+          {getFieldError("cust_billing_postalcode") ? (
+            <span>{getFieldError("cust_billing_postalcode")}</span>
+          ) : null}
+          <input
+            type="text"
+            name="cust_billing_city"
+            id="cust_billing_city"
+            placeholder="cust_billing_city"
+            value={formValues.cust_billing_city}
+            onChange={onValueChange}
+          />
+          {getFieldError("cust_billing_city") ? (
+            <span>{getFieldError("cust_billing_city")}</span>
+          ) : null}
+          <input
+            type="text"
+            name="cust_billing_state"
+            id="cust_billing_state"
+            placeholder="cust_billing_state"
+            value={formValues.cust_billing_state}
+            onChange={onValueChange}
+          />
+          {getFieldError("cust_billing_state") ? (
+            <span>{getFieldError("cust_billing_state")}</span>
+          ) : null}
+          <select
+            name="cust_billing_country"
+            id="cust_billing_country"
+            value={formValues.cust_billing_country}
+            onChange={onValueChange}
+          >
+            <option value=""></option>
+            {countrylist.map((ctry) => (
+              <option value={ctry.code} key={ctry.code}>
+                {ctry.name}
+              </option>
+            ))}
+          </select>
+          {getFieldError("cust_billing_country") ? (
+            <span>{getFieldError("cust_billing_country")}</span>
+          ) : null}
+          <input
+            type="text"
+            name="cust_billing_phone"
+            id="cust_billing_phone"
+            placeholder="cust_billing_phone"
+            value={formValues.cust_billing_phone}
+            onChange={onValueChange}
+          />
+          {getFieldError("cust_billing_phone") ? (
+            <span>{getFieldError("cust_billing_phone")}</span>
+          ) : null}
+        </fieldset>
 
-      <br />
-      {getFieldError("checkout") ? (
-        <span>{getFieldError("checkout")}</span>
-      ) : null}
-      <button
-        type="button"
-        disabled={pending || processingPayment}
-        onClick={() =>
-          modeUpdate ? formActionCheckoutUpdateOrInsert() : setModeUpdate(true)
-        }
-      >
-        {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
-      </button>
-      <BraintreeDropIn
-        show={modeUpdate ? false : true}
-        processingPayment={processingPayment}
-        setProcessingPayment={setProcessingPayment}
-        custEmail={checkout?.cust_email || formValues.cust_email}
-      />
-      {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
+        <br />
+        {getFieldError("checkout") ? (
+          <span>{getFieldError("checkout")}</span>
+        ) : null}
+        <button
+          type="button"
+          disabled={pending || processingPayment}
+          onClick={() =>
+            modeUpdate
+              ? formActionCheckoutUpdateOrInsert()
+              : setModeUpdate(true)
+          }
+        >
+          {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
+        </button>
+        <BraintreeDropIn
+          show={modeUpdate ? false : true}
+          processingPayment={processingPayment}
+          setProcessingPayment={setProcessingPayment}
+          custEmail={checkout?.cust_email || formValues.cust_email}
+        />
+        {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p>
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p> */}
-      <div
-        className={`${
-          pending ? "d-block" : "d-none"
-        } position-absolute top-0 bottom-0 start-0 end-0 bg-dark opacity-25`}
-      ></div>
-    </form>
+        <div
+          className={`${
+            pending ? "d-block" : "d-none"
+          } position-absolute top-0 bottom-0 start-0 end-0 bg-dark opacity-25`}
+        ></div>
+      </form>
+    </>
   );
 }

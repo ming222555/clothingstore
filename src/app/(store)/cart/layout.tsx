@@ -37,8 +37,8 @@ export default async function CartLayout({
         </div>
       </div>
       <div className="col-xl-5" style={{ background: "lightblue" }}>
-        <div style={{ background: "lightgreen" }}>
-          <h2 className="h2 pb-2">Checkout</h2>
+        <div style={{ background: "white" }}>
+          <h2 className="h2 mb-0">Checkout</h2>
           {children}
         </div>
       </div>
