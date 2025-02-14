@@ -586,22 +586,23 @@ export default function Checkout({
         >
           <legend className="h6">Shipping method</legend>
           <div role="radiodroup">
-            <input
-              type="radio"
-              name="shipping_rate_id"
-              value="USPS-3-33"
-              checked={formValues.shipping_rate_id === "USPS-3-33"}
-              onChange={(evt) => {
-                onValueChange(evt);
-                formActionCheckoutUpdateOrInsertShippingRate(evt);
-              }}
-              disabled={pending}
-              id="shipping_rate_id_USPS-3-33"
-            />
             <label
               htmlFor="shipping_rate_id_USPS-3-33"
               className="Checkout__label-for-shipping-rate-id"
             >
+              <input
+                type="radio"
+                name="shipping_rate_id"
+                value="USPS-3-33"
+                checked={formValues.shipping_rate_id === "USPS-3-33"}
+                onChange={(evt) => {
+                  onValueChange(evt);
+                  formActionCheckoutUpdateOrInsertShippingRate(evt);
+                }}
+                disabled={pending}
+                id="shipping_rate_id_USPS-3-33"
+                className="d-none"
+              />
               USPS-3-33 | 1.99 | 3-33 days{" "}
               {pendingShippingRate &&
               currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
@@ -609,22 +610,23 @@ export default function Checkout({
               ) : null}
             </label>
             <br />
-            <input
-              type="radio"
-              name="shipping_rate_id"
-              value="USPS-4-44"
-              checked={formValues.shipping_rate_id === "USPS-4-44"}
-              onChange={(evt) => {
-                onValueChange(evt);
-                formActionCheckoutUpdateOrInsertShippingRate(evt);
-              }}
-              disabled={pending}
-              id="shipping_rate_id_USPS-4-44"
-            />
             <label
               htmlFor="shipping_rate_id_USPS-4-44"
               className="Checkout__label-for-shipping-rate-id"
             >
+              <input
+                type="radio"
+                name="shipping_rate_id"
+                value="USPS-4-44"
+                checked={formValues.shipping_rate_id === "USPS-4-44"}
+                onChange={(evt) => {
+                  onValueChange(evt);
+                  formActionCheckoutUpdateOrInsertShippingRate(evt);
+                }}
+                disabled={pending}
+                id="shipping_rate_id_USPS-4-44"
+                className="d-none"
+              />
               USPS-4-44 | 0.99 | 4-44 days{" "}
               {pendingShippingRate &&
               currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
