@@ -1,8 +1,4 @@
 .Checkout {
-  &__label-for-shipping-rate-id > .loader {
-    @include loader();
-  }
-
   &__fieldset-billing-address {
     max-height: 999px;
     transition: all 0.2s;
@@ -12,9 +8,4 @@
       max-height: 0;
     }
   }
-}
-
-.popo {
-  width: 11rem;
-  height: 11rem;
 }

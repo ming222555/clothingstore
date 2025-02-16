@@ -555,10 +555,7 @@ export default function Checkout({
               setBillingAddrEqShipping((prev) => !prev);
             }}
           />
-          <label
-            htmlFor="cbx-billing-addr-eq-shipping"
-            className="Checkout__label-for-cbx-billing-addr-eq-shipping ps-2"
-          >
+          <label htmlFor="cbx-billing-addr-eq-shipping" className="ps-2">
             Billing address same as shipping
           </label>
         </fieldset>
