@@ -2,6 +2,7 @@ import Checkout from "@/ui/checkout/checkout";
 import {
   getCheckoutFromCookiesAction,
   validateCheckoutAction,
+  getShippingRatesAction,
 } from "@/actions/cart-actions";
 
 export default async function CartPage() {
@@ -19,6 +20,14 @@ export default async function CartPage() {
     }
   }
 
+  const shippingRates = await getShippingRatesAction();
+
   console.log(cartCheckout);
-  return <Checkout checkout={cartCheckout} preValidationOk={preValidationOk} />;
+  return (
+    <Checkout
+      checkout={cartCheckout}
+      preValidationOk={preValidationOk}
+      shippingRates={shippingRates}
+    />
+  );
 }

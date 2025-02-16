@@ -1002,7 +1002,7 @@ async function validateCheckoutUpdateOrInsert(
   if (!input_shipping_rate_id) {
     errors.push({
       field: "shipping_rate_id",
-      errormsg: "Please select a Shipping method",
+      errormsg: "Please select Shipping method",
     });
   }
 
@@ -1225,4 +1225,27 @@ export async function insertPayment({
       error: "Failed to create payment record",
     };
   }
+}
+
+export async function getShippingRates(): Promise<
+  {
+    id: string;
+    rate: number;
+    rate_currency: string;
+    agency: string;
+    duration: string;
+  }[]
+> {
+  const stmt = db.prepare(`
+    SELECT 
+      id, rate, '${DEFAULT_CURRENCY}' as rate_currency, agency, duration
+    FROM shipping_rate`);
+
+  const resultset = stmt.all();
+
+  if (resultset.length === 0) {
+    return [];
+  }
+
+  return resultset;
 }

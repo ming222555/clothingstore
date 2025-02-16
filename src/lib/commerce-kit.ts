@@ -186,6 +186,11 @@ export const insertPayment = async ({
   return ret;
 };
 
+export const getShippingRates = async () => {
+  const rc = await Db.getShippingRates();
+  return rc;
+};
+
 export const validateCheckout = async (formValues: Checkout) => {
   const rc = await Db.validateCheckout(formValues);
   return rc;

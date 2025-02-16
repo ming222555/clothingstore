@@ -184,6 +184,11 @@ export const checkoutUpdateOrInsertAction = async (
   };
 };
 
+export const getShippingRatesAction = async () => {
+  const shippingRates = await Commerce.getShippingRates();
+  return shippingRates;
+};
+
 export const validateCheckoutAction = async (formValues: Commerce.Checkout) => {
   const rc = await Commerce.validateCheckout(formValues);
   return rc;

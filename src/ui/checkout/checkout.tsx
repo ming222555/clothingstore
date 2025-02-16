@@ -7,6 +7,7 @@ import ip3country from "ip3country";
 
 import BraintreeDropIn from "./checkout-braintreedropin";
 import countrylist from "@/dat/countries.json";
+import { formatMoney } from "@/lib/utils/utils";
 
 ip3country.init();
 
@@ -39,9 +40,17 @@ const initialFormValues: FormState = {
 export default function Checkout({
   checkout,
   preValidationOk,
+  shippingRates,
 }: {
   checkout: Commerce.Checkout | null;
   preValidationOk: boolean | null;
+  shippingRates: {
+    id: string;
+    rate: number;
+    rate_currency: string;
+    agency: string;
+    duration: string;
+  }[];
 }) {
   console.log("checkout111111111111", checkout);
 
@@ -93,7 +102,7 @@ export default function Checkout({
           const pos = errorsRef.current.findIndex(
             (err) =>
               err.field === "shipping_rate_id" &&
-              err.errormsg.includes("lease select") // "Please select a Shipping method option"
+              err.errormsg.includes("Please select") // "Please select Shipping method"
           );
 
           if (pos > -1) {
@@ -306,19 +315,6 @@ export default function Checkout({
         Provide billing and shipping details below.
       </p>
       <form className="Checkout position-relative">
-        {/* <input
-        type="text"
-        inputMode="email"
-        name="cust_email"
-        id="cust_email"
-        placeholder="you@example.com"
-        value={formValues.cust_email}
-        onChange={onValueChange}
-        disabled={!modeUpdate}
-      />
-      {getFieldError("cust_email") ? (
-        <span>{getFieldError("cust_email")}</span>
-      ) : null} */}
         <div className="mb-3">
           <label htmlFor="cust_email" className="form-label mb-1">
             Email{" "}
@@ -334,26 +330,18 @@ export default function Checkout({
             placeholder="you@example.com"
             value={formValues.cust_email}
             onChange={onValueChange}
-            disabled={!modeUpdate}
+            disabled={!modeUpdate || pending}
             className={`form-control${
               getFieldError("cust_email") ? " border-warning" : ""
             }`}
             aria-describedby="emailHelp"
           />
         </div>
-        <fieldset disabled={!modeUpdate} className="border rounded border-2">
+        <fieldset
+          className="border rounded border-1"
+          disabled={!modeUpdate || pending}
+        >
           <legend className="h6">Shipping</legend>
-          {/* <input
-          type="text"
-          name="cust_shipping_fullname"
-          id="cust_shipping_fullname"
-          placeholder="cust_shipping_fullname"
-          value={formValues.cust_shipping_fullname}
-          onChange={onValueChange}
-        />
-        {getFieldError("cust_shipping_fullname") ? (
-          <span>{getFieldError("cust_shipping_fullname")}</span>
-        ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_shipping_fullname" className="form-label mb-1">
               Full name{" "}
@@ -378,18 +366,6 @@ export default function Checkout({
               aria-describedby="custShippingFullnameHelp"
             />
           </div>
-
-          {/* <input
-          type="text"
-          name="cust_shipping_address"
-          id="cust_shipping_address"
-          placeholder="cust_shipping_address"
-          value={formValues.cust_shipping_address}
-          onChange={onValueChange}
-        />
-        {getFieldError("cust_shipping_address") ? (
-          <span>{getFieldError("cust_shipping_address")}</span>
-        ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_shipping_address" className="form-label mb-1">
               Address{" "}
@@ -416,17 +392,6 @@ export default function Checkout({
           </div>
 
           <div className="d-flex justify-content-between">
-            {/* <input
-          type="text"
-          name="cust_shipping_postalcode"
-          id="cust_shipping_postalcode"
-          placeholder="cust_shipping_postalcode"
-          value={formValues.cust_shipping_postalcode}
-          onChange={onValueChange}
-        />
-        {getFieldError("cust_shipping_postalcode") ? (
-          <span>{getFieldError("cust_shipping_postalcode")}</span>
-        ) : null} */}
             <div className="mb-3">
               <label
                 htmlFor="cust_shipping_postalcode"
@@ -456,18 +421,6 @@ export default function Checkout({
                 aria-describedby="custShippingPostalCodeHelp"
               />
             </div>
-
-            {/* <input
-          type="text"
-          name="cust_shipping_city"
-          id="cust_shipping_city"
-          placeholder="cust_shipping_city"
-          value={formValues.cust_shipping_city}
-          onChange={onValueChange}
-        />
-        {getFieldError("cust_shipping_city") ? (
-          <span>{getFieldError("cust_shipping_city")}</span>
-        ) : null} */}
             <div className="mb-3">
               <label htmlFor="cust_shipping_city" className="form-label mb-1">
                 City{" "}
@@ -493,18 +446,6 @@ export default function Checkout({
               />
             </div>
           </div>
-
-          {/* <input
-          type="text"
-          name="cust_shipping_state"
-          id="cust_shipping_state"
-          placeholder="cust_shipping_state"
-          value={formValues.cust_shipping_state}
-          onChange={onValueChange}
-        />
-        {getFieldError("cust_shipping_state") ? (
-          <span>{getFieldError("cust_shipping_state")}</span>
-        ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_shipping_state" className="form-label mb-1">
               State / Region{" "}
@@ -529,23 +470,6 @@ export default function Checkout({
               aria-describedby="custShippingStateHelp"
             />
           </div>
-
-          {/* <select
-          name="cust_shipping_country"
-          id="cust_shipping_country"
-          value={formValues.cust_shipping_country}
-          onChange={onValueChange}
-        >
-          <option value=""></option>
-          {countrylist.map((ctry) => (
-            <option value={ctry.code} key={ctry.code}>
-              {ctry.name}
-            </option>
-          ))}
-        </select>
-        {getFieldError("cust_shipping_country") ? (
-          <span>{getFieldError("cust_shipping_country")}</span>
-        ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_shipping_country" className="form-label mb-1">
               Country{" "}
@@ -577,196 +501,65 @@ export default function Checkout({
             </select>
           </div>
         </fieldset>
-        {getFieldError("shipping_rate_id") ? (
-          <span>{getFieldError("shipping_rate_id")}</span>
-        ) : null}
-        <fieldset disabled={!modeUpdate} className="mt-3">
+        <fieldset className="mt-3" disabled={!modeUpdate || pending}>
+          {getFieldError("shipping_rate_id") ? (
+            <span className="form-text text-danger">
+              {getFieldError("shipping_rate_id")}
+            </span>
+          ) : null}
           <legend className="h6">Shipping method</legend>
-          <div className="row row-cols-3">
-            <div className="col">
-              <label
-                htmlFor="shipping_rate_id_USPS-3-33"
-                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
-                role="button"
-              >
-                <input
-                  type="radio"
-                  name="shipping_rate_id"
-                  value="USPS-3-33"
-                  checked={formValues.shipping_rate_id === "USPS-3-33"}
-                  onChange={(evt) => {
-                    onValueChange(evt);
-                    formActionCheckoutUpdateOrInsertShippingRate(evt);
-                  }}
-                  disabled={pending}
-                  id="shipping_rate_id_USPS-3-33"
-                  className="d-none"
-                />
-                <span>USPS-3-33</span>
-                <span>1.99</span>
-                <span>3-33 days</span>
-                {pendingShippingRate &&
-                currentFieldId.current === "shipping_rate_id_USPS-3-33" ? (
-                  <span className="loader align-self-center"></span>
-                ) : null}
-              </label>
-            </div>
-            <div className="col">
-              <label
-                htmlFor="shipping_rate_id_USPS-4-44"
-                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
-                role="button"
-              >
-                <input
-                  type="radio"
-                  name="shipping_rate_id"
-                  value="USPS-4-44"
-                  checked={formValues.shipping_rate_id === "USPS-4-44"}
-                  onChange={(evt) => {
-                    onValueChange(evt);
-                    formActionCheckoutUpdateOrInsertShippingRate(evt);
-                  }}
-                  disabled={pending}
-                  id="shipping_rate_id_USPS-4-44"
-                  className="d-none"
-                />
-                <span>USPS-4-44</span>
-                <span>0.99</span>
-                <span>4-44 days</span>
-                {pendingShippingRate &&
-                currentFieldId.current === "shipping_rate_id_USPS-4-44" ? (
-                  <span className="loader align-self-center"></span>
-                ) : null}
-              </label>
-            </div>
-            <div className="col">
-              <label
-                htmlFor="shipping_rate_id_USPS-4-44a"
-                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
-                role="button"
-              >
-                <input
-                  type="radio"
-                  name="shipping_rate_id"
-                  value="USPS-4-44a"
-                  checked={formValues.shipping_rate_id === "USPS-4-44a"}
-                  onChange={(evt) => {
-                    onValueChange(evt);
-                    formActionCheckoutUpdateOrInsertShippingRate(evt);
-                  }}
-                  disabled={pending}
-                  id="shipping_rate_id_USPS-4-44a"
-                  className="d-none"
-                />
-                <span>USPS-4-44</span>
-                <span>0.99</span>
-                <span>4-44 days</span>
-                {pendingShippingRate &&
-                currentFieldId.current === "shipping_rate_id_USPS-4-44a" ? (
-                  <span className="loader align-self-center"></span>
-                ) : null}
-              </label>
-            </div>
-            <div className="col">
-              <label
-                htmlFor="shipping_rate_id_USPS-4-44b"
-                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
-                role="button"
-              >
-                <input
-                  type="radio"
-                  name="shipping_rate_id"
-                  value="USPS-4-44b"
-                  checked={formValues.shipping_rate_id === "USPS-4-44b"}
-                  onChange={(evt) => {
-                    onValueChange(evt);
-                    formActionCheckoutUpdateOrInsertShippingRate(evt);
-                  }}
-                  disabled={pending}
-                  id="shipping_rate_id_USPS-4-44b"
-                  className="d-none"
-                />
-                <span>USPS-4-44</span>
-                <span>0.99</span>
-                <span>4-44 days</span>
-                {pendingShippingRate &&
-                currentFieldId.current === "shipping_rate_id_USPS-4-44b" ? (
-                  <span className="loader align-self-center"></span>
-                ) : null}
-              </label>
-            </div>
-            <div className="col">
-              <label
-                htmlFor="shipping_rate_id_USPS-4-44c"
-                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
-                role="button"
-              >
-                <input
-                  type="radio"
-                  name="shipping_rate_id"
-                  value="USPS-4-44c"
-                  checked={formValues.shipping_rate_id === "USPS-4-44c"}
-                  onChange={(evt) => {
-                    onValueChange(evt);
-                    formActionCheckoutUpdateOrInsertShippingRate(evt);
-                  }}
-                  disabled={pending}
-                  id="shipping_rate_id_USPS-4-44c"
-                  className="d-none"
-                />
-                <span>USPS-4-44</span>
-                <span>0.99</span>
-                <span>4-44 days</span>
-                {pendingShippingRate &&
-                currentFieldId.current === "shipping_rate_id_USPS-4-44c" ? (
-                  <span className="loader align-self-center"></span>
-                ) : null}
-              </label>
-            </div>
-            <div className="col">
-              <label
-                htmlFor="shipping_rate_id_USPS-4-44d"
-                className="Checkout__label-for-shipping-rate-id d-flex flex-column border rounded border-1"
-                role="button"
-              >
-                <input
-                  type="radio"
-                  name="shipping_rate_id"
-                  value="USPS-4-44d"
-                  checked={formValues.shipping_rate_id === "USPS-4-44d"}
-                  onChange={(evt) => {
-                    onValueChange(evt);
-                    formActionCheckoutUpdateOrInsertShippingRate(evt);
-                  }}
-                  disabled={pending}
-                  id="shipping_rate_id_USPS-4-44d"
-                  className="d-none"
-                />
-                <span>USPS-4-44</span>
-                <span>0.99</span>
-                <span>4-44 days</span>
-                {pendingShippingRate &&
-                currentFieldId.current === "shipping_rate_id_USPS-4-44d" ? (
-                  <span className="loader align-self-center"></span>
-                ) : null}
-              </label>
-            </div>
+          <div
+            className={`row row-cols-3${
+              pendingShippingRate ? " cursor-wait" : ""
+            }`}
+          >
+            {shippingRates.map((sr) => (
+              <div className="col mb-2" key={sr.id}>
+                <label
+                  htmlFor={`${sr.id}`}
+                  className={`Checkout__label-for-shipping-rate-id d-flex flex-column border border-1 rounded${
+                    formValues.shipping_rate_id === sr.id ? " border-dark" : ""
+                  }${pendingShippingRate ? " cursor-wait" : ""}`}
+                  role="button"
+                >
+                  <input
+                    type="radio"
+                    name="shipping_rate_id"
+                    value={`${sr.id}`}
+                    checked={formValues.shipping_rate_id === `${sr.id}`}
+                    onChange={(evt) => {
+                      onValueChange(evt);
+                      formActionCheckoutUpdateOrInsertShippingRate(evt);
+                    }}
+                    disabled={pending}
+                    id={`${sr.id}`}
+                    className="d-none"
+                  />
+                  <span className="h6 mb-0">{`${sr.id}`}</span> {/* agency */}
+                  <span className="form-text">{`${sr.duration}`}</span>
+                  <span className="h5">{`${formatMoney(
+                    sr.rate,
+                    sr.rate_currency
+                  )}`}</span>
+                </label>
+              </div>
+            ))}
           </div>
+          <input
+            type="checkbox"
+            id="cbx-billing-addr-eq-shipping"
+            checked={billingAddrEqShipping}
+            onChange={() => {
+              setBillingAddrEqShipping((prev) => !prev);
+            }}
+          />
+          <label
+            htmlFor="cbx-billing-addr-eq-shipping"
+            className="Checkout__label-for-cbx-billing-addr-eq-shipping"
+          >
+            Billing address same as shipping
+          </label>
         </fieldset>
-        <input
-          type="checkbox"
-          id="cbx-billing-addr-eq-shipping"
-          checked={billingAddrEqShipping}
-          onChange={() => {
-            setBillingAddrEqShipping((prev) => !prev);
-          }}
-        />
-        <label
-          htmlFor="cbx-billing-addr-eq-shipping"
-          className="Checkout__label-for-cbx-billing-addr-eq-shipping"
-        >
-          Billing address same as shipping
-        </label>
         <fieldset
           disabled={!modeUpdate}
           className={`bg-warning Checkout__fieldset-billing-address${
@@ -885,11 +678,11 @@ export default function Checkout({
       <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
         Me cart page
       </p> */}
-        <div
+        {/* <div
           className={`${
             pending ? "d-block" : "d-none"
           } position-absolute top-0 bottom-0 start-0 end-0 bg-dark opacity-25`}
-        ></div>
+        ></div> */}
       </form>
     </>
   );
