@@ -129,6 +129,8 @@ export default function Checkout({
   const [modeUpdate, setModeUpdate] = useState(true);
   const [processingPayment, setProcessingPayment] = useState(false);
 
+  const [updatePaymentDisabled, setUpdatePaymentDisabled] = useState(true);
+
   const errorsRef = useRef(errors);
 
   useEffect(() => {
@@ -165,6 +167,7 @@ export default function Checkout({
       }
     }
     initShippingCountry();
+    setUpdatePaymentDisabled(false);
   }, []);
 
   useEffect(() => {
@@ -509,7 +512,7 @@ export default function Checkout({
           ) : null}
           <legend className="h6">Shipping method</legend>
           <div
-            className={`row row-cols-3${
+            className={`row row-cols-3 mb-3${
               pendingShippingRate ? " cursor-wait" : ""
             }`}
           >
@@ -561,13 +564,13 @@ export default function Checkout({
           </label>
         </fieldset>
         <fieldset
-          disabled={!modeUpdate}
-          className={`bg-warning Checkout__fieldset-billing-address${
+          className={`Checkout__fieldset-billing-address mt-3 border rounded border-1${
             billingAddrEqShipping ? " hide" : ""
           }`}
+          disabled={!modeUpdate || pending}
         >
-          <legend>Billing address</legend>
-          <input
+          <legend className="h6">Billing address</legend>
+          {/* <input
             type="text"
             name="cust_billing_fullname"
             id="cust_billing_fullname"
@@ -577,8 +580,33 @@ export default function Checkout({
           />
           {getFieldError("cust_billing_fullname") ? (
             <span>{getFieldError("cust_billing_fullname")}</span>
-          ) : null}
-          <input
+          ) : 'null null null null null null null null null null null null'} */}
+          <div className="mb-3">
+            <label htmlFor="cust_billing_fullname" className="form-label mb-1">
+              Full name{" "}
+              <span
+                id="custBillingFullnameHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_billing_fullname")
+                  ? getFieldError("cust_billing_fullname")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_billing_fullname"
+              id="cust_billing_fullname"
+              value={formValues.cust_billing_fullname}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_billing_fullname") ? " border-warning" : ""
+              }`}
+              aria-describedby="custBillingFullnameHelp"
+            />
+          </div>
+
+          {/* <input
             type="text"
             name="cust_billing_address"
             id="cust_billing_address"
@@ -588,8 +616,33 @@ export default function Checkout({
           />
           {getFieldError("cust_billing_address") ? (
             <span>{getFieldError("cust_billing_address")}</span>
-          ) : null}
-          <input
+          ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_billing_address" className="form-label mb-1">
+              Address{" "}
+              <span
+                id="custBillingAddressHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_billing_address")
+                  ? getFieldError("cust_billing_address")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_billing_address"
+              id="cust_billing_address"
+              value={formValues.cust_billing_address}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_billing_address") ? " border-warning" : ""
+              }`}
+              aria-describedby="custBillingAddressHelp"
+            />
+          </div>
+
+          {/* <input
             type="text"
             name="cust_billing_postalcode"
             id="cust_billing_postalcode"
@@ -610,8 +663,65 @@ export default function Checkout({
           />
           {getFieldError("cust_billing_city") ? (
             <span>{getFieldError("cust_billing_city")}</span>
-          ) : null}
-          <input
+          ) : null} */}
+          <div className="d-flex justify-content-between">
+            <div className="mb-3">
+              <label
+                htmlFor="cust_billing_postalcode"
+                className="form-label mb-1"
+              >
+                Postal Code{" "}
+                <p
+                  id="custBillingPostalCodeHelp"
+                  className="form-text text-danger my-0"
+                >
+                  {getFieldError("cust_billing_postalcode")
+                    ? getFieldError("cust_billing_postalcode")
+                    : null}
+                </p>
+              </label>
+              <input
+                type="text"
+                name="cust_billing_postalcode"
+                id="cust_billing_postalcode"
+                value={formValues.cust_billing_postalcode}
+                onChange={onValueChange}
+                className={`form-control${
+                  getFieldError("cust_billing_postalcode")
+                    ? " border-warning"
+                    : ""
+                }`}
+                aria-describedby="custBillingPostalCodeHelp"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="cust_billing_city" className="form-label mb-1">
+                City{" "}
+                <span
+                  id="custBillingCityCodeHelp"
+                  className="form-text text-danger ps-1"
+                >
+                  {getFieldError("cust_billing_city")
+                    ? getFieldError("cust_billing_city")
+                    : null}
+                </span>
+              </label>
+              <input
+                type="text"
+                name="cust_billing_city"
+                id="cust_billing_city"
+                value={formValues.cust_billing_city}
+                onChange={onValueChange}
+                className={`form-control${
+                  getFieldError("cust_billing_city") ? " border-warning" : ""
+                }`}
+                aria-describedby="custBillingCityCodeHelp"
+              />
+            </div>
+          </div>
+
+          {/* ///////////////////////////////////// */}
+          {/* <input
             type="text"
             name="cust_billing_state"
             id="cust_billing_state"
@@ -621,8 +731,33 @@ export default function Checkout({
           />
           {getFieldError("cust_billing_state") ? (
             <span>{getFieldError("cust_billing_state")}</span>
-          ) : null}
-          <select
+          ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_billing_state" className="form-label mb-1">
+              State / Region{" "}
+              <span
+                id="custBillingStateHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_billing_state")
+                  ? getFieldError("cust_billing_state")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_billing_state"
+              id="cust_billing_state"
+              value={formValues.cust_billing_state}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_billing_state") ? " border-warning" : ""
+              }`}
+              aria-describedby="custBillingStateHelp"
+            />
+          </div>
+
+          {/* <select
             name="cust_billing_country"
             id="cust_billing_country"
             value={formValues.cust_billing_country}
@@ -637,8 +772,39 @@ export default function Checkout({
           </select>
           {getFieldError("cust_billing_country") ? (
             <span>{getFieldError("cust_billing_country")}</span>
-          ) : null}
-          <input
+          ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_billing_country" className="form-label mb-1">
+              Country{" "}
+              <span
+                id="custBillingCountryHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_billing_country")
+                  ? getFieldError("cust_billing_country")
+                  : null}
+              </span>
+            </label>
+            <select
+              name="cust_billing_country"
+              id="cust_billing_country"
+              value={formValues.cust_billing_country}
+              onChange={onValueChange}
+              className={`form-select form-select-sm${
+                getFieldError("cust_billing_country") ? " border-warning" : ""
+              }`}
+              aria-describedby="custBillingCountryHelp"
+            >
+              <option value=""></option>
+              {countrylist.map((ctry) => (
+                <option value={ctry.code} key={ctry.code}>
+                  {ctry.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* <input
             type="text"
             name="cust_billing_phone"
             id="cust_billing_phone"
@@ -648,16 +814,96 @@ export default function Checkout({
           />
           {getFieldError("cust_billing_phone") ? (
             <span>{getFieldError("cust_billing_phone")}</span>
-          ) : null}
+          ) : null} */}
+          <div className="mb-3">
+            <label htmlFor="cust_billing_phone" className="form-label mb-1">
+              Phone{" "}
+              <span
+                id="custBillingPhoneHelp"
+                className="form-text text-danger ps-1"
+              >
+                {getFieldError("cust_billing_phone")
+                  ? getFieldError("cust_billing_phone")
+                  : null}
+              </span>
+            </label>
+            <input
+              type="text"
+              name="cust_billing_phone"
+              id="cust_billing_phone"
+              value={formValues.cust_billing_phone}
+              onChange={onValueChange}
+              className={`form-control${
+                getFieldError("cust_billing_phone") ? " border-warning" : ""
+              }`}
+              aria-describedby="custBillingPhoneHelp"
+            />
+          </div>
         </fieldset>
 
+        <div
+          className={`${
+            getFieldError("checkout")
+              ? "text-danger border border-danger rounded border-1 ps-3 py-1 mt-3 d-flex flex-column"
+              : "d-none"
+          }`}
+        >
+          <span className="d-flex align-items-center">
+            <span className="w-1rem">
+              <svg
+                fill="currentColor"
+                // width="800px"
+                // height="800px"
+                viewBox="-2 -2 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMinYMin"
+              >
+                <path d="M5.094 16.32A8 8 0 0 0 16.32 5.094L5.094 16.32zM3.68 14.906L14.906 3.68A8 8 0 0 0 3.68 14.906zM10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10z" />
+              </svg>
+            </span>
+            <span className="text-danger fw-medium ps-2 form-text">Error</span>
+          </span>
+          <span className="d-flex align-items-center">
+            <span className="w-1rem"></span>
+            <span className="text-danger ps-2 form-text">
+              {getFieldError("checkout") ? getFieldError("checkout") : null}
+            </span>
+          </span>
+        </div>
+        <div
+          className={`${
+            errors.length > 0 &&
+            !(errors.length === 1 && errors[0].field === "checkout")
+              ? "text-danger border border-danger rounded border-1 ps-3 py-1 mt-3 d-flex flex-column"
+              : "d-none"
+          }`}
+        >
+          <span className="d-flex align-items-center">
+            <span className="w-1rem">
+              <svg
+                fill="currentColor"
+                // width="800px"
+                // height="800px"
+                viewBox="-2 -2 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="xMinYMin"
+              >
+                <path d="M5.094 16.32A8 8 0 0 0 16.32 5.094L5.094 16.32zM3.68 14.906L14.906 3.68A8 8 0 0 0 3.68 14.906zM10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10z" />
+              </svg>
+            </span>
+            <span className="text-danger fw-medium ps-2 form-text">Error</span>
+          </span>
+          <span className="d-flex align-items-center">
+            <span className="w-1rem"></span>
+            <span className="text-danger ps-2 form-text">
+              Please fill in the required fields with valid data.
+            </span>
+          </span>
+        </div>
         <br />
-        {getFieldError("checkout") ? (
-          <span>{getFieldError("checkout")}</span>
-        ) : null}
         <button
           type="button"
-          disabled={pending || processingPayment}
+          disabled={updatePaymentDisabled || pending || processingPayment}
           onClick={() =>
             modeUpdate
               ? formActionCheckoutUpdateOrInsert()
@@ -672,17 +918,6 @@ export default function Checkout({
           setProcessingPayment={setProcessingPayment}
           custEmail={checkout?.cust_email || formValues.cust_email}
         />
-        {/* <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p>
-      <p style={{ background: "lightgray", padding: 0, margin: 0 }}>
-        Me cart page
-      </p> */}
-        {/* <div
-          className={`${
-            pending ? "d-block" : "d-none"
-          } position-absolute top-0 bottom-0 start-0 end-0 bg-dark opacity-25`}
-        ></div> */}
       </form>
     </>
   );
