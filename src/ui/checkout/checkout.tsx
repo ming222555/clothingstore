@@ -393,9 +393,8 @@ export default function Checkout({
               aria-describedby="custShippingAddressHelp"
             />
           </div>
-
           <div className="d-flex justify-content-between">
-            <div className="mb-3">
+            <div className="mb-3 w-40">
               <label
                 htmlFor="cust_shipping_postalcode"
                 className="form-label mb-1"
@@ -424,7 +423,7 @@ export default function Checkout({
                 aria-describedby="custShippingPostalCodeHelp"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 w-40">
               <label htmlFor="cust_shipping_city" className="form-label mb-1">
                 City{" "}
                 <span
@@ -520,7 +519,7 @@ export default function Checkout({
               <div className="col mb-2" key={sr.id}>
                 <label
                   htmlFor={`${sr.id}`}
-                  className={`Checkout__label-for-shipping-rate-id d-flex flex-column border border-1 rounded${
+                  className={`d-flex flex-column border border-1 rounded${
                     formValues.shipping_rate_id === sr.id ? " border-dark" : ""
                   }${pendingShippingRate ? " cursor-wait" : ""}`}
                   role="button"
@@ -558,7 +557,7 @@ export default function Checkout({
           />
           <label
             htmlFor="cbx-billing-addr-eq-shipping"
-            className="Checkout__label-for-cbx-billing-addr-eq-shipping"
+            className="Checkout__label-for-cbx-billing-addr-eq-shipping ps-2"
           >
             Billing address same as shipping
           </label>
@@ -570,17 +569,6 @@ export default function Checkout({
           disabled={!modeUpdate || pending}
         >
           <legend className="h6">Billing address</legend>
-          {/* <input
-            type="text"
-            name="cust_billing_fullname"
-            id="cust_billing_fullname"
-            placeholder="cust_billing_fullname"
-            value={formValues.cust_billing_fullname}
-            onChange={onValueChange}
-          />
-          {getFieldError("cust_billing_fullname") ? (
-            <span>{getFieldError("cust_billing_fullname")}</span>
-          ) : 'null null null null null null null null null null null null'} */}
           <div className="mb-3">
             <label htmlFor="cust_billing_fullname" className="form-label mb-1">
               Full name{" "}
@@ -605,18 +593,6 @@ export default function Checkout({
               aria-describedby="custBillingFullnameHelp"
             />
           </div>
-
-          {/* <input
-            type="text"
-            name="cust_billing_address"
-            id="cust_billing_address"
-            placeholder="cust_billing_address"
-            value={formValues.cust_billing_address}
-            onChange={onValueChange}
-          />
-          {getFieldError("cust_billing_address") ? (
-            <span>{getFieldError("cust_billing_address")}</span>
-          ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_billing_address" className="form-label mb-1">
               Address{" "}
@@ -641,31 +617,8 @@ export default function Checkout({
               aria-describedby="custBillingAddressHelp"
             />
           </div>
-
-          {/* <input
-            type="text"
-            name="cust_billing_postalcode"
-            id="cust_billing_postalcode"
-            placeholder="cust_billing_postalcode"
-            value={formValues.cust_billing_postalcode}
-            onChange={onValueChange}
-          />
-          {getFieldError("cust_billing_postalcode") ? (
-            <span>{getFieldError("cust_billing_postalcode")}</span>
-          ) : null}
-          <input
-            type="text"
-            name="cust_billing_city"
-            id="cust_billing_city"
-            placeholder="cust_billing_city"
-            value={formValues.cust_billing_city}
-            onChange={onValueChange}
-          />
-          {getFieldError("cust_billing_city") ? (
-            <span>{getFieldError("cust_billing_city")}</span>
-          ) : null} */}
           <div className="d-flex justify-content-between">
-            <div className="mb-3">
+            <div className="mb-3 w-40">
               <label
                 htmlFor="cust_billing_postalcode"
                 className="form-label mb-1"
@@ -694,7 +647,7 @@ export default function Checkout({
                 aria-describedby="custBillingPostalCodeHelp"
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 w-40">
               <label htmlFor="cust_billing_city" className="form-label mb-1">
                 City{" "}
                 <span
@@ -719,19 +672,6 @@ export default function Checkout({
               />
             </div>
           </div>
-
-          {/* ///////////////////////////////////// */}
-          {/* <input
-            type="text"
-            name="cust_billing_state"
-            id="cust_billing_state"
-            placeholder="cust_billing_state"
-            value={formValues.cust_billing_state}
-            onChange={onValueChange}
-          />
-          {getFieldError("cust_billing_state") ? (
-            <span>{getFieldError("cust_billing_state")}</span>
-          ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_billing_state" className="form-label mb-1">
               State / Region{" "}
@@ -756,23 +696,6 @@ export default function Checkout({
               aria-describedby="custBillingStateHelp"
             />
           </div>
-
-          {/* <select
-            name="cust_billing_country"
-            id="cust_billing_country"
-            value={formValues.cust_billing_country}
-            onChange={onValueChange}
-          >
-            <option value=""></option>
-            {countrylist.map((ctry) => (
-              <option value={ctry.code} key={ctry.code}>
-                {ctry.name}
-              </option>
-            ))}
-          </select>
-          {getFieldError("cust_billing_country") ? (
-            <span>{getFieldError("cust_billing_country")}</span>
-          ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_billing_country" className="form-label mb-1">
               Country{" "}
@@ -803,18 +726,6 @@ export default function Checkout({
               ))}
             </select>
           </div>
-
-          {/* <input
-            type="text"
-            name="cust_billing_phone"
-            id="cust_billing_phone"
-            placeholder="cust_billing_phone"
-            value={formValues.cust_billing_phone}
-            onChange={onValueChange}
-          />
-          {getFieldError("cust_billing_phone") ? (
-            <span>{getFieldError("cust_billing_phone")}</span>
-          ) : null} */}
           <div className="mb-3">
             <label htmlFor="cust_billing_phone" className="form-label mb-1">
               Phone{" "}
@@ -840,7 +751,6 @@ export default function Checkout({
             />
           </div>
         </fieldset>
-
         <div
           className={`${
             getFieldError("checkout")

@@ -25,6 +25,29 @@ $enable-dark-mode: false;
 @import "../../node_modules/bootstrap/scss/forms";
 @import "../../node_modules/bootstrap/scss/buttons";
 @import "../../node_modules/bootstrap/scss/helpers";
+
+// https://getbootstrap.com/docs/5.3/utilities/api/
+// to add .w-40 { width: 40%; }
+$utilities: map-merge(
+  $utilities,
+  (
+    "width":
+      map-merge(
+        map-get($utilities, "width"),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, "width"), "values"),
+              (
+                40: 40%,
+              )
+            ),
+        )
+      ),
+  )
+);
+
+// Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "../../node_modules/bootstrap/scss/utilities/api";
 
 // Add additional custom code here
