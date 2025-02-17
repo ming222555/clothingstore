@@ -7,7 +7,6 @@ import { useFormStatus } from "react-dom";
 
 import { cartUpdateAction } from "@/actions/cart-actions";
 import type { OptimisticCartActionType, Delta } from "./cart-summary-table";
-import "./cart-item-quantity.scss";
 
 export default function CartItemQuantity({
   qty,
@@ -112,18 +111,23 @@ export default function CartItemQuantity({
   return (
     <span
       className={`CartItemQuantity d-flex flex-column flex-sm-row align-items-center justify-content-between p-1${
-        isPending ? " pending" : ""
+        isPending ? " bg-white" : ""
       }`}
     >
       <button
         type="submit"
         disabled={qty <= 0}
+        className="btn btn-light btn-sm"
         formAction={() => formAction("DECREASE")}
       >
         <span>-</span>
       </button>
       <span>{qty}</span>
-      <button type="submit" formAction={() => formAction("INCREASE")}>
+      <button
+        type="submit"
+        className="btn btn-light btn-sm"
+        formAction={() => formAction("INCREASE")}
+      >
         <span>+</span>
       </button>
     </span>

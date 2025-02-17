@@ -48,27 +48,33 @@ export default function CartSummaryTable({
   });
 
   return (
-    <form>
-      <table className="CartSummaryTable table table-bordered table-sm align-middle">
+    <form className="pe-2">
+      <table className="CartSummaryTable table table-bordered table-sm align-middle table-hover">
         <thead>
-          <tr>
+          <tr className="form-text">
             <th
               scope="col"
               className="CartSummaryTable__th-image d-none d-sm-table-cell"
             >
               <span className="visually-hidden">Image</span>
             </th>
-            <th scope="col">Product</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col" className="text-end">
+            <th scope="col" className="fw-medium text-secondary">
+              Product
+            </th>
+            <th scope="col" className="fw-medium text-secondary">
+              Price
+            </th>
+            <th scope="col" className="fw-medium text-secondary">
+              Quantity
+            </th>
+            <th scope="col" className="text-end fw-medium text-secondary">
               Total
             </th>
           </tr>
         </thead>
         <tbody>
           {optimisticCart.lines.map((line) => (
-            <tr key={line.product_id}>
+            <tr key={line.product_id} className="form-text fw-medium">
               <td className="CartSummaryTable__td-image d-none d-sm-table-cell">
                 <Image
                   src={line.img_src}
@@ -108,12 +114,14 @@ export default function CartSummaryTable({
               </td>
             </tr>
           ) : null}
-          <tr>
+          <tr className="table-active">
             <td className="CartSummaryTable__td-image d-none d-sm-table-cell"></td>
-            <td colSpan={3} className="text-end pe-3">
+            <td colSpan={3} className="text-end pe-3 h6 fw-bold">
               TOTAL
             </td>
-            <td className="text-end">{formatMoney(total, cart.currency)}</td>
+            <td className="text-end h6 fw-bold">
+              {formatMoney(total, cart.currency)}
+            </td>
           </tr>
         </tbody>
       </table>
