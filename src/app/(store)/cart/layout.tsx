@@ -41,7 +41,7 @@ export default async function CartLayout({
         style={{ background: "lightblue" }}
       >
         <div style={{ background: "white" }}>
-          <h2 className="h2 mb-0">Checkout</h2>
+          <h2 className="h2 mb-0 ps-3">Checkout</h2>
           {children}
         </div>
       </div>

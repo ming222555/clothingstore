@@ -314,10 +314,10 @@ export default function Checkout({
 
   return (
     <>
-      <p className="form-text mb-3">
+      <p className="form-text mb-3 ps-3">
         Provide billing and shipping details below.
       </p>
-      <form className="Checkout position-relative">
+      <form className="Checkout position-relative ps-3 pb-5">
         <div className="mb-3">
           <label htmlFor="cust_email" className="form-label mb-1">
             Email{" "}
@@ -341,7 +341,7 @@ export default function Checkout({
           />
         </div>
         <fieldset
-          className="border rounded border-1"
+          className="border rounded border-1 ps-3"
           disabled={!modeUpdate || pending}
         >
           <legend className="h6">Shipping</legend>
@@ -560,7 +560,7 @@ export default function Checkout({
           </label>
         </fieldset>
         <fieldset
-          className={`Checkout__fieldset-billing-address mt-3 border rounded border-1${
+          className={`Checkout__fieldset-billing-address mt-3 border rounded border-1 ps-3${
             billingAddrEqShipping ? " hide" : ""
           }`}
           disabled={!modeUpdate || pending}

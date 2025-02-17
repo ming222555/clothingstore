@@ -83,7 +83,7 @@ export default function BraintreeDropIn({
   }, []);
 
   return (
-    <div className={`${show ? "d-block" : "d-none"}`}>
+    <div className={`pb-5${show ? " d-block" : " d-none"}`}>
       <div id={"braintree-drop-in-div"} />
 
       <button
