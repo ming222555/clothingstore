@@ -27,7 +27,7 @@ $enable-dark-mode: false;
 @import "../../node_modules/bootstrap/scss/helpers";
 
 // https://getbootstrap.com/docs/5.3/utilities/api/
-// to add .w-40 { width: 40%; }
+// to add .w-45 { width: 45%; }
 $utilities: map-merge(
   $utilities,
   (
@@ -39,7 +39,7 @@ $utilities: map-merge(
             map-merge(
               map-get(map-get($utilities, "width"), "values"),
               (
-                40: 40%,
+                45: 45%,
               )
             ),
         )

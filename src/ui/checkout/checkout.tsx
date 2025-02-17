@@ -394,7 +394,7 @@ export default function Checkout({
             />
           </div>
           <div className="d-flex justify-content-between">
-            <div className="mb-3 w-40">
+            <div className="mb-3 w-45">
               <label
                 htmlFor="cust_shipping_postalcode"
                 className="form-label mb-1"
@@ -423,7 +423,7 @@ export default function Checkout({
                 aria-describedby="custShippingPostalCodeHelp"
               />
             </div>
-            <div className="mb-3 w-40">
+            <div className="mb-3 w-45">
               <label htmlFor="cust_shipping_city" className="form-label mb-1">
                 City{" "}
                 <span
@@ -615,7 +615,7 @@ export default function Checkout({
             />
           </div>
           <div className="d-flex justify-content-between">
-            <div className="mb-3 w-40">
+            <div className="mb-3 w-45">
               <label
                 htmlFor="cust_billing_postalcode"
                 className="form-label mb-1"
@@ -644,7 +644,7 @@ export default function Checkout({
                 aria-describedby="custBillingPostalCodeHelp"
               />
             </div>
-            <div className="mb-3 w-40">
+            <div className="mb-3 w-45">
               <label htmlFor="cust_billing_city" className="form-label mb-1">
                 City{" "}
                 <span
