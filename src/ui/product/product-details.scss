@@ -1,0 +1,7 @@
+.ProductDetails {
+  &__description {
+    @include media-breakpoint-up(md) {
+      padding-left: 1rem;
+    }
+  }
+}

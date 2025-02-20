@@ -12,7 +12,7 @@ export default function StoreLayout({
   return (
     <CartModalProvider>
       <MainNav />
-      <main className="p-3 bg-info m-auto">
+      <main className="p-3 m-auto">
         {children}
         {<CartModal />}
       </main>

@@ -7,13 +7,14 @@ import { CartModalContext } from "@/providers/cart-modal-provider";
 import { addToCartAction } from "@/actions/cart-actions";
 
 export default function AddToCartButton({ productId }: { productId: string }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { open, openCartModal } = useContext(CartModalContext);
+  const { openCartModal } = useContext(CartModalContext);
   const [pending, startTransition] = useTransition();
 
   return (
     <button
-      className="AddToCartButton d-flex align-items-center"
+      className={`btn btn-dark rounded-pill w-100${
+        pending ? " cursor-wait" : ""
+      }`}
       disabled={pending}
       onClick={() => {
         if (pending) {
@@ -32,8 +33,7 @@ export default function AddToCartButton({ productId }: { productId: string }) {
         });
       }}
     >
-      <span className="d-block me-2">Add to cart</span>
-      {pending ? <span className="loader"></span> : null}
+      <p className="h5 my-1">Add to cart</p>
     </button>
   );
 }
