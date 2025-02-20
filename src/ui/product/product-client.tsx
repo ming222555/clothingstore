@@ -18,7 +18,7 @@ export default function SingleProductPageClient() {
         <div ref={ref}>
           <AddToCartButton productId="www" />
           <div
-            className={`position-fixed start-0 end-0 px-3 bg-warning${
+            className={`position-fixed start-0 end-0 px-3 bg-white shadow${
               notMounted.current
                 ? " bottom-100"
                 : inView
@@ -33,19 +33,25 @@ export default function SingleProductPageClient() {
               }}
             >
               <div
-                className="d-flex py-2"
                 style={{
                   width: 60,
                   height: 60,
                   background: "green",
-                  color: "white",
                 }}
               >
-                <div className="bg-info flex-grow-1">Pic</div>
+                <div
+                  className="bg-light"
+                  style={{
+                    width: 60,
+                    height: 60,
+                  }}
+                >
+                  Image Pic
+                </div>
               </div>
-              <div className="d-flex flex-column bg-info flex-grow-1">
-                <span className="bg-danger">ZebraBlend T-Shirt</span>
-                <span>$44.00</span>
+              <div className="d-flex flex-column flex-grow-1">
+                <span className="px-2 fw-bold">ZebraBlend T-Shirt</span>
+                <span className="px-2 form-text">$44.00</span>
               </div>
               <div>
                 <AddToCartButton productId="www" />
