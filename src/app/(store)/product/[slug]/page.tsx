@@ -27,7 +27,7 @@ export default function SingleProductPage() {
         <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>
         <div className="row g-0 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 text-center">
           <div className="col bg-warning border border-1 border-dark">
-            <div className="m-2 bg-info">Pic1</div>
+            <div className="m-2 bg-info">Pic1 todo ...</div>
           </div>
           <div className="col bg-warning border border-1 border-dark">Pic2</div>
           <div className="col bg-warning border border-1 border-dark">Pic3</div>
