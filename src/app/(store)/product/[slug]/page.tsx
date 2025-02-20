@@ -4,7 +4,7 @@ import ProductDetails from "@/ui/product/product-details";
 export default function SingleProductPage() {
   return (
     <div className="Page">
-      <div className="bg-warning">
+      <div>
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb pb-3">
             <li className="breadcrumb-item form-text">
@@ -23,8 +23,8 @@ export default function SingleProductPage() {
         </nav>
         <ProductDetails />
       </div>
-      <div className="bg-danger">
-        <h2 className="h4 fw-semibold mt-5 mb-3">You May Also Like</h2>
+      <div className="mb-5">
+        <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>
         <div className="row g-0 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 text-center">
           <div className="col bg-warning border border-1 border-dark">
             <div className="m-2 bg-info">Pic1</div>

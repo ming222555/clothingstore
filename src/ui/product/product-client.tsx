@@ -15,7 +15,7 @@ export default function SingleProductPageClient() {
   return (
     <InView>
       {({ inView, ref }) => (
-        <div ref={ref} className="border border-3">
+        <div ref={ref}>
           <AddToCartButton productId="www" />
           <div
             className={`position-fixed start-0 end-0 bg-warning${
