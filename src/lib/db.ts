@@ -149,7 +149,7 @@ function initDb() {
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src)
-    VALUES ('one-shoe', 'One Shoe', 32.00, '/one-shoe.jpg')
+    VALUES ('beach-pattern-tee', 'Beach Pattern Tee', 32.00, '/beach-pattern-tee.jpg')
   `);
   }
 }

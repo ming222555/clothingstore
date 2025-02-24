@@ -19,7 +19,7 @@ export default function SingleProductPage() {
               className="breadcrumb-item form-text fw-medium active"
               aria-current="page"
             >
-              One Shoe
+              Beach Pattern Tee
             </li>
           </ol>
         </nav>
@@ -30,7 +30,7 @@ export default function SingleProductPage() {
         <div className="row g-0 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 bg-body-tertiary">
           <div className="col">
             <div className="m-2 shadow-sm hover-opacity-75">
-              <YnsLink href="/product/one-shoe" className="d-block">
+              <YnsLink href="/product/beach-pattern-tee" className="d-block">
                 <Image
                   className="w-100 h-auto product-image"
                   src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg"
@@ -44,7 +44,7 @@ export default function SingleProductPage() {
               <div>
                 <h3 className="h5 fw-semibold">
                   <YnsLink
-                    href="/product/one-shoe"
+                    href="/product/beach-pattern-tee"
                     className="d-inline-block pt-3 text-dark"
                   >
                     Beach Pattern Tee
@@ -58,7 +58,7 @@ export default function SingleProductPage() {
           </div>
           <div className="col">
             <div className="m-2 shadow-sm hover-opacity-75">
-              <YnsLink href="/product/one-shoe" className="d-block">
+              <YnsLink href="/product/beach-pattern-tee" className="d-block">
                 <Image
                   className="w-100 h-auto product-image"
                   src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg"
@@ -72,7 +72,7 @@ export default function SingleProductPage() {
               <div>
                 <h3 className="h5 fw-semibold">
                   <YnsLink
-                    href="/product/one-shoe"
+                    href="/product/beach-pattern-tee"
                     className="d-inline-block pt-3 text-dark"
                   >
                     Beach Pattern Tee
@@ -86,7 +86,7 @@ export default function SingleProductPage() {
           </div>
           <div className="col">
             <div className="m-2 shadow-sm hover-opacity-75">
-              <YnsLink href="/product/one-shoe" className="d-block">
+              <YnsLink href="/product/beach-pattern-tee" className="d-block">
                 <Image
                   className="w-100 h-auto product-image"
                   src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg"
@@ -100,7 +100,7 @@ export default function SingleProductPage() {
               <div>
                 <h3 className="h5 fw-semibold">
                   <YnsLink
-                    href="/product/one-shoe"
+                    href="/product/beach-pattern-tee"
                     className="d-inline-block pt-3 text-dark"
                   >
                     Beach Pattern Tee
@@ -114,7 +114,7 @@ export default function SingleProductPage() {
           </div>
           <div className="col">
             <div className="m-2 shadow-sm hover-opacity-75">
-              <YnsLink href="/product/one-shoe" className="d-block">
+              <YnsLink href="/product/beach-pattern-tee" className="d-block">
                 <Image
                   className="w-100 h-auto product-image"
                   src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg"
@@ -128,7 +128,7 @@ export default function SingleProductPage() {
               <div>
                 <h3 className="h5 fw-semibold">
                   <YnsLink
-                    href="/product/one-shoe"
+                    href="/product/beach-pattern-tee"
                     className="d-inline-block pt-3 text-dark"
                   >
                     Beach Pattern Tee
