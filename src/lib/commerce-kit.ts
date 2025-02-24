@@ -13,6 +13,8 @@ export type Cart = {
   currency: string;
 };
 
+export type Product = Db.DbProduct;
+
 export type Checkout = {
   // id: string;
   cust_email: string;
@@ -195,3 +197,8 @@ export const validateCheckout = async (formValues: Checkout) => {
   const rc = await Db.validateCheckout(formValues);
   return rc;
 };
+
+export async function getProduct(productId: string) {
+  const product = await Db.getProduct(productId);
+  return product;
+}

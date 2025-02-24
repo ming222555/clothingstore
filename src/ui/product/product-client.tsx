@@ -5,8 +5,14 @@ import { useEffect, useRef } from "react";
 import { InView } from "react-intersection-observer";
 
 import AddToCartButton from "@/ui/add-to-cart/add-to-cart-button";
+import type { Product } from "@/lib/commerce-kit";
+import { formatMoney } from "@/lib/utils/utils";
 
-export default function SingleProductPageClient() {
+export default function SingleProductPageClient({
+  product,
+}: {
+  product: Product;
+}) {
   const notMounted = useRef(true);
 
   useEffect(() => {
@@ -41,7 +47,7 @@ export default function SingleProductPageClient() {
               >
                 <Image
                   className="w-100 h-auto product-image"
-                  src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg"
+                  src={product.img_src}
                   width="72"
                   height="72"
                   sizes="(min-width: 420px) 70px, 17vw"
@@ -51,8 +57,10 @@ export default function SingleProductPageClient() {
                 />
               </div>
               <div className="d-flex flex-column flex-grow-1 ms-3">
-                <span className="px-2 fw-bold">Beach Pattern Tee</span>
-                <span className="px-2 form-text">$44.00</span>
+                <span className="px-2 fw-bold">{product.name}</span>
+                <span className="px-2 form-text">
+                  {formatMoney(product.unit_price, product.currency)}
+                </span>
               </div>
               <div>
                 <AddToCartButton productId="www" />

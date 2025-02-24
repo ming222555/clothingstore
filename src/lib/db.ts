@@ -3,11 +3,13 @@ import { validate as emailValidate } from "email-validator";
 
 import type { Cart, Checkout } from "@/lib/commerce-kit";
 
-type DbProduct = {
+export type DbProduct = {
   id: string;
   name: string;
   unit_price: number;
   img_src: string;
+  description: string;
+  currency: string;
 };
 
 export type DbShippingRate = {
@@ -42,7 +44,8 @@ function initDb() {
       id TEXT PRIMARY KEY, 
       name TEXT,
       unit_price REAL,
-      img_src TEXT
+      img_src TEXT,
+      description TEXT
     )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS cart_line (
@@ -133,23 +136,23 @@ function initDb() {
 
   if (stmt.get().count === 0) {
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src)
-    VALUES ('gloves-with-holes', 'Gloves with holes', 6.99, '/img-glove.jpg')
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('gloves-with-holes', 'Gloves with holes', 6.99, '/img-glove.jpg', 'Lightweight and handy gloves')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src)
-    VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16.99, '/img-arctic.jpg')
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16.99, '/img-arctic.jpg', 'Perfect wear for extreme cold')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src)
-    VALUES ('sunbeam-tote-ray-tomasz', 'Sunbeam Tote Ray Tomasz', 25.00, '/img-tomasz.jpg')
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('sunbeam-tote-ray-tomasz', 'Sunbeam Tote Ray Tomasz', 25.00, '/img-tomasz.jpg', 'Feel the sunshine!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src)
-    VALUES ('beach-pattern-tee', 'Beach Pattern Tee', 32.00, '/beach-pattern-tee.jpg')
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('beach-pattern-tee', 'Beach Pattern Tee', 32.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg', 'Lightweight and cooling, designed for beach getaways')
   `);
   }
 }
@@ -366,7 +369,7 @@ export async function getProduct(
   product_id: string
 ): Promise<DbProduct | null> {
   const stmt = db.prepare(`
-    SELECT id, name, unit_price, img_src
+    SELECT id, name, unit_price, img_src, description, '${DEFAULT_CURRENCY}' AS currency
     FROM product
     WHERE id = ?`);
 

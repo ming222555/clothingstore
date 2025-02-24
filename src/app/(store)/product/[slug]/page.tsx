@@ -1,9 +1,21 @@
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 import YnsLink from "@/ui/yns-link";
 import ProductDetails from "@/ui/product/product-details";
+import { getProductAction } from "@/actions/cart-actions";
 
-export default function SingleProductPage() {
+type Params = Promise<{ slug: string }>;
+
+export default async function SingleProductPage(props: { params: Params }) {
+  const { slug } = await props.params;
+
+  const product = await getProductAction(slug);
+
+  if (!product) {
+    redirect("/not-found");
+  }
+
   return (
     <div className="Page">
       <div>
@@ -19,11 +31,11 @@ export default function SingleProductPage() {
               className="breadcrumb-item form-text fw-medium active"
               aria-current="page"
             >
-              Beach Pattern Tee
+              {product.name}
             </li>
           </ol>
         </nav>
-        <ProductDetails />
+        <ProductDetails product={product} />
       </div>
       <div className="mb-5">
         <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>

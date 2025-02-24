@@ -193,3 +193,8 @@ export const validateCheckoutAction = async (formValues: Commerce.Checkout) => {
   const rc = await Commerce.validateCheckout(formValues);
   return rc;
 };
+
+export async function getProductAction(productId: string) {
+  const product = Commerce.getProduct(productId);
+  return product;
+}
