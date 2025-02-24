@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { InView } from "react-intersection-observer";
 
@@ -34,23 +35,23 @@ export default function SingleProductPageClient() {
             >
               <div
                 style={{
-                  width: 60,
-                  height: 60,
-                  background: "green",
+                  width: 72,
+                  height: 72,
                 }}
               >
-                <div
-                  className="bg-light"
-                  style={{
-                    width: 60,
-                    height: 60,
-                  }}
-                >
-                  Image Pic
-                </div>
+                <Image
+                  className="w-100 h-auto product-image"
+                  src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg"
+                  width="72"
+                  height="72"
+                  sizes="(min-width: 420px) 70px, 17vw"
+                  loading="eager"
+                  priority
+                  alt=""
+                />
               </div>
-              <div className="d-flex flex-column flex-grow-1">
-                <span className="px-2 fw-bold">ZebraBlend T-Shirt</span>
+              <div className="d-flex flex-column flex-grow-1 ms-3">
+                <span className="px-2 fw-bold">Beach Pattern Tee</span>
                 <span className="px-2 form-text">$44.00</span>
               </div>
               <div>
