@@ -15,19 +15,19 @@ export default function AddToCartButton({ productId }: { productId: string }) {
       className={`btn btn-dark rounded-pill w-100${
         pending ? " cursor-wait" : ""
       }`}
-      disabled={pending}
       onClick={() => {
         if (pending) {
           return;
         }
 
-        openCartModal();
+        // openCartModal(); // mv to below
 
         startTransition(async () => {
           const res = await addToCartAction(productId);
           if (res.error) {
             toast(res.error);
           } else {
+            openCartModal();
             toast("Successfully added to cart");
           }
         });
