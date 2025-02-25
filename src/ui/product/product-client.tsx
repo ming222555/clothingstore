@@ -23,7 +23,7 @@ export default function SingleProductPageClient({
     <InView>
       {({ inView, ref }) => (
         <div ref={ref}>
-          <AddToCartButton productId="www" />
+          <AddToCartButton productId={product.id} />
           <div
             className={`position-fixed start-0 end-0 px-3 bg-white shadow${
               notMounted.current
@@ -63,7 +63,7 @@ export default function SingleProductPageClient({
                 </span>
               </div>
               <div>
-                <AddToCartButton productId="www" />
+                <AddToCartButton productId={product.id} />
               </div>
             </div>
           </div>

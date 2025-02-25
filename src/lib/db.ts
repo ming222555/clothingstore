@@ -137,17 +137,17 @@ function initDb() {
   if (stmt.get().count === 0) {
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('gloves-with-holes', 'Gloves with holes', 6.99, '/img-glove.jpg', 'Lightweight and handy gloves')
+    VALUES ('brown-nodisturbance-casual', 'Brown Nodisturbance Casual', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Brown_Nodisturbance_Casual.jpeg', 'Free and easy on you!')
   `);
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('arctic-circle-neck-warmer', 'Arctic Circle Neck Warmer', 16.99, '/img-arctic.jpg', 'Perfect wear for extreme cold')
+    VALUES ('flamingo-polo-tee', 'Flamingo Polo Tee', 16.99, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flamingo_Pattern_Polo_T_shirt.jpeg', 'Feel bright and colorful!')
   `);
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('sunbeam-tote-ray-tomasz', 'Sunbeam Tote Ray Tomasz', 25.00, '/img-tomasz.jpg', 'Feel the sunshine!')
+    VALUES ('champagne-tee', 'Champagne Tee', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Champagne_T_shirt.jpeg', 'Feel the sunshine!')
   `);
 
     db.exec(`
