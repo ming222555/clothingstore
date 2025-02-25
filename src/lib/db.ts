@@ -137,6 +137,56 @@ function initDb() {
   if (stmt.get().count === 0) {
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('white_tshirt_beach_juice_rose', 'White Tshirt Beach Juice Rose', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/White_Tshirt_Beach_Juice_Rose.jpeg', 'Hit the beach and impress with this super duper cool tee!')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('recess_tshirt', 'Recess Tshirt', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Recess_Tshirt.jpeg', 'Another cool looking tee')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'Male Female Red_Tee with painted skeleton hands', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton, cool looking wear for halloween!')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('men_super_heavywhite', 'Men Super Heavy White', 8.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/MEN_SUPER_HEAVYWEIGHT_OPEN-END.jpeg', 'Simple looking built with durable Grade One cotton for your comfort')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'Male Female White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('flat_lay_tee', 'Flat Lay Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flat_Lay_Tee.jpeg', 'Look and feel cool with this JailHouse Rock replica Tee!')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('female_white_tshirt_with_painted_girls_bloomfield_hills', 'Female White Tshirt With Painted Girls', 48.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Female_White_Tshirt_With_Painted_Girls_Bloomfield_Hills.jpeg', 'Go fun and easy with this cartoonist tee!')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('classic_unisex_detoxwater_tee', 'Classic Unisex Detoxwater Tee', 10.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Classic_Unisex_Detoxwater_Tee.jpeg', 'Save the water environment with this message emblazoned Tee!')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('blue_tshirt_recess', 'Blue Tshirt Recess', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Blue_Tshirt_Recess.jpeg', 'This vibrant blue t-shirt captures the essence of sunset skies. Made from soft, breathable fabric, it keeps you cool and comfortable all day. Ideal for both sports and leisure activities.')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
+    VALUES ('blue_t_shirt_reality', 'Blue T-shirt Reality', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Blue_T_shirt_Reality.jpeg', 'Show off your wild side with this unique t-shirt. Made from 100% organic cotton, it offers both comfort and durability. Its eye-catching design makes it perfect for any casual occasion.')
+  `);
+
+    db.exec(`
+    INSERT INTO product (id, name, unit_price, img_src, description)
     VALUES ('brown-nodisturbance-casual', 'Brown Nodisturbance Casual', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Brown_Nodisturbance_Casual.jpeg', 'Free and easy on you!')
   `);
 
