@@ -25,7 +25,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           alt=""
         />
       </div>
-      <div className="ProductDetails__description col-md-5 border border-1">
+      <div className="ProductDetails__description col-md-5">
         <div className="d-none d-md-block">
           <h1 className="h2 fw-semibold mb-1">{product.name}</h1>
           <p className="h4 text-body-tertiary">

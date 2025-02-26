@@ -1,0 +1,9 @@
+.SimilarProducts {
+  &__details {
+    &:hover {
+      .SimilarProducts__image {
+        opacity: 75%;
+      }
+    }
+  }
+}

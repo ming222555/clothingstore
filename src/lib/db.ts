@@ -152,7 +152,7 @@ function initDb() {
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'Male Female Red_Tee with painted skeleton hands', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton, cool looking wear for halloween!')
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'Painted skeleton hands Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton, cool looking wear for halloween!')
   `);
 
     db.exec(`
@@ -208,6 +208,20 @@ function initDb() {
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
     VALUES ('beach-pattern-tee', 'Beach Pattern Tee', 32.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg', 'Lightweight and cooling, designed for beach getaways')
+  `);
+  }
+
+  // Creating similar products
+  const stmt3 = db.prepare("SELECT COUNT(*) AS count FROM product_similar");
+
+  if (stmt3.get().count === 0) {
+    db.exec(`
+    INSERT INTO product_similar (product_ids)
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills,recess_tshirt,champagne-tee,flamingo-polo-tee'),
+    ('beach-pattern-tee,white_tshirt_beach_juice_rose'),
+    ('flat_lay_tee,classic_unisex_detoxwater_tee'),
+    ('brown-nodisturbance-casual,men_super_heavywhite'),
+    ('female_white_tshirt_with_painted_girls_bloomfield_hills,male_female_white_tshirt_bloomfield_hills_with_painted_boy')
   `);
   }
 }
