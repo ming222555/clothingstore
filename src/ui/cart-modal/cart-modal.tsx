@@ -26,53 +26,40 @@ export default async function CartModal() {
           </GoToPayment>
         </header>
         <ul className="flex-grow-1 p-3 pt-0 m-0 overflow-auto">
-          {cart.lines.map((line) => (
+          {cart.lines.map((line, idx) => (
             <li
-              className="py-4 border-bottom border-secondary-subtle"
+              className={`py-4${
+                idx < cart.lines.length - 1
+                  ? " border-bottom border-secondary-subtle"
+                  : ""
+              }`}
               key={line.product_id}
             >
               <div className="d-flex">
                 <Image
                   className="align-self-center"
                   src={line.img_src}
-                  width="60"
-                  height="60"
-                  sizes="(min-width: 1px) 60px"
+                  width="64"
+                  height="64"
+                  sizes="(min-width: 1px) 64px"
                   loading="lazy"
                   alt=""
                 />
 
-                <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">
+                <div className="flex-grow-1 d-flex flex-column mx-3">
                   <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
                     {line.name}
                   </p>
-                  <p className="fs-0875 fw-medium p-0 mt-2 mb-0 bg-info text-black-50">
+                  <p className="fs-0875 fw-medium p-0 mt-2 mb-0 text-black-50">
                     Quantity: {line.qty}
                   </p>
                 </div>
-                <div className="fs-0875 fw-medium bg-warning">
+                <div className="fs-0875 fw-medium">
                   <p>${line.unit_price}</p>
                 </div>
               </div>
             </li>
           ))}
-
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
-          <li>line 1</li>
-          <li>line 2</li>
-          <li>line 3</li>
         </ul>
         <hr className="m-0 mb-2" />
         <div className="p-3">
