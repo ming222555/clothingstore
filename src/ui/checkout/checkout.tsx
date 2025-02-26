@@ -341,7 +341,7 @@ export default function Checkout({
           />
         </div>
         <fieldset
-          className="border rounded border-1 ps-3"
+          className="border rounded border-1 px-3"
           disabled={!modeUpdate || pending}
         >
           <legend className="h6">Shipping</legend>
@@ -560,7 +560,7 @@ export default function Checkout({
           </label>
         </fieldset>
         <fieldset
-          className={`Checkout__fieldset-billing-address mt-3 border rounded border-1 ps-3${
+          className={`Checkout__fieldset-billing-address mt-3 border rounded border-1 px-3${
             billingAddrEqShipping ? " hide" : ""
           }`}
           disabled={!modeUpdate || pending}
@@ -810,12 +810,22 @@ export default function Checkout({
         <br />
         <button
           type="button"
-          disabled={updatePaymentDisabled || pending || processingPayment}
-          onClick={() =>
-            modeUpdate
-              ? formActionCheckoutUpdateOrInsert()
-              : setModeUpdate(true)
-          }
+          // disabled={updatePaymentDisabled || pending || processingPayment}
+          className={`btn btn-dark rounded-pill w-100${
+            updatePaymentDisabled || pending || processingPayment
+              ? " cursor-wait"
+              : ""
+          }`}
+          onClick={() => {
+            if (updatePaymentDisabled || pending || processingPayment) {
+              return;
+            }
+            if (modeUpdate) {
+              formActionCheckoutUpdateOrInsert();
+            } else {
+              setModeUpdate(true);
+            }
+          }}
         >
           {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
         </button>

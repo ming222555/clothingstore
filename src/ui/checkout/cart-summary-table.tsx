@@ -49,7 +49,7 @@ export default function CartSummaryTable({
 
   return (
     <form className="pe-2">
-      <table className="CartSummaryTable table table-bordered table-sm align-middle table-hover">
+      <table className="CartSummaryTable table table-sm align-middle table-hover">
         <thead>
           <tr className="form-text">
             <th
@@ -74,14 +74,16 @@ export default function CartSummaryTable({
         </thead>
         <tbody>
           {optimisticCart.lines.map((line) => (
-            <tr key={line.product_id} className="form-text fw-medium">
+            <tr key={line.product_id} className="form-text">
               <td className="CartSummaryTable__td-image d-none d-sm-table-cell">
                 <Image
-                  src={line.img_src}
-                  width={80}
-                  height={80}
-                  alt=""
                   className="d-block"
+                  src={line.img_src}
+                  width="80"
+                  height="80"
+                  sizes="(min-width: 1px) 80px"
+                  loading="lazy"
+                  alt=""
                 />
               </td>
               <td>
@@ -98,7 +100,7 @@ export default function CartSummaryTable({
                   actionProductId={actionProductId.current}
                 />
               </td>
-              <td className="text-end" width={16}>
+              <td className="text-end">
                 {formatMoney(line.line_total, cart.currency)}
               </td>
             </tr>
@@ -106,10 +108,10 @@ export default function CartSummaryTable({
           {shippingRate ? (
             <tr>
               <td className="CartSummaryTable__td-image d-none d-sm-table-cell"></td>
-              <td colSpan={3}>
+              <td colSpan={3} className="form-text">
                 {shippingRate.agency} {shippingRate.duration}
               </td>
-              <td className="text-end">
+              <td className="form-text text-end">
                 {formatMoney(shippingRate.rate, cart.currency)}
               </td>
             </tr>

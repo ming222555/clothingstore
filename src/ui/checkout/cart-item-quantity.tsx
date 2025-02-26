@@ -111,13 +111,13 @@ export default function CartItemQuantity({
   return (
     <span
       className={`CartItemQuantity d-flex flex-column flex-sm-row align-items-center justify-content-between p-1${
-        isPending ? " bg-white" : ""
+        isPending ? " bg-white cursor-wait" : ""
       }`}
     >
       <button
         type="submit"
         disabled={qty <= 0}
-        className="btn btn-light btn-sm"
+        className={`btn btn-light btn-sm${isPending ? " cursor-wait" : ""}`}
         formAction={() => formAction("DECREASE")}
       >
         <span>-</span>
@@ -125,7 +125,7 @@ export default function CartItemQuantity({
       <span>{qty}</span>
       <button
         type="submit"
-        className="btn btn-light btn-sm"
+        className={`btn btn-light btn-sm${isPending ? " cursor-wait" : ""}`}
         formAction={() => formAction("INCREASE")}
       >
         <span>+</span>

@@ -33,11 +33,13 @@ export default async function CartModal() {
             >
               <div className="d-flex">
                 <Image
-                  src={line.img_src}
-                  width={60}
-                  height={60}
-                  alt=""
                   className="align-self-center"
+                  src={line.img_src}
+                  width="60"
+                  height="60"
+                  sizes="(min-width: 1px) 60px"
+                  loading="lazy"
+                  alt=""
                 />
 
                 <div className="flex-grow-1 d-flex flex-column bg-warning mx-3">

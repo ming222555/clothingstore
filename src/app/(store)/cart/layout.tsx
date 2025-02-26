@@ -26,21 +26,15 @@ export default async function CartLayout({
   const total = cartTotalNetWithoutShipping + rate;
 
   return (
-    <div className="Page row g-0 bg-warning">
+    <div className="Page row g-0">
       <div className="col-xl-7">
-        <div
-          className="position-sticky top-0"
-          style={{ background: "lightgreen" }}
-        >
+        <div className="position-sticky top-0">
           <h2 className="h2 pb-2">Your cart</h2>
           <CartSummaryTable cart={cart} shippingRate={sr} total={total} />
         </div>
       </div>
-      <div
-        className="col-sm-10 offset-sm-1 col-xl-5 offset-xl-0"
-        style={{ background: "lightblue" }}
-      >
-        <div style={{ background: "white" }}>
+      <div className="col-sm-10 offset-sm-1 col-xl-5 offset-xl-0">
+        <div>
           <h2 className="h2 mb-0 ps-3">Checkout</h2>
           {children}
         </div>

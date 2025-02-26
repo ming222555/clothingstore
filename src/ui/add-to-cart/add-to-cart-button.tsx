@@ -12,6 +12,7 @@ export default function AddToCartButton({ productId }: { productId: string }) {
 
   return (
     <button
+      type="button"
       className={`btn btn-dark rounded-pill w-100${
         pending ? " cursor-wait" : ""
       }`}
