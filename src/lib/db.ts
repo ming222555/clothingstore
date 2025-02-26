@@ -48,6 +48,11 @@ function initDb() {
       description TEXT
     )`);
   db.exec(`
+    CREATE TABLE IF NOT EXISTS product_similar (
+      id INTEGER PRIMARY KEY,
+      product_ids TEXT
+      )`);
+  db.exec(`
     CREATE TABLE IF NOT EXISTS cart_line (
       cart_id TEXT, 
       product_id TEXT, 
@@ -1301,4 +1306,41 @@ export async function getShippingRates(): Promise<
   }
 
   return resultset;
+}
+
+export async function getSimilarProducts(
+  product_id: string
+): Promise<DbProduct[] | { error: string }> {
+  try {
+    const stmt = db.prepare(`
+      SELECT product_ids FROM product_similar WHERE product_ids LIKE ?`);
+
+    const resultset = stmt.all("%" + product_id + "%");
+
+    if (resultset.length === 0) {
+      return [];
+    }
+
+    const similarProductIDs: string = resultset[0].product_ids; // e.g. "'men_super_heavywhite','recess_tshirt'"
+    const similarProductIDsAry = similarProductIDs.split(",");
+
+    const placeholders = similarProductIDsAry.map(() => "?").join(",");
+
+    const stmt2 = db.prepare(`
+      SELECT id, name, unit_price, img_src, '${DEFAULT_CURRENCY}' AS currency
+      FROM product
+      WHERE id IN (${placeholders})`);
+
+    const resultset2 = stmt2.all(...similarProductIDsAry);
+
+    return resultset2;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to SELECT similar products",
+    };
+  }
 }

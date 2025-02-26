@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 
 import YnsLink from "@/ui/yns-link";
 import ProductDetails from "@/ui/product/product-details";
-import { getProductAction } from "@/actions/cart-actions";
+import {
+  getProductAction,
+  getSimilarProductsAction,
+} from "@/actions/cart-actions";
 
 type Params = Promise<{ slug: string }>;
 
@@ -15,6 +18,9 @@ export default async function SingleProductPage(props: { params: Params }) {
   if (!product) {
     redirect("/not-found");
   }
+
+  const products = await getSimilarProductsAction(slug); // You May Also Like
+  console.log(products);
 
   return (
     <div className="Page">

@@ -198,3 +198,8 @@ export async function getProductAction(productId: string) {
   const product = Commerce.getProduct(productId);
   return product;
 }
+
+export async function getSimilarProductsAction(productId: string) {
+  const product = Commerce.getSimilarProducts(productId);
+  return product;
+}

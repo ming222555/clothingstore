@@ -41,9 +41,7 @@ export default function RootLayout({
               beach-pattern-tee add cart
             </Link>{" "}
             <Link href="/cart-overlay?add=dummy-prod">dummy</Link>{" "}
-            <Link href="/product/beach-pattern-tee">
-              Product Beach Pattern Tee
-            </Link>{" "}
+            <Link href="/product/recess_tshirt">Recess Tshirt</Link>{" "}
             <Link href="/product/champagne-tee">Champagne Tee</Link>{" "}
             <Link href="/product/flamingo-polo-tee">Flamingo Polo Tee</Link>{" "}
             <Link href="/product/brown-nodisturbance-casual">
