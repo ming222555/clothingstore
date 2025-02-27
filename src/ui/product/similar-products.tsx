@@ -18,12 +18,12 @@ export default function SimilarProducts({
       }`}
     >
       <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>
-      <div className="row g-0 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 bg-body-tertiary">
+      <div className="row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 bg-body-tertiary">
         {similarProducts.length &&
           similarProducts.map((p) =>
             p.id !== productId ? (
               <div className="col" key={p.id}>
-                <div className="SimilarProducts__details m-2 shadow-sm">
+                <div className="SimilarProducts__details shadow-sm">
                   <YnsLink href={`/product/${p.id}`} className="d-block">
                     <Image
                       className="SimilarProducts__image w-100 h-auto product-image"
@@ -35,7 +35,7 @@ export default function SimilarProducts({
                       alt=""
                     />
                   </YnsLink>
-                  <div>
+                  <div className="ps-2">
                     <h3 className="h5 fw-semibold">
                       <YnsLink
                         href={`/product/${p.id}`}
