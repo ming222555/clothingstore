@@ -203,7 +203,7 @@ export async function getProduct(productId: string) {
   return product;
 }
 
-export async function getSimilarProducts(productId: string) {
-  const products = await Db.getSimilarProducts(productId);
+export async function getProductsSimilar(productId: string) {
+  const products = await Db.getProductsSimilar(productId);
   return products;
 }

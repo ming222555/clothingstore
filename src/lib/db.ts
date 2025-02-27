@@ -152,7 +152,7 @@ function initDb() {
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'Painted skeleton hands Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton, cool looking wear for halloween!')
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'Painted skeleton hands', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton T shirt, cool looking wear for halloween!')
   `);
 
     db.exec(`
@@ -1322,7 +1322,7 @@ export async function getShippingRates(): Promise<
   return resultset;
 }
 
-export async function getSimilarProducts(
+export async function getProductsSimilar(
   product_id: string
 ): Promise<DbProduct[] | { error: string }> {
   try {
@@ -1335,7 +1335,7 @@ export async function getSimilarProducts(
       return [];
     }
 
-    const similarProductIDs: string = resultset[0].product_ids; // e.g. "'men_super_heavywhite','recess_tshirt'"
+    const similarProductIDs: string = resultset[0].product_ids; // e.g. "men_super_heavywhite,recess_tshirt"
     const similarProductIDsAry = similarProductIDs.split(",");
 
     const placeholders = similarProductIDsAry.map(() => "?").join(",");

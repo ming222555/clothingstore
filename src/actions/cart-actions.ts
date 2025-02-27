@@ -199,7 +199,7 @@ export async function getProductAction(productId: string) {
   return product;
 }
 
-export async function getSimilarProductsAction(productId: string) {
-  const product = Commerce.getSimilarProducts(productId);
+export async function getProductsSimilarAction(productId: string) {
+  const product = Commerce.getProductsSimilar(productId);
   return product;
 }

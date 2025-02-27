@@ -5,7 +5,7 @@ import ProductDetails from "@/ui/product/product-details";
 import SimilarProducts from "@/ui/product/similar-products";
 import {
   getProductAction,
-  getSimilarProductsAction,
+  getProductsSimilarAction,
 } from "@/actions/cart-actions";
 
 type Params = Promise<{ slug: string }>;
@@ -19,7 +19,7 @@ export default async function SingleProductPage(props: { params: Params }) {
     redirect("/not-found");
   }
 
-  const products = await getSimilarProductsAction(slug);
+  const products = await getProductsSimilarAction(slug);
   const similarProducts = Array.isArray(products) ? products : [];
 
   if (Array.isArray(products)) {
