@@ -203,3 +203,8 @@ export async function getProductsSimilarAction(productId: string) {
   const product = Commerce.getProductsSimilar(productId);
   return product;
 }
+
+export async function getProductsAllAction() {
+  const product = Commerce.getProductsAll();
+  return product;
+}

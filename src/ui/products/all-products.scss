@@ -1,0 +1,10 @@
+.AllProducts {
+  margin-top: -3.2rem;
+  &__details {
+    &:hover {
+      .AllProducts__image {
+        opacity: 75%;
+      }
+    }
+  }
+}

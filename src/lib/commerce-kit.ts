@@ -207,3 +207,8 @@ export async function getProductsSimilar(productId: string) {
   const products = await Db.getProductsSimilar(productId);
   return products;
 }
+
+export const getProductsAll = async () => {
+  const products = await Db.getProductsAll();
+  return products;
+};

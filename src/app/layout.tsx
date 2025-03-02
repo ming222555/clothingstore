@@ -46,7 +46,8 @@ export default function RootLayout({
             <Link href="/product/flamingo-polo-tee">Flamingo Polo Tee</Link>{" "}
             <Link href="/product/brown-nodisturbance-casual">
               Nodisturbance
-            </Link>
+            </Link>{" "}
+            <Link href="/products">All</Link>
           </div>
           {children}
           <Toaster />

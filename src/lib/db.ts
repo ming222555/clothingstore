@@ -162,7 +162,7 @@ function initDb() {
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'Male Female White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
+    VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'Male White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
   `);
 
     db.exec(`
@@ -172,7 +172,7 @@ function initDb() {
 
     db.exec(`
     INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('female_white_tshirt_with_painted_girls_bloomfield_hills', 'Female White Tshirt With Painted Girls', 48.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Female_White_Tshirt_With_Painted_Girls_Bloomfield_Hills.jpeg', 'Go fun and easy with this cartoonist tee!')
+    VALUES ('female_white_tshirt_with_painted_girls_bloomfield_hills', 'Female White With Painted Girls', 48.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Female_White_Tshirt_With_Painted_Girls_Bloomfield_Hills.jpeg', 'Go fun and easy with this cartoonist tee!')
   `);
 
     db.exec(`
@@ -217,9 +217,8 @@ function initDb() {
   if (stmt3.get().count === 0) {
     db.exec(`
     INSERT INTO product_similar (product_ids)
-    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills,recess_tshirt,champagne-tee,flamingo-polo-tee'),
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills,recess_tshirt,champagne-tee,flamingo-polo-tee,flat_lay_tee,classic_unisex_detoxwater_tee'),
     ('beach-pattern-tee,white_tshirt_beach_juice_rose'),
-    ('flat_lay_tee,classic_unisex_detoxwater_tee'),
     ('brown-nodisturbance-casual,men_super_heavywhite'),
     ('female_white_tshirt_with_painted_girls_bloomfield_hills,male_female_white_tshirt_bloomfield_hills_with_painted_boy')
   `);
@@ -1355,6 +1354,28 @@ export async function getProductsSimilar(
 
     return {
       error: "Failed to SELECT similar products",
+    };
+  }
+}
+
+export async function getProductsAll(): Promise<
+  DbProduct[] | { error: string }
+> {
+  try {
+    const stmt2 = db.prepare(`
+      SELECT id, name, unit_price, img_src, '${DEFAULT_CURRENCY}' AS currency
+      FROM product`);
+
+    const resultset2 = stmt2.all();
+
+    return resultset2;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to SELECT products",
     };
   }
 }
