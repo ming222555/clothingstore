@@ -14,7 +14,7 @@ export default function SimilarProducts({
   return (
     <div
       className={`SimilarProducts mb-5${
-        similarProducts.length ? " d-block" : " d-none"
+        similarProducts.length > 1 ? " d-block" : " d-none" // exclude productId from listing to display
       }`}
     >
       <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>

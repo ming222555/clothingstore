@@ -35,17 +35,24 @@ const INPUT_MIN_LENGTH = 6;
 
 function initDb() {
   db.exec(`
-      CREATE TABLE IF NOT EXISTS cart (
-        id TEXT PRIMARY KEY, 
-        currency TEXT
+    CREATE TABLE IF NOT EXISTS cart (
+      id TEXT PRIMARY KEY, 
+      currency TEXT
+    )`);
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS category (
+      id TEXT PRIMARY KEY, 
+      name TEXT
       )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS product (
       id TEXT PRIMARY KEY, 
+      category_id TEXT,
       name TEXT,
       unit_price REAL,
       img_src TEXT,
-      description TEXT
+      description TEXT,
+      FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE CASCADE
     )`);
   db.exec(`
     CREATE TABLE IF NOT EXISTS product_similar (
@@ -136,78 +143,98 @@ function initDb() {
     `);
   }
 
+  // Creating categories
+  const stmt4 = db.prepare("SELECT COUNT(*) AS count FROM category");
+
+  if (stmt4.get().count === 0) {
+    db.exec(`
+    INSERT INTO category (id, name)
+    VALUES ('apparel', 'Apparel')
+    `);
+
+    db.exec(`
+      INSERT INTO category (id, name)
+    VALUES ('accessories', 'Accessories')
+    `);
+
+    db.exec(`
+      INSERT INTO category (id, name)
+      VALUES ('shoes', 'Shoes')
+    `);
+  }
+
   // Creating products
   const stmt = db.prepare("SELECT COUNT(*) AS count FROM product");
 
   if (stmt.get().count === 0) {
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('white_tshirt_beach_juice_rose', 'White Tshirt Beach Juice Rose', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/White_Tshirt_Beach_Juice_Rose.jpeg', 'Hit the beach and impress with this super duper cool tee!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('white_tshirt_beach_juice_rose', 'apparel', 'White Tshirt Beach Juice Rose', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/White_Tshirt_Beach_Juice_Rose.jpeg', 'Hit the beach and impress with this super duper cool tee!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('recess_tshirt', 'Recess Tshirt', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Recess_Tshirt.jpeg', 'Another cool looking tee')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('recess_tshirt', 'apparel', 'Recess Tshirt', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Recess_Tshirt.jpeg', 'Another cool looking tee')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'Painted skeleton hands', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton T shirt, cool looking wear for halloween!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills', 'apparel', 'Painted skeleton hands', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_Red_Tshirt_with_skeleton_hands_Bloomfield_Hills.jpeg', 'Painted skeleton T shirt, cool looking wear for halloween!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('men_super_heavywhite', 'Men Super Heavy White', 8.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/MEN_SUPER_HEAVYWEIGHT_OPEN-END.jpeg', 'Simple looking built with durable Grade One cotton for your comfort')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('men_super_heavywhite', 'apparel', 'Men Super Heavy White', 8.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/MEN_SUPER_HEAVYWEIGHT_OPEN-END.jpeg', 'Simple looking built with durable Grade One cotton for your comfort')
+  `);
+
+    //   db.exec(`
+    //   INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    //   VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'apparel', 'Male White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
+    // `);
+
+    db.exec(`
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('flat_lay_tee', 'apparel', 'Flat Lay Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flat_Lay_Tee.jpeg', 'Look and feel cool with this JailHouse Rock replica Tee!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'Male White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('female_white_tshirt_with_painted_girls_bloomfield_hills', 'apparel', 'Female White With Painted Girls', 48.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Female_White_Tshirt_With_Painted_Girls_Bloomfield_Hills.jpeg', 'Go fun and easy with this cartoonist tee!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('flat_lay_tee', 'Flat Lay Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flat_Lay_Tee.jpeg', 'Look and feel cool with this JailHouse Rock replica Tee!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('classic_unisex_detoxwater_tee', 'apparel', 'Classic Unisex Detoxwater Tee', 10.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Classic_Unisex_Detoxwater_Tee.jpeg', 'Save the water environment with this message emblazoned Tee!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('female_white_tshirt_with_painted_girls_bloomfield_hills', 'Female White With Painted Girls', 48.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Female_White_Tshirt_With_Painted_Girls_Bloomfield_Hills.jpeg', 'Go fun and easy with this cartoonist tee!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('blue_tshirt_recess', 'apparel', 'Blue Tshirt Recess', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Blue_Tshirt_Recess.jpeg', 'This vibrant blue t-shirt captures the essence of sunset skies. Made from soft, breathable fabric, it keeps you cool and comfortable all day. Ideal for both sports and leisure activities.')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('classic_unisex_detoxwater_tee', 'Classic Unisex Detoxwater Tee', 10.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Classic_Unisex_Detoxwater_Tee.jpeg', 'Save the water environment with this message emblazoned Tee!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('blue_t_shirt_reality', 'apparel', 'Blue T-shirt Reality', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Blue_T_shirt_Reality.jpeg', 'Show off your wild side with this unique t-shirt. Made from 100% organic cotton, it offers both comfort and durability. Its eye-catching design makes it perfect for any casual occasion.')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('blue_tshirt_recess', 'Blue Tshirt Recess', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Blue_Tshirt_Recess.jpeg', 'This vibrant blue t-shirt captures the essence of sunset skies. Made from soft, breathable fabric, it keeps you cool and comfortable all day. Ideal for both sports and leisure activities.')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('brown-nodisturbance-casual', 'apparel', 'Brown Nodisturbance Casual', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Brown_Nodisturbance_Casual.jpeg', 'Free and easy on you!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('blue_t_shirt_reality', 'Blue T-shirt Reality', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Blue_T_shirt_Reality.jpeg', 'Show off your wild side with this unique t-shirt. Made from 100% organic cotton, it offers both comfort and durability. Its eye-catching design makes it perfect for any casual occasion.')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('flamingo-polo-tee', 'apparel', 'Flamingo Polo Tee', 16.99, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flamingo_Pattern_Polo_T_shirt.jpeg', 'Feel bright and colorful!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('brown-nodisturbance-casual', 'Brown Nodisturbance Casual', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Brown_Nodisturbance_Casual.jpeg', 'Free and easy on you!')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('champagne-tee', 'apparel', 'Champagne Tee', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Champagne_T_shirt.jpeg', 'Feel the sunshine!')
   `);
 
     db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('flamingo-polo-tee', 'Flamingo Polo Tee', 16.99, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flamingo_Pattern_Polo_T_shirt.jpeg', 'Feel bright and colorful!')
-  `);
-
-    db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('champagne-tee', 'Champagne Tee', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Champagne_T_shirt.jpeg', 'Feel the sunshine!')
-  `);
-
-    db.exec(`
-    INSERT INTO product (id, name, unit_price, img_src, description)
-    VALUES ('beach-pattern-tee', 'Beach Pattern Tee', 32.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg', 'Lightweight and cooling, designed for beach getaways')
+    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+    VALUES ('beach-pattern-tee', 'apparel', 'Beach Pattern Tee', 32.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg', 'Lightweight and cooling, designed for beach getaways')
   `);
   }
 
@@ -1367,6 +1394,28 @@ export async function getProductsAll(): Promise<
       FROM product`);
 
     const resultset2 = stmt2.all();
+
+    return resultset2;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to SELECT products",
+    };
+  }
+}
+
+export async function getProductsCategory(
+  category: string
+): Promise<DbProduct[] | { error: string }> {
+  try {
+    const stmt2 = db.prepare(`
+      SELECT id, name, unit_price, img_src, '${DEFAULT_CURRENCY}' AS currency
+      FROM product WHERE category_id = ?`);
+
+    const resultset2 = stmt2.all(category);
 
     return resultset2;
 

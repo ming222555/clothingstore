@@ -208,3 +208,8 @@ export async function getProductsAllAction() {
   const product = Commerce.getProductsAll();
   return product;
 }
+
+export const getProductsCategoryAction = async (category: string) => {
+  const products = Commerce.getProductsCategory(category);
+  return products;
+};

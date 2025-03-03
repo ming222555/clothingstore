@@ -4,28 +4,33 @@ import YnsLink from "@/ui/yns-link";
 import type { Product } from "@/lib/commerce-kit";
 import { formatMoney } from "@/lib/utils/utils";
 
-export default function AllProducts({
-  allProducts,
+export default function CategoryProducts({
+  category,
+  products,
 }: {
-  allProducts: Product[];
+  category: string;
+  products: Product[];
 }) {
   return (
-    <div className="AllProducts mb-5">
-      <h1 className="h2 fw-semibold mt-5 mb-4">All Products</h1>
+    <div className="CategoryProducts mb-5">
+      <h1 className="h2 fw-semibold mt-5 mb-4">
+        {category}
+        <p className="h5 text-info">Category</p>
+      </h1>
       <div
         className={`row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-xl-3 bg-body-tertiary${
-          allProducts.length ? " d-flex" : " d-none"
+          products.length ? " d-flex" : " d-none"
         }`}
       >
-        {allProducts.length &&
-          allProducts.map((p) => (
-            <div className="col" key={p.id}>
+        {products.length &&
+          products.map((p) => (
+            <div className="col border border-1" key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}
-                className="AllProducts__details shadow-sm d-block"
+                className="CategoryProducts__details shadow-sm d-block"
               >
                 <Image
-                  className="AllProducts__image w-100 h-auto product-image"
+                  className="CategoryProducts__image w-100 h-auto product-image"
                   src={p.img_src}
                   width="736"
                   height="736"
