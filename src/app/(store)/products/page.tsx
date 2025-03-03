@@ -1,9 +1,9 @@
 import { getProductsAllAction } from "@/actions/cart-actions";
-import AllProducts from "@/ui/products/all-products";
+import AllProducts from "@/ui/products/products";
 
 export default async function AllProductsPage() {
   const products = await getProductsAllAction();
-  const allProducts = Array.isArray(products) ? products : [];
+  const productsAry = Array.isArray(products) ? products : [];
 
   if (Array.isArray(products)) {
     //
@@ -13,7 +13,7 @@ export default async function AllProductsPage() {
 
   return (
     <div className="Page">
-      <AllProducts allProducts={allProducts} />
+      <AllProducts products={productsAry} />
     </div>
   );
 }

@@ -6,21 +6,21 @@ import { formatMoney } from "@/lib/utils/utils";
 
 export default function SimilarProducts({
   productId,
-  similarProducts,
+  products,
 }: {
   productId: string;
-  similarProducts: Product[];
+  products: Product[];
 }) {
   return (
     <div
       className={`SimilarProducts mb-5${
-        similarProducts.length > 1 ? " d-block" : " d-none" // exclude productId from listing to display
+        products.length > 1 ? " d-block" : " d-none" // exclude productId from listing to display
       }`}
     >
       <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>
       <div className="row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 bg-body-tertiary">
-        {similarProducts.length &&
-          similarProducts.map((p) =>
+        {products.length &&
+          products.map((p) =>
             p.id !== productId ? (
               <div className="col" key={p.id}>
                 <div className="SimilarProducts__details shadow-sm">

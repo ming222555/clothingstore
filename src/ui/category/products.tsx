@@ -24,7 +24,7 @@ export default function CategoryProducts({
       >
         {products.length &&
           products.map((p) => (
-            <div className="col border border-1" key={p.id}>
+            <div className="col" key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}
                 className="CategoryProducts__details shadow-sm d-block"

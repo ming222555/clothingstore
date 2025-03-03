@@ -4,21 +4,17 @@ import YnsLink from "@/ui/yns-link";
 import type { Product } from "@/lib/commerce-kit";
 import { formatMoney } from "@/lib/utils/utils";
 
-export default function AllProducts({
-  allProducts,
-}: {
-  allProducts: Product[];
-}) {
+export default function AllProducts({ products }: { products: Product[] }) {
   return (
     <div className="AllProducts mb-5">
       <h1 className="h2 fw-semibold mt-5 mb-4">All Products</h1>
       <div
         className={`row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-xl-3 bg-body-tertiary${
-          allProducts.length ? " d-flex" : " d-none"
+          products.length ? " d-flex" : " d-none"
         }`}
       >
-        {allProducts.length &&
-          allProducts.map((p) => (
+        {products.length &&
+          products.map((p) => (
             <div className="col" key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}

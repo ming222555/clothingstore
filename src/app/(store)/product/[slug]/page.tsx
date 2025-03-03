@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import YnsLink from "@/ui/yns-link";
 import ProductDetails from "@/ui/product/product-details";
-import SimilarProducts from "@/ui/product/similar-products";
+import SimilarProducts from "@/ui/product/products";
 import {
   getProductAction,
   getProductsSimilarAction,
@@ -20,7 +20,7 @@ export default async function SingleProductPage(props: { params: Params }) {
   }
 
   const products = await getProductsSimilarAction(slug);
-  const similarProducts = Array.isArray(products) ? products : [];
+  const productsAry = Array.isArray(products) ? products : [];
 
   if (Array.isArray(products)) {
     //
@@ -49,7 +49,7 @@ export default async function SingleProductPage(props: { params: Params }) {
         </nav>
         <ProductDetails product={product} />
       </div>
-      <SimilarProducts productId={slug} similarProducts={similarProducts} />
+      <SimilarProducts productId={slug} products={productsAry} />
     </div>
   );
 }
