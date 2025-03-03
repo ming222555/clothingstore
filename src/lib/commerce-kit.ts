@@ -14,6 +14,7 @@ export type Cart = {
 };
 
 export type Product = Db.DbProduct;
+export type DbShippingRate = Db.DbShippingRate;
 
 export type Checkout = {
   // id: string;

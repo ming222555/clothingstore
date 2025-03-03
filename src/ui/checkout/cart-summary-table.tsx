@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useOptimistic, useRef } from "react";
 import CartItemQuantity from "./cart-item-quantity";
 import { formatMoney } from "@/lib/utils/utils";
-import type { Cart } from "@/lib/commerce-kit";
-import type { DbShippingRate } from "@/lib/db";
+import type { Cart, DbShippingRate } from "@/lib/commerce-kit";
 import YnsLink from "@/ui/yns-link";
 
 export type Delta = "INCREASE" | "DECREASE";
