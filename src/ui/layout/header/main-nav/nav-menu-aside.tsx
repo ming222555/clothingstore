@@ -43,20 +43,20 @@ export default function NavMenuAside() {
           Apparel
         </YnsLink>
         <YnsLink
+          href="/category/shoes"
+          className={`btn btn-sm btn-light fw-medium w-75${
+            pathname === "/category/shoes" ? " link-is-active" : ""
+          }`}
+        >
+          Shoes
+        </YnsLink>
+        <YnsLink
           href="/category/accessories"
           className={`btn btn-sm btn-light fw-medium w-75${
             pathname === "/category/accessories" ? " link-is-active" : ""
           }`}
         >
           Accessories
-        </YnsLink>
-        <YnsLink
-          href="/category/digital"
-          className={`btn btn-sm btn-light fw-medium w-75${
-            pathname === "/category/digital" ? " link-is-active" : ""
-          }`}
-        >
-          Digital
         </YnsLink>
       </div>
     </>

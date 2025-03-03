@@ -37,7 +37,9 @@ export default async function SingleProductPage(props: { params: Params }) {
               <YnsLink href="/products">All products</YnsLink>
             </li>
             <li className="breadcrumb-item form-text">
-              <YnsLink href="/category/apparel">Apparel</YnsLink>
+              <YnsLink href={`/category/${product.category_id}`}>
+                {product.category_name}
+              </YnsLink>
             </li>
             <li
               className="breadcrumb-item form-text fw-medium active"

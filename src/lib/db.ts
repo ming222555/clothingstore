@@ -5,6 +5,8 @@ import type { Cart, Checkout } from "@/lib/commerce-kit";
 
 export type DbProduct = {
   id: string;
+  category_id: string;
+  category_name: string;
   name: string;
   unit_price: number;
   img_src: string;
@@ -154,12 +156,12 @@ function initDb() {
 
     db.exec(`
       INSERT INTO category (id, name)
-    VALUES ('accessories', 'Accessories')
+      VALUES ('shoes', 'Shoes')
     `);
 
     db.exec(`
       INSERT INTO category (id, name)
-      VALUES ('shoes', 'Shoes')
+    VALUES ('accessories', 'Accessories')
     `);
   }
 
@@ -167,6 +169,8 @@ function initDb() {
   const stmt = db.prepare("SELECT COUNT(*) AS count FROM product");
 
   if (stmt.get().count === 0) {
+    // apparel
+
     db.exec(`
     INSERT INTO product (id, category_id, name, unit_price, img_src, description)
     VALUES ('white_tshirt_beach_juice_rose', 'apparel', 'White Tshirt Beach Juice Rose', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/White_Tshirt_Beach_Juice_Rose.jpeg', 'Hit the beach and impress with this super duper cool tee!')
@@ -187,10 +191,10 @@ function initDb() {
     VALUES ('men_super_heavywhite', 'apparel', 'Men Super Heavy White', 8.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/MEN_SUPER_HEAVYWEIGHT_OPEN-END.jpeg', 'Simple looking built with durable Grade One cotton for your comfort')
   `);
 
-    //   db.exec(`
-    //   INSERT INTO product (id, category_id, name, unit_price, img_src, description)
-    //   VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'apparel', 'Male White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
-    // `);
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'apparel', 'Male White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
+    `);
 
     db.exec(`
     INSERT INTO product (id, category_id, name, unit_price, img_src, description)
@@ -236,6 +240,32 @@ function initDb() {
     INSERT INTO product (id, category_id, name, unit_price, img_src, description)
     VALUES ('beach-pattern-tee', 'apparel', 'Beach Pattern Tee', 32.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Beach_Pattern_T_Shirt.jpeg', 'Lightweight and cooling, designed for beach getaways')
   `);
+
+    // shoes
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('handmade_men_business_chelsea_boots_black_leather', 'shoes', 'Handmade Chelsea Boots Black Leather', 116.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/shoes/handmade_men_business_chelsea_boots_black_leather.jpeg', 'High Top Handmade Men Business Chelsea Ankle Boots Black Leather')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('lowndes_dark_brown_burnished_calf', 'shoes', 'Lowndes Burnished Calf Classic Brown', 88, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/shoes/lowndes_dark_brown_burnished_calf.jpeg', 'Dark Brown Burnished Calf Classic for Men')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny', 'shoes', 'Magnanni Brown Full Grain Leather', 96.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/shoes/magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny.jpeg', 'Magnanni Matlin III 24671 Men Shoes Brown Full Grain Leather Casual Penny Loafers')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('thick_male_black_spot_round_head_martin_boots', 'shoes', 'Black Spot Round Head Martin Boots', 99.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/shoes/thick_male_black_spot_round_head_martin_boots.jpeg', 'Male Cotton Shoes High Top Leather Shoes Black Martin Boots Men Middle Top Leather Shoes')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('timberland_premium_6_inch_lace_up_waterproof_boot_for_men', 'shoes', 'Timberland Premium Lace Up Waterproof', 125.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/shoes/timberland_premium_6_inch_lace_up_waterproof_boot_for_men.jpeg', 'Timberland® Premium 6-Inch Lace-Up Waterproof Boot for Men in Yellow')
+    `);
   }
 
   // Creating similar products
@@ -464,9 +494,11 @@ export async function getProduct(
   product_id: string
 ): Promise<DbProduct | null> {
   const stmt = db.prepare(`
-    SELECT id, name, unit_price, img_src, description, '${DEFAULT_CURRENCY}' AS currency
-    FROM product
-    WHERE id = ?`);
+    SELECT p.id, c.id AS category_id, c.name AS category_name, p.name, p.unit_price, p.img_src, p.description, '${DEFAULT_CURRENCY}' AS currency
+    FROM product AS p
+    LEFT OUTER JOIN category AS c
+    ON p.category_id = c.id
+    WHERE p.id = ?`);
 
   const resultset = stmt.all(product_id);
 

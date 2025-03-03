@@ -26,20 +26,20 @@ export default function NavMenu() {
         Apparel
       </YnsLink>
       <YnsLink
+        href="/category/shoes"
+        className={`d-none d-sm-block btn btn-sm btn-light fw-medium me-1${
+          pathname === "/category/shoes" ? " link-is-active" : ""
+        }`}
+      >
+        Shoes
+      </YnsLink>
+      <YnsLink
         href="/category/accessories"
         className={`d-none d-sm-block btn btn-sm btn-light fw-medium me-1${
           pathname === "/category/accessories" ? " link-is-active" : ""
         }`}
       >
         Accessories
-      </YnsLink>
-      <YnsLink
-        href="/category/digital"
-        className={`d-none d-sm-block btn btn-sm btn-light fw-medium me-1${
-          pathname === "/category/digital" ? " link-is-active" : ""
-        }`}
-      >
-        Digital
       </YnsLink>
     </>
   );
