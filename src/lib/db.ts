@@ -277,7 +277,8 @@ function initDb() {
     VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills,recess_tshirt,champagne-tee,flamingo-polo-tee,flat_lay_tee,classic_unisex_detoxwater_tee'),
     ('beach-pattern-tee,white_tshirt_beach_juice_rose'),
     ('brown-nodisturbance-casual,men_super_heavywhite'),
-    ('female_white_tshirt_with_painted_girls_bloomfield_hills,male_female_white_tshirt_bloomfield_hills_with_painted_boy')
+    ('female_white_tshirt_with_painted_girls_bloomfield_hills,male_female_white_tshirt_bloomfield_hills_with_painted_boy'),
+    ('magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny,handmade_men_business_chelsea_boots_black_leather,timberland_premium_6_inch_lace_up_waterproof_boot_for_men,thick_male_black_spot_round_head_martin_boots')
   `);
   }
 }
