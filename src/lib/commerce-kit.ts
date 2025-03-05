@@ -218,3 +218,13 @@ export const getProductsCategory = async (category: string) => {
   const products = await Db.getProductsCategory(category);
   return products;
 };
+
+export const getCategory = async (id: string) => {
+  const category = await Db.getCategory(id);
+  return category;
+};
+
+export const getProductForHtmlHead = async (id: string) => {
+  const product = await Db.getProductForHtmlHead(id);
+  return product;
+};

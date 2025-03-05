@@ -213,3 +213,13 @@ export const getProductsCategoryAction = async (category: string) => {
   const products = Commerce.getProductsCategory(category);
   return products;
 };
+
+export const getCategoryAction = async (id: string) => {
+  const category = Commerce.getCategory(id);
+  return category;
+};
+
+export const getProductForHtmlHeadAction = async (id: string) => {
+  const product = Commerce.getProductForHtmlHead(id);
+  return product;
+};

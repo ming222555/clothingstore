@@ -14,6 +14,11 @@ export type DbProduct = {
   currency: string;
 };
 
+export type DbCategory = {
+  id: string;
+  name: string;
+};
+
 export type DbShippingRate = {
   id: string;
   rate: number;
@@ -1511,6 +1516,58 @@ export async function getProductsCategory(
 
     return {
       error: "Failed to SELECT products",
+    };
+  }
+}
+
+export async function getCategory(
+  id: string
+): Promise<DbCategory | null | { error: string }> {
+  try {
+    const stmt2 = db.prepare(`
+      SELECT id, name
+      FROM category WHERE id = ?`);
+
+    const resultset2 = stmt2.all(id);
+
+    if (resultset2.length === 0) {
+      return null;
+    }
+
+    return resultset2[0];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to SELECT category",
+    };
+  }
+}
+
+export async function getProductForHtmlHead(
+  product_id: string
+): Promise<{ name: string; description: string } | null | { error: string }> {
+  try {
+    const stmt2 = db.prepare(`
+      SELECT id, name, description
+      FROM product WHERE id = ?`);
+
+    const resultset2 = stmt2.all(product_id);
+
+    if (resultset2.length === 0) {
+      return null;
+    }
+
+    return resultset2[0];
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to SELECT product",
     };
   }
 }
