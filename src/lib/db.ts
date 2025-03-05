@@ -266,6 +266,57 @@ function initDb() {
       INSERT INTO product (id, category_id, name, unit_price, img_src, description)
       VALUES ('timberland_premium_6_inch_lace_up_waterproof_boot_for_men', 'shoes', 'Timberland Premium Lace Up Waterproof', 125.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/shoes/timberland_premium_6_inch_lace_up_waterproof_boot_for_men.jpeg', 'Timberland® Premium 6-Inch Lace-Up Waterproof Boot for Men in Yellow')
     `);
+
+    // accessories
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag1', 'accessories', 'Bag1', 25.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag1.jpeg', 'Bag Beauty')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag2', 'accessories', 'Bag2', 32.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag2.jpeg', 'Bag Beauty2')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag3', 'accessories', 'Bag3', 64.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag3.jpeg', 'Bag Beauty3')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag4', 'accessories', 'Bag4', 50.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag4.jpeg', 'Bag Beauty4')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag5', 'accessories', 'Bag5', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag5.jpeg', 'Bag Beauty5')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag6', 'accessories', 'Bag6', 48.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag6.jpeg', 'Bag Beauty6')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag7', 'accessories', 'Bag7', 132.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag7.jpeg', 'Bag Beauty7')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag8', 'accessories', 'Bag8', 36.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag8.jpeg', 'Bag Beauty8')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag9', 'accessories', 'Bag9', 60.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag9.jpeg', 'Bag Beauty9')
+    `);
+
+    db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('bag10', 'accessories', 'Bag10', 128.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/accessories/Bag10.jpeg', 'Bag Beauty10')
+    `);
   }
 
   // Creating similar products
@@ -278,7 +329,9 @@ function initDb() {
     ('beach-pattern-tee,white_tshirt_beach_juice_rose'),
     ('brown-nodisturbance-casual,men_super_heavywhite'),
     ('female_white_tshirt_with_painted_girls_bloomfield_hills,male_female_white_tshirt_bloomfield_hills_with_painted_boy'),
-    ('magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny,handmade_men_business_chelsea_boots_black_leather,timberland_premium_6_inch_lace_up_waterproof_boot_for_men,thick_male_black_spot_round_head_martin_boots')
+    ('magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny,handmade_men_business_chelsea_boots_black_leather,timberland_premium_6_inch_lace_up_waterproof_boot_for_men,thick_male_black_spot_round_head_martin_boots'),
+    ('bag3,bag6,bag2'),
+    ('bag7,bag4,bag1,bag8,bag9,bag5')
   `);
   }
 }
