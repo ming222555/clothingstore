@@ -209,6 +209,11 @@ export async function getProductsAllAction() {
   return product;
 }
 
+export async function getProductsFeaturedAction() {
+  const product = Commerce.getProductsFeatured();
+  return product;
+}
+
 export const getProductsCategoryAction = async (category: string) => {
   const products = Commerce.getProductsCategory(category);
   return products;

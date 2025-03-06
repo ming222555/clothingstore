@@ -214,6 +214,11 @@ export const getProductsAll = async () => {
   return products;
 };
 
+export const getProductsFeatured = async () => {
+  const products = await Db.getProductsFeatured();
+  return products;
+};
+
 export const getProductsCategory = async (category: string) => {
   const products = await Db.getProductsCategory(category);
   return products;

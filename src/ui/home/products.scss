@@ -1,0 +1,10 @@
+.FeaturedProducts {
+  margin-top: -3.2rem;
+  &__details {
+    &:hover {
+      .FeaturedProducts__image {
+        opacity: 75%;
+      }
+    }
+  }
+}

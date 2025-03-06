@@ -67,6 +67,11 @@ function initDb() {
       product_ids TEXT
       )`);
   db.exec(`
+    CREATE TABLE IF NOT EXISTS product_featured (
+      id TEXT PRIMARY KEY, 
+      FOREIGN KEY(id) REFERENCES product(id) ON DELETE CASCADE
+      )`);
+  db.exec(`
     CREATE TABLE IF NOT EXISTS cart_line (
       cart_id TEXT, 
       product_id TEXT, 
@@ -337,6 +342,21 @@ function initDb() {
     ('magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny,handmade_men_business_chelsea_boots_black_leather,timberland_premium_6_inch_lace_up_waterproof_boot_for_men,thick_male_black_spot_round_head_martin_boots'),
     ('bag3,bag6,bag2'),
     ('bag7,bag4,bag1,bag8,bag9,bag5')
+  `);
+  }
+
+  // Creating similar products
+  const stmt5 = db.prepare("SELECT COUNT(*) AS count FROM product_featured");
+
+  if (stmt5.get().count === 0) {
+    db.exec(`
+    INSERT INTO product_featured (id)
+    VALUES ('magnanni_matlin_men_shoes_brown_full_grain_leather_casual_penny'),
+    ('champagne-tee'),
+    ('bag9'),
+    ('timberland_premium_6_inch_lace_up_waterproof_boot_for_men'),
+    ('flat_lay_tee'),
+    ('bag2')
   `);
   }
 }
@@ -1494,6 +1514,29 @@ export async function getProductsAll(): Promise<
 
     return {
       error: "Failed to SELECT products",
+    };
+  }
+}
+
+export async function getProductsFeatured(): Promise<
+  DbProduct[] | { error: string }
+> {
+  try {
+    const stmt2 = db.prepare(`
+      SELECT id, name, unit_price, img_src, '${DEFAULT_CURRENCY}' AS currency
+      FROM product
+      WHERE id IN (SELECT id FROM product_featured) `);
+
+    const resultset2 = stmt2.all();
+
+    return resultset2;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    console.log(e.message);
+
+    return {
+      error: "Failed to SELECT featured products",
     };
   }
 }
