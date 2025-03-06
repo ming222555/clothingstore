@@ -182,6 +182,11 @@ function initDb() {
     // apparel
 
     db.exec(`
+      INSERT INTO product (id, category_id, name, unit_price, img_src, description)
+      VALUES ('aflat_lay_tee', 'apparel', 'Flat Lay Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flat_Lay_Tee.jpeg', 'Look and feel cool with this JailHouse Rock replica Tee!')
+    `);
+
+    db.exec(`
     INSERT INTO product (id, category_id, name, unit_price, img_src, description)
     VALUES ('white_tshirt_beach_juice_rose', 'apparel', 'White Tshirt Beach Juice Rose', 30.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/White_Tshirt_Beach_Juice_Rose.jpeg', 'Hit the beach and impress with this super duper cool tee!')
   `);
@@ -205,11 +210,6 @@ function initDb() {
       INSERT INTO product (id, category_id, name, unit_price, img_src, description)
       VALUES ('male_female_white_tshirt_bloomfield_hills_with_painted_boy', 'apparel', 'Male White With Painted Boy', 12.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Male_Female_White_Tshirt_Bloomfield_Hills_with_painted_boy.jpeg', 'Discover the fun in you with this cute and fun looking tee!')
     `);
-
-    db.exec(`
-    INSERT INTO product (id, category_id, name, unit_price, img_src, description)
-    VALUES ('flat_lay_tee', 'apparel', 'Flat Lay Tee', 16.00, 'https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/tshirts/Flat_Lay_Tee.jpeg', 'Look and feel cool with this JailHouse Rock replica Tee!')
-  `);
 
     db.exec(`
     INSERT INTO product (id, category_id, name, unit_price, img_src, description)
@@ -335,7 +335,7 @@ function initDb() {
   if (stmt3.get().count === 0) {
     db.exec(`
     INSERT INTO product_similar (product_ids)
-    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills,recess_tshirt,champagne-tee,flamingo-polo-tee,flat_lay_tee,classic_unisex_detoxwater_tee'),
+    VALUES ('male_female_red_tshirt_with_skeleton_hands_bloomfield_hills,recess_tshirt,champagne-tee,flamingo-polo-tee,aflat_lay_tee,classic_unisex_detoxwater_tee'),
     ('beach-pattern-tee,white_tshirt_beach_juice_rose'),
     ('brown-nodisturbance-casual,men_super_heavywhite'),
     ('female_white_tshirt_with_painted_girls_bloomfield_hills,male_female_white_tshirt_bloomfield_hills_with_painted_boy'),
@@ -355,7 +355,7 @@ function initDb() {
     ('champagne-tee'),
     ('bag9'),
     ('timberland_premium_6_inch_lace_up_waterproof_boot_for_men'),
-    ('flat_lay_tee'),
+    ('aflat_lay_tee'),
     ('bag2')
   `);
   }

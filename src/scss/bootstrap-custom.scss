@@ -5,6 +5,7 @@
 
 // Include any default variable overrides here
 $enable-dark-mode: false;
+$enable-negative-margins: true;
 
 @import "../../node_modules/bootstrap/scss/variables";
 // @import "../../node_modules/bootstrap/scss/variables-dark";

@@ -14,7 +14,7 @@ export default function AllProducts({ products }: { products: Product[] }) {
         }`}
       >
         {products.length &&
-          products.map((p) => (
+          products.map((p, idx) => (
             <div className="col" key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}
@@ -26,7 +26,7 @@ export default function AllProducts({ products }: { products: Product[] }) {
                   width="736"
                   height="736"
                   sizes="(min-width: 1200px) 380px, (min-width: 580px) calc(50vw - 18px), calc(100vw - 34px)"
-                  loading="lazy"
+                  loading={idx < 3 ? "eager" : "lazy"}
                   alt=""
                 />
                 <div className="ps-2">

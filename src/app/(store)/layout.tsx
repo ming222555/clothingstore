@@ -8,7 +8,6 @@ export default function StoreLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("LLLLLLLLLLLLLLLLLLLLayout");
   return (
     <CartModalProvider>
       <MainNav />

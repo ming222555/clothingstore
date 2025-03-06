@@ -10,15 +10,14 @@ export default function FeaturedProducts({
   products: Product[];
 }) {
   return (
-    <div className="FeaturedProducts mb-5">
-      <h1 className="h2 fw-semibold mt-5 mb-4">Featured</h1>
+    <div className="FeaturedProducts mb-5 mt-5">
       <div
         className={`row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-xl-3 bg-body-tertiary${
           products.length ? " d-flex" : " d-none"
         }`}
       >
         {products.length &&
-          products.map((p) => (
+          products.map((p, idx) => (
             <div className="col" key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}
@@ -30,7 +29,7 @@ export default function FeaturedProducts({
                   width="736"
                   height="736"
                   sizes="(min-width: 1200px) 380px, (min-width: 580px) calc(50vw - 18px), calc(100vw - 34px)"
-                  loading="lazy"
+                  loading={idx < 3 ? "eager" : "lazy"}
                   alt=""
                 />
                 <div className="ps-2">

@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-
-import { roboto } from "@/lib/utils/fonts";
-import Link from "next/link";
 import { Toaster } from "sonner";
 
+import { roboto } from "@/lib/utils/fonts";
 import "../globals.scss";
 
 export const metadata: Metadata = {
-  title: "Your Store",
+  title: "Your Nextjs Store",
   description: "Created by nextjs",
 };
 
