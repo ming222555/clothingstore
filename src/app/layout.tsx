@@ -4,8 +4,6 @@ import { roboto } from "@/lib/utils/fonts";
 import Link from "next/link";
 import { Toaster } from "sonner";
 
-import createCookieAction from "@/actions/createCookieAction";
-import FetchcookieClient from "./fetchcookie-client";
 import "../globals.scss";
 
 export const metadata: Metadata = {
@@ -28,27 +26,6 @@ export default function RootLayout({
         }
       >
         <div>
-          <form action={createCookieAction}>
-            <input type="text" defaultValue="popp" />
-            <button type="submit">Cre cart cookie</button>
-          </form>
-          <FetchcookieClient />
-          <div className="testing123">
-            <Link href="/cart-overlay?add=arctic-circle-neck-warmer">
-              arctic-circle-neck-warmer add cart
-            </Link>
-            <Link href="/cart-overlay?add=beach-pattern-tee">
-              beach-pattern-tee add cart
-            </Link>{" "}
-            <Link href="/cart-overlay?add=dummy-prod">dummy</Link>{" "}
-            <Link href="/product/recess_tshirt">Recess Tshirt</Link>{" "}
-            <Link href="/product/champagne-tee">Champagne Tee</Link>{" "}
-            <Link href="/product/flamingo-polo-tee">Flamingo Polo Tee</Link>{" "}
-            <Link href="/product/brown-nodisturbance-casual">
-              Nodisturbance
-            </Link>{" "}
-            <Link href="/products">All</Link>
-          </div>
           {children}
           <Toaster />
         </div>
