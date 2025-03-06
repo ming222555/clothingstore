@@ -54,7 +54,7 @@ $utilities: map-merge(
             map-merge(
               map-get(map-get($utilities, "opacity"), "values"),
               (
-                95: 0.95,
+                97: 0.97,
               )
             ),
         )

@@ -23,7 +23,7 @@ export default function SearchNav() {
         onClick={() => setMobile(false)}
       ></div>
       <div
-        className={`SearchNav__input-group input-group input-group-sm ms-auto bg-warning${
+        className={`SearchNav__input-group input-group input-group-sm ms-auto${
           mobile ? " mobile" : ""
         }`}
       >

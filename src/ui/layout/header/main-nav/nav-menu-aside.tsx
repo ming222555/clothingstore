@@ -23,9 +23,7 @@ export default function NavMenuAside() {
         className={`NavMenuAside__backdrop${mobile ? " mobile" : ""}`}
         onClick={() => setMobile(false)}
       ></div>
-      <div
-        className={`NavMenuAside__links bg-warning${mobile ? " mobile" : ""}`}
-      >
+      <div className={`NavMenuAside__links${mobile ? " mobile" : ""}`}>
         <YnsLink
           href="/"
           className={`btn btn-sm btn-light fw-medium w-75${

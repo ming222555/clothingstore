@@ -30,12 +30,9 @@ export default function LogoNav() {
   }, [pathname]);
 
   return (
-    <YnsLink
-      href="/"
-      className="text-decoration-none flex-shrink-0 me-2 bg-warning"
-    >
+    <YnsLink href="/" className="text-decoration-none flex-shrink-0 me-2">
       {isH1 ? (
-        <h1 className="h4 d-inline fs-5 bg-light fw-bold">Your Next Store</h1>
+        <h1 className="h4 d-inline fs-5 fw-bold">Your Next Store</h1>
       ) : (
         <span className="h4 fs-5 fw-bold">Your Next Store</span>
       )}
