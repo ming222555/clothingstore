@@ -32,9 +32,13 @@ export default function LogoNav() {
   return (
     <YnsLink href="/" className="text-decoration-none flex-shrink-0 me-2">
       {isH1 ? (
-        <h1 className="h4 d-inline fs-5 fw-bold">Your Nextjs Store</h1>
+        <h1 className="h4 d-inline fs-5 fw-bold text-body-tertiary">
+          Your Nextjs Store
+        </h1>
       ) : (
-        <span className="h4 fs-5 fw-bold">Your Nextjs Store</span>
+        <span className="h4 fs-5 fw-bold text-body-tertiary">
+          Your Nextjs Store
+        </span>
       )}
     </YnsLink>
   );

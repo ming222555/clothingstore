@@ -32,7 +32,6 @@ export default function Hero() {
             src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/hero.jpeg"
             width="457"
             height="839"
-            // sizes="(min-width: 768px) 25vw, 50vw"
             sizes="(min-width: 1320px) 300px, (min-width: 780px) calc(21.73vw + 18px), calc(50vw - 16px)"
             loading="eager"
             priority

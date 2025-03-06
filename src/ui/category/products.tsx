@@ -45,7 +45,7 @@ export default function CategoryProducts({
                     </span>
                   </h3>
                   <div className="pb-3">
-                    <span className="h6">
+                    <span className="h6 text-body-tertiary">
                       {formatMoney(p.unit_price, p.currency)}
                     </span>
                   </div>
