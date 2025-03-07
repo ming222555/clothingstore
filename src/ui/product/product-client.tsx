@@ -25,7 +25,7 @@ export default function SingleProductPageClient({
         <div ref={ref}>
           <AddToCartButton productId={product.id} />
           <div
-            className={`position-fixed start-0 end-0 px-3 bg-white opacity-95 shadow${
+            className={`position-fixed start-0 end-0 px-3 bg-white opacity-95 shadow z-1${
               notMounted.current
                 ? " bottom-100"
                 : inView
