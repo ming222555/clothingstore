@@ -56,13 +56,13 @@ export default function SingleProductPageClient({
                   alt=""
                 />
               </div>
-              <div className="d-flex flex-column flex-grow-1 ms-3">
+              <div className="d-flex flex-column ms-3">
                 <span className="px-2 fw-bold">{product.name}</span>
                 <span className="px-2 form-text">
                   {formatMoney(product.unit_price, product.currency)}
                 </span>
               </div>
-              <div>
+              <div className="ms-auto flex-shrink-0">
                 <AddToCartButton productId={product.id} />
               </div>
             </div>
