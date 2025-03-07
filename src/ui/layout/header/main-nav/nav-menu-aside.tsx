@@ -26,7 +26,7 @@ export default function NavMenuAside() {
       <div className={`NavMenuAside__links${mobile ? " mobile" : ""}`}>
         <YnsLink
           href="/"
-          className={`btn btn-sm btn-light fw-medium w-75${
+          className={`btn btn-sm btn-light fw-medium w-75 opacity-75${
             pathname === "/" ? " link-is-active" : ""
           }`}
         >
@@ -34,7 +34,7 @@ export default function NavMenuAside() {
         </YnsLink>
         <YnsLink
           href="/category/apparel"
-          className={`btn btn-sm btn-light fw-medium w-75${
+          className={`btn btn-sm btn-light fw-medium w-75 opacity-75${
             pathname === "/category/apparel" ? " link-is-active" : ""
           }`}
         >
@@ -42,7 +42,7 @@ export default function NavMenuAside() {
         </YnsLink>
         <YnsLink
           href="/category/shoes"
-          className={`btn btn-sm btn-light fw-medium w-75${
+          className={`btn btn-sm btn-light fw-medium w-75 opacity-75${
             pathname === "/category/shoes" ? " link-is-active" : ""
           }`}
         >
@@ -50,7 +50,7 @@ export default function NavMenuAside() {
         </YnsLink>
         <YnsLink
           href="/category/accessories"
-          className={`btn btn-sm btn-light fw-medium w-75${
+          className={`btn btn-sm btn-light fw-medium w-75 opacity-75${
             pathname === "/category/accessories" ? " link-is-active" : ""
           }`}
         >
