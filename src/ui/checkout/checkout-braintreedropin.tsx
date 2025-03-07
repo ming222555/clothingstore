@@ -40,7 +40,7 @@ export default function BraintreeDropIn({
               overrides: {
                 fields: {
                   number: {
-                    placeholder: "1234 1234 1234 1234", // Update the number field placeholder
+                    placeholder: "4111 1111 1111 1111", // Update the number field placeholder
                   },
                   cvv: {
                     maskInput: true,
@@ -88,8 +88,14 @@ export default function BraintreeDropIn({
 
       <button
         type="button"
-        disabled={!braintreeInstance || processingPayment}
+        className={`btn btn-dark rounded-pill w-100${
+          !braintreeInstance || processingPayment ? " cursor-wait" : ""
+        }`}
+        // disabled={!braintreeInstance || processingPayment}
         onClick={() => {
+          if (!braintreeInstance || processingPayment) {
+            return;
+          }
           if (braintreeInstance) {
             setProcessingPayment(true);
             braintreeInstance.requestPaymentMethod((error, payload) => {
