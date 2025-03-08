@@ -52,7 +52,7 @@ export const addToCartAction = async (
     };
   }
 
-  await new Promise((resolv) => setTimeout(resolv, 2000));
+  await new Promise((resolv) => setTimeout(resolv, 1000)); // 2000
 
   const rc = await setCartCookieJson({
     id: createdOrUpdatedCart.meta!.id,
@@ -96,7 +96,7 @@ export const cartUpdateAction = async (
     };
   }
 
-  await new Promise((resolv) => setTimeout(resolv, 2000));
+  await new Promise((resolv) => setTimeout(resolv, 1000)); // 2000
 
   const rc = await setCartCookieJson({
     id: updatedCart.meta!.id,
@@ -140,7 +140,7 @@ export const checkoutUpdateOrInsertShippingRateAction = async (
     };
   }
 
-  await new Promise((resolv) => setTimeout(resolv, 2000));
+  await new Promise((resolv) => setTimeout(resolv, 1000)); // 2000
 
   return {
     error: "",
@@ -177,7 +177,7 @@ export const checkoutUpdateOrInsertAction = async (
     return updatedOrInserted;
   }
 
-  await new Promise((resolv) => setTimeout(resolv, 2000));
+  await new Promise((resolv) => setTimeout(resolv, 1000)); // 2000
 
   return {
     errors: [],
