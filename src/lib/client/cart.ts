@@ -8,8 +8,8 @@ export async function addToCartApi(productId: string) {
     body: JSON.stringify({ add: productId }),
     credentials: "include",
   });
-  console.log("addToCartApi res.ok", res.ok);
+
   const data = await res.json();
-  console.log("addToCartApi res.json data", data);
+
   return data;
 }

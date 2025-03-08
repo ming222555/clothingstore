@@ -39,7 +39,7 @@ export default function CartItemQuantity({
 
       // Update failed
       if (rc.error) {
-        console.log("toast remoteCartUpdate error", rc.error);
+        console.log("remoteCartUpdate error", rc.error);
         toast(rc.error);
 
         // this will revert optimisticCart to the initial value passed to useOptimistic()
@@ -84,8 +84,6 @@ export default function CartItemQuantity({
       pendingPromise.current = null;
 
       timer.current = null;
-
-      console.log("Me remoteCartUpdate...qty", qty + 1);
     };
 
     if (timer.current) {

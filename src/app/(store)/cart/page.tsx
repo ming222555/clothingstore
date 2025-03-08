@@ -22,7 +22,6 @@ export default async function CartPage() {
 
   const shippingRates = await getShippingRatesAction();
 
-  console.log(cartCheckout);
   return (
     <Checkout
       checkout={cartCheckout}

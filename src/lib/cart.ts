@@ -11,8 +11,6 @@ export async function setCartCookieJson(
 ): Promise<boolean> {
   try {
     (await cookies()).set(CART_COOKIE, JSON.stringify(cartCookieJson));
-    console.log(cartCookieJson, 111111111);
-    console.log(JSON.stringify(cartCookieJson), 111111111);
     return true;
   } catch (error) {
     console.error("Failed to set cart cookie", error);
@@ -24,7 +22,6 @@ export async function getCartCookieJson() {
   const cookiesValue = await cookies();
   const cartCookieValue = cookiesValue.get(CART_COOKIE)?.value;
 
-  console.log("yyyyyyyyyy cartCookieValue", cartCookieValue);
   if (cartCookieValue === undefined) {
     return null;
   }

@@ -24,13 +24,11 @@ export default function CartSummaryTable({
   shippingRate: DbShippingRate | null;
   total: number;
 }) {
-  console.log("CartSummaryTable cart", cart);
   const actionProductId = useRef("");
   const [optimisticCart, dispatchOptimisticCartAction] = useOptimistic<
     Cart,
     OptimisticCartActionType
   >(cart, (prevCart, action) => {
-    // console.log("prevCart", prevCart);
     actionProductId.current = action.productId;
     return {
       ...prevCart,

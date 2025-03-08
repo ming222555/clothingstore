@@ -52,8 +52,6 @@ export default function Checkout({
     duration: string;
   }[];
 }) {
-  console.log("checkout111111111111", checkout);
-
   const reducer = useMemo(() => {
     return function (
       state: FormState,
@@ -85,7 +83,6 @@ export default function Checkout({
     reducer,
     checkout || initialFormValues
   );
-  console.log("formValues", formValues);
 
   const currentFieldId = useRef("");
   const isShippingRateLastFieldChangedPriorUpdate = useRef<true | null>(null);
@@ -173,7 +170,6 @@ export default function Checkout({
   useEffect(() => {
     if (checkout && preValidationOk) {
       if (isShippingRateLastFieldChangedPriorUpdate.current) {
-        console.log("ttttttttt00000");
         setModeUpdate(true);
         return;
       }

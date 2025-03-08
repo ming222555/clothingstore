@@ -104,9 +104,6 @@ export default function BraintreeDropIn({
                 toast((error as Error).message); // e.g. Invalid card number
                 setProcessingPayment(false);
               } else {
-                console.log(`Payment payload`, payload);
-                console.log("payment method nonce", payload.nonce);
-
                 makePayment(payload.nonce);
               }
             });

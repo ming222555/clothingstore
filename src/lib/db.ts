@@ -650,7 +650,7 @@ async function cartAddUpdate(
   // []
 
   // return stmt.all(id);
-  console.log("cartId", cartId);
+
   const resultset = stmt.all(cartId, product.id);
 
   if (resultset.length === 0) {
@@ -901,7 +901,6 @@ export async function cartUpdate({
     WHERE c.id = ?
     AND cl.product_id = ?`);
 
-  console.log("cartId", cartId);
   const resultset = stmt.all(cartId, product.id);
 
   if (resultset.length === 0) {
@@ -990,7 +989,6 @@ export async function checkoutUpdateOrInsertShippingRateId({
     ON c.id = ck.id
     WHERE c.id = ?`);
 
-  console.log("cartId", cartId);
   const resultset = stmt.all(cartId);
 
   if (resultset.length === 0) {
@@ -1270,7 +1268,6 @@ export async function checkoutUpdateOrInsert({
     ON c.id = ck.id
     WHERE c.id = ?`);
 
-  console.log("cartId", cartId);
   const resultset = stmt.all(cartId);
 
   if (resultset.length === 0) {
