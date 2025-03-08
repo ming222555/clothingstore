@@ -88,6 +88,7 @@ export default function BraintreeDropIn({
 
       <button
         type="button"
+        style={{ display: braintreeInstance ? "inline-block" : "none" }}
         className={`btn btn-dark rounded-pill w-100${
           !braintreeInstance || processingPayment ? " cursor-wait" : ""
         }`}
@@ -110,7 +111,7 @@ export default function BraintreeDropIn({
           }
         }}
       >
-        {"Pay"}
+        Pay
       </button>
     </div>
   );
