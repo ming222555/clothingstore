@@ -92,6 +92,12 @@ export default function BraintreeDropIn({
         </p>
       )}
 
+      {processingPayment ? (
+        <p className="h5 fst-italic text-primary my-3">
+          Please wait, payment in progess...
+        </p>
+      ) : null}
+
       <button
         type="button"
         style={{ display: braintreeInstance ? "inline-block" : "none" }}
