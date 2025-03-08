@@ -86,6 +86,12 @@ export default function BraintreeDropIn({
     <div className={`pb-5${show ? " d-block" : " d-none"}`}>
       <div id={"braintree-drop-in-div"} />
 
+      {braintreeInstance ? null : (
+        <p className="h5 fst-italic text-primary mt-3">
+          Please wait, loading payment form...
+        </p>
+      )}
+
       <button
         type="button"
         style={{ display: braintreeInstance ? "inline-block" : "none" }}
