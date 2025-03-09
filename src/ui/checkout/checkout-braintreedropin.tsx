@@ -87,13 +87,13 @@ export default function BraintreeDropIn({
       <div id={"braintree-drop-in-div"} />
 
       {braintreeInstance ? null : (
-        <p className="h5 fst-italic text-primary mt-3">
+        <p className="h5 fst-italic text-white bg-info text-center mt-4">
           Please wait, loading payment form...
         </p>
       )}
 
       {processingPayment ? (
-        <p className="h5 fst-italic text-primary my-3">
+        <p className="h5 fst-italic text-white bg-info text-center mt-4">
           Please wait, payment in progess...
         </p>
       ) : null}
