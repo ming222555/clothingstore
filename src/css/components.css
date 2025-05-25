@@ -1,0 +1,9 @@
+.Page {
+  max-width: var(--breakpoint-xl);
+  margin: auto;
+}
+
+.product-image {
+  border: 1px solid #fff;
+  border-radius: 8px;
+}

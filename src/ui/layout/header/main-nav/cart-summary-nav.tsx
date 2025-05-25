@@ -7,7 +7,7 @@ import CartSummaryNavShoppingIcon from "./cart-summary-nav-shopping-icon";
 import ShoppingBagIconTooltip from "./shopping-bag-icon-tooltip";
 
 const CartFallback = () => (
-  <div className="ms-3 opacity-25">
+  <div className="ms-2 opacity-25">
     <ShoppingBagIcon />
   </div>
 );
@@ -34,7 +34,7 @@ const CartSummaryNavInner = async () => {
 
   return (
     <div
-      className="position-relative ms-3"
+      className="position-relative ms-2"
       data-tooltip-id="shopping-bag-icon-tooltip"
     >
       <CartSummaryNavShoppingIcon />

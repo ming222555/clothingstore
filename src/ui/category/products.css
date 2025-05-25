@@ -1,0 +1,10 @@
+.CategoryProducts {
+  margin-top: -3.2rem;
+  &__details {
+    &:hover {
+      .CategoryProducts__image {
+        opacity: 75%;
+      }
+    }
+  }
+}

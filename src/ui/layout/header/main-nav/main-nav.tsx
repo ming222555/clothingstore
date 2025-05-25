@@ -6,11 +6,11 @@ import CartSummaryNav from "./cart-summary-nav";
 
 export default function MainNav() {
   return (
-    <header className="p-3 bg-white opacity-97 border-bottom position-sticky top-0 z-1">
+    <header className="p-3 bg-white opacity-97 border-b sticky top-0 z-1">
       <nav
-        className="d-flex align-items-center m-auto position-relative"
+        className="bg-red-300 flex items-center m-auto relative"
         style={{
-          maxWidth: "var(--bs-breakpoint-xl)",
+          maxWidth: "var(--breakpoint-xl)",
         }}
       >
         <LogoNav />

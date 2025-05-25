@@ -9,21 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tailwindcss/postcss": "^4.1.7",
     "better-sqlite3": "11.8.1",
     "bootstrap": "^5.3.3",
     "braintree": "^3.28.0",
     "braintree-web": "^3.115.0",
     "braintree-web-drop-in": "^1.44.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "country-list": "^2.3.0",
     "email-validator": "^2.0.4",
     "ip3country": "^5.0.0",
-    "lucide-react": "^0.469.0",
+    "lucide-react": "^0.511.0",
     "next": "15.1.0",
+    "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.15.1",
     "react-tooltip": "^5.28.0",
-    "sonner": "^1.7.1"
+    "sonner": "^1.7.1",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.1.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -38,6 +45,7 @@
     "eslint-config-next": "15.1.0",
     "i": "^0.3.7",
     "sass": "1.77.6",
+    "tw-animate-css": "^1.3.0",
     "typescript": "^5"
   }
 }

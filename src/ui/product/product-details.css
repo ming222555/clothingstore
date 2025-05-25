@@ -1,0 +1,7 @@
+.ProductDetails {
+  &__description {
+    @media (min-width: 640px) {
+      padding-left: 1rem;
+    }
+  }
+}

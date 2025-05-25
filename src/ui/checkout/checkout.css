@@ -1,0 +1,11 @@
+.Checkout {
+  &__fieldset-billing-address {
+    max-height: 999px;
+    transition: all 0.2s;
+    overflow: hidden;
+
+    &.hide {
+      max-height: 0;
+    }
+  }
+}

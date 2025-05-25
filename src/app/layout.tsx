@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 
 import { roboto } from "@/lib/utils/fonts";
-import "../globals.scss";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Your Nextjs Store",
@@ -17,11 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        style={
-          {
-            "--bs-body-font-family": `${roboto.style.fontFamily}`,
-          } as React.CSSProperties
-        }
+        style={{
+          fontFamily: `${roboto.style.fontFamily}`,
+        }}
       >
         <div>
           {children}
