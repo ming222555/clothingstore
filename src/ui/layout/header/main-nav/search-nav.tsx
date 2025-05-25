@@ -18,21 +18,21 @@ export default function SearchNav() {
         />
       </label>
       <div
-        className={`SearchNav__backdrop ${mobile ? "mobile" : ""}`}
+        className={`hidden bg-[#000] opacity-25 [&.mobile]:block [&.mobile]:fixed [&.mobile]:top-0 [&.mobile]:left-0 [&.mobile]:bottom-0 [&.mobile]:right-0 md:[&.mobile]:hidden ${
+          mobile ? "mobile" : ""
+        }`}
         onClick={() => setMobile(false)}
       ></div>
       <Input
         type="text"
         placeholder="Search for products..."
         id="SearchNav__input"
-        className={`SearchNav__input bg-white ms-auto md:max-w-lg ${
+        className={`bg-white ms-auto md:max-w-lg hidden md:block md:static md:z-auto [&.mobile]:block [&.mobile]:absolute [&.mobile]:z-1 md:[&.mobile]:static md:[&.mobile]:z-auto ${
           mobile ? "mobile" : ""
         }`}
       />
-      <label
-        className="bg-black ms-2 hidden md:block"
-        htmlFor="SearchNav__input"
-      >
+      {/* bg-black */}
+      <label className="ms-2 hidden md:block" htmlFor="SearchNav__input">
         <SearchIcon role="button" />
       </label>
     </>

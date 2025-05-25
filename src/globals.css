@@ -2,7 +2,6 @@
 @import "./css/base.css";
 @import "./css/bs-typography.css";
 @import "./css/components.css";
-@import "./ui/layout/header/main-nav/search-nav.css";
 @import "./ui/layout/header/main-nav/nav-menu-aside.css";
 @import "./ui/product/product-details.css";
 @import "./ui/product/products.css";

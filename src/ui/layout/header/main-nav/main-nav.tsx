@@ -7,8 +7,9 @@ import CartSummaryNav from "./cart-summary-nav";
 export default function MainNav() {
   return (
     <header className="p-3 bg-white opacity-97 border-b sticky top-0 z-1">
+      {/* bg-red-300 */}
       <nav
-        className="bg-red-300 flex items-center m-auto relative"
+        className="flex items-center m-auto relative"
         style={{
           maxWidth: "var(--breakpoint-xl)",
         }}
