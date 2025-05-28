@@ -9,6 +9,6 @@ export default function CartSummaryNavShoppingIcon() {
   const { openCartModal } = useContext(CartModalContext);
 
   return (
-    <ShoppingBagIcon onClick={openCartModal} className="hover-cursor-pointer" />
+    <ShoppingBagIcon onClick={openCartModal} role="button" size="1.8rem" />
   );
 }

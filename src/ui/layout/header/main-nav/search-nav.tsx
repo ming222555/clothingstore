@@ -18,7 +18,7 @@ export default function SearchNav() {
         />
       </label>
       <div
-        className={`hidden bg-[#000] opacity-25 [&.mobile]:block [&.mobile]:fixed [&.mobile]:top-0 [&.mobile]:left-0 [&.mobile]:bottom-0 [&.mobile]:right-0 md:[&.mobile]:hidden ${
+        className={`hidden bg-black opacity-25 [&.mobile]:block [&.mobile]:fixed [&.mobile]:top-0 [&.mobile]:left-0 [&.mobile]:bottom-0 [&.mobile]:right-0 md:[&.mobile]:hidden ${
           mobile ? "mobile" : ""
         }`}
         onClick={() => setMobile(false)}

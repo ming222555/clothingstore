@@ -15,7 +15,7 @@ export default function MainNav() {
         }}
       >
         <LogoNav />
-        <NavMenu />
+        <NavMenu linkclassName="hidden sm:block" />
         <SearchNav />
         <CartSummaryNav />
         <NavMenuAside />

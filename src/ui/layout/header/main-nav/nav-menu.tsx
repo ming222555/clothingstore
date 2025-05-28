@@ -5,12 +5,19 @@ import { Button } from "@/components/ui/button";
 
 import YnsLink from "@/ui/yns-link";
 
-export default function NavMenu() {
+export default function NavMenu({
+  linkclassName = "",
+}: {
+  linkclassName?: string;
+}) {
   const pathname = usePathname();
 
   return (
     <>
-      <YnsLink href="/" className="text-black hidden sm:block me-1">
+      <YnsLink
+        href="/"
+        className={`text-black me-1 ${linkclassName ? linkclassName : ""}`}
+      >
         <Button
           type="button"
           role="button"
@@ -25,7 +32,7 @@ export default function NavMenu() {
       </YnsLink>
       <YnsLink
         href="/category/apparel"
-        className="text-black hidden sm:block me-1"
+        className={`text-black me-1 ${linkclassName ? linkclassName : ""}`}
       >
         <Button
           type="button"
@@ -41,7 +48,7 @@ export default function NavMenu() {
       </YnsLink>
       <YnsLink
         href="/category/shoes"
-        className="text-black hidden sm:block me-1"
+        className={`text-black me-1 ${linkclassName ? linkclassName : ""}`}
       >
         <Button
           type="button"
@@ -57,7 +64,7 @@ export default function NavMenu() {
       </YnsLink>
       <YnsLink
         href="/category/accessories"
-        className="text-black hidden sm:block me-1"
+        className={`text-black me-1 ${linkclassName ? linkclassName : ""}`}
       >
         <Button
           type="button"

@@ -8,7 +8,7 @@ import ShoppingBagIconTooltip from "./shopping-bag-icon-tooltip";
 
 const CartFallback = () => (
   <div className="ms-2 opacity-25">
-    <ShoppingBagIcon />
+    <ShoppingBagIcon size="1.8rem" />
   </div>
 );
 
@@ -33,12 +33,9 @@ const CartSummaryNavInner = async () => {
   const totalItems = cart.lines.reduce((accum, line) => accum + line.qty, 0);
 
   return (
-    <div
-      className="position-relative ms-2"
-      data-tooltip-id="shopping-bag-icon-tooltip"
-    >
+    <div className="relative ms-2" data-tooltip-id="shopping-bag-icon-tooltip">
       <CartSummaryNavShoppingIcon />
-      <span className="d-flex align-items-center justify-content-center position-absolute top-100 start-100 translate-middle border border-2 bg-light rounded-pill fs-075 min-w-1rem">
+      <span className="flex items-center justify-center absolute top-1/2 left-1/2 -translate-1/2 bg-gray-200 rounded-2xl text-xs min-w-[1rem]">
         {totalItems}
       </span>
 
