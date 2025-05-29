@@ -9,9 +9,9 @@ export default function CartModalBackdrop() {
 
   return (
     <div
-      className={`CartModalBackdrop${
-        open ? " open" : ""
-      } position-fixed top-0 bottom-0 start-0 end-0 bg-dark opacity-50 z-1`}
+      className={`peer ${
+        open ? "open" : ""
+      } fixed top-0 bottom-0 left-0 right-0 bg-black opacity-50 z-1 translate-x-full transition-all duration-1000 [&.open]:translate-x-0`}
       onClick={closeCartModal}
     ></div>
   );

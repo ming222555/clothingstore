@@ -34,11 +34,7 @@ const CartSummaryNavInner = async () => {
 
   return (
     <div className="relative ms-2" data-tooltip-id="shopping-bag-icon-tooltip">
-      <CartSummaryNavShoppingIcon />
-      <span className="flex items-center justify-center absolute top-1/2 left-1/2 -translate-1/2 bg-gray-200 rounded-2xl text-xs min-w-[1rem]">
-        {totalItems}
-      </span>
-
+      <CartSummaryNavShoppingIcon totalItems={totalItems} />
       <ShoppingBagIconTooltip
         tooltipId="shopping-bag-icon-tooltip"
         totalItems={totalItems}

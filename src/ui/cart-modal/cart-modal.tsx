@@ -18,7 +18,7 @@ export default async function CartModal() {
   return (
     <>
       <CartModalBackdrop />
-      <div className="CartModal d-flex flex-column bg-light position-fixed bottom-0 start-100 z-1">
+      <div className="peer-[.open]:-translate-x-full transition-all duration-1000 flex flex-col bg-gray-100 fixed bottom-0 left-full z-1 w-full h-[80%] sm:w-[50%] sm:h-full lg:w-[33.3%]">
         <header className="d-flex p-3">
           <h2 className="h5 fw-semibold me-auto">Shopping Cart</h2>
           <GoToPayment className="text-decoration-underline fs-0875 text-black-50">
@@ -47,7 +47,7 @@ export default async function CartModal() {
                 />
 
                 <div className="flex-grow-1 d-flex flex-column mx-3">
-                  <p className="CartModal__product-name p-0 m-0 flex-grow-1 fw-semibold">
+                  <p className="CartModal__product-name leading-[1.25] p-0 m-0 flex-grow-1 fw-semibold">
                     {line.name}
                   </p>
                   <p className="fs-0875 fw-medium p-0 mt-2 mb-0 text-black-50">
