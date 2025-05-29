@@ -1,34 +1,37 @@
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 import YnsLink from "@/ui/yns-link";
 
 export default function Hero() {
   return (
-    <div className="row row-cols-1 row-cols-md-2 g-0">
-      <div
-        className="col d-flex align-items-center"
-        style={{ background: "#9BEBF6" }}
-      >
-        <div className="w-75 m-auto">
-          <br className="d-md-none" />
-          <h2 className="h1 fw-bold">Discover our Curated Collection</h2>
-          <p className="form-text fs-6">
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      <div className="flex items-center bg-[#9BEBF6]">
+        <div className="w-3/4 m-auto">
+          <br className="md:hidden" />
+          <h2 className="h1 font-light">Discover our Curated Collection</h2>
+          <p className="text-md text-gray-500 mb-4">
             Explore our carefully selected products for your home and lifestyle.
           </p>
-          <YnsLink
-            className="btn btn-dark rounded-pill px-3"
-            href="/category/accessories"
-          >
-            Shop Now
+
+          <YnsLink href="/category/accessories">
+            <Button
+              type="button"
+              role="button"
+              size="lg"
+              className="text-base font-bold rounded-4xl"
+            >
+              Shop Now
+            </Button>
           </YnsLink>
-          <br className="d-md-none" />
-          <br className="d-md-none" />
+          <br className="md:hidden" />
+          <br className="md:hidden" />
         </div>
       </div>
-      <div className="col" style={{ background: "#9BEBF6" }}>
-        <div className="w-50 bg-light m-auto">
+      <div className="bg-[#9BEBF6]">
+        <div className="w-1/2 bg-gray-100 m-auto">
           <Image
-            className="w-100 h-auto"
+            className="w-full h-auto"
             src="https://yournextjsstore.s3.ap-southeast-1.amazonaws.com/images/hero.jpeg"
             width="457"
             height="839"

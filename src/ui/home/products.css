@@ -1,9 +1,0 @@
-.FeaturedProducts {
-  &__details {
-    &:hover {
-      .FeaturedProducts__image {
-        opacity: 75%;
-      }
-    }
-  }
-}

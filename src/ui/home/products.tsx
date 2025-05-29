@@ -10,21 +10,21 @@ export default function FeaturedProducts({
   products: Product[];
 }) {
   return (
-    <div className="FeaturedProducts mb-5 mt-5">
+    <div className="mb-12 mt-5">
       <div
-        className={`row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-xl-3 bg-body-tertiary${
-          products.length ? " d-flex" : " d-none"
+        className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 ${
+          products.length ? "flex" : "hidden"
         }`}
       >
         {products.length &&
           products.map((p, idx) => (
-            <div className="col" key={p.id}>
+            <div key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}
-                className="FeaturedProducts__details shadow-sm d-block"
+                className="rounded-xl shadow-sm block"
               >
                 <Image
-                  className="FeaturedProducts__image w-100 h-auto product-image"
+                  className="rounded-xl hover:opacity-75"
                   src={p.img_src}
                   width="736"
                   height="736"
@@ -33,16 +33,12 @@ export default function FeaturedProducts({
                   alt=""
                 />
                 <div className="ps-2">
-                  <h3 className="h5 fw-semibold">
-                    <span className="d-inline-block pt-3 text-dark">
-                      {p.name}
-                    </span>
-                  </h3>
-                  <div className="pb-3">
-                    <span className="h6 text-body-tertiary">
+                  <h3 className="h5 font-bold pt-4 pb-2">
+                    <span>{p.name}</span>
+                    <span className="h6 block pt-2 text-gray-400">
                       {formatMoney(p.unit_price, p.currency)}
                     </span>
-                  </div>
+                  </h3>
                 </div>
               </YnsLink>
             </div>

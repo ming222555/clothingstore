@@ -1,9 +1,0 @@
-.FeaturedCategories {
-  &__details {
-    &:hover {
-      .FeaturedCategories__image {
-        opacity: 75%;
-      }
-    }
-  }
-}

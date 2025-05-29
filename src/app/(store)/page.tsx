@@ -14,7 +14,7 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="Page mt-n3">
+    <div className="Page -mt-3">
       <Hero />
       <FeaturedProducts products={productsAry} />
       <FeaturedCategories />
