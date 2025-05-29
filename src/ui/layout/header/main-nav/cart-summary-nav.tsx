@@ -8,7 +8,7 @@ import ShoppingBagIconTooltip from "./shopping-bag-icon-tooltip";
 
 const CartFallback = () => (
   <div className="ms-2 opacity-25">
-    <ShoppingBagIcon size="1.8rem" />
+    <ShoppingBagIcon />
   </div>
 );
 

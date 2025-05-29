@@ -14,9 +14,9 @@ export default function CartSummaryNavShoppingIcon({
 
   return (
     <>
-      <ShoppingBagIcon onClick={openCartModal} role="button" size="1.8rem" />
+      <ShoppingBagIcon onClick={openCartModal} role="button" />
       <span
-        className="flex items-center justify-center absolute top-1/2 left-1/2 -translate-1/2 bg-gray-200 rounded-2xl text-xs min-w-[1rem]"
+        className="flex items-center justify-center absolute top-15/16 left-15/16 -translate-1/2 bg-white border rounded-4xl text-xs min-w-[1.6rem] p-1"
         role="button"
         onClick={openCartModal}
       >
