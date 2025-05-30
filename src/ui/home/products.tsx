@@ -21,10 +21,10 @@ export default function FeaturedProducts({
             <div key={p.id}>
               <YnsLink
                 href={`/product/${p.id}`}
-                className="rounded-xl shadow-sm block"
+                className="group rounded-xl shadow-sm block"
               >
                 <Image
-                  className="rounded-xl hover:opacity-75"
+                  className="group-hover:opacity-75 rounded-xl"
                   src={p.img_src}
                   width="736"
                   height="736"
