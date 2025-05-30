@@ -13,20 +13,20 @@ export default function SimilarProducts({
 }) {
   return (
     <div
-      className={`SimilarProducts mb-5${
-        products.length > 1 ? " d-block" : " d-none" // exclude productId from listing to display
+      className={`mb-20 ${
+        products.length > 1 ? "block" : "hidden" // exclude productId from listing to display
       }`}
     >
-      <h2 className="h4 fw-semibold mt-5 mb-4">You May Also Like</h2>
-      <div className="row g-0 row-gap-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 bg-body-tertiary">
+      <h2 className="h4 font-bold mt-12 mb-8">You May Also Like</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
         {products.length &&
           products.map((p) =>
             p.id !== productId ? (
-              <div className="col" key={p.id}>
-                <div className="SimilarProducts__details shadow-sm">
-                  <YnsLink href={`/product/${p.id}`} className="d-block">
+              <div key={p.id}>
+                <div className="group shadow-sm">
+                  <YnsLink href={`/product/${p.id}`} className="block">
                     <Image
-                      className="SimilarProducts__image w-100 h-auto product-image"
+                      className="group-hover:opacity-75 rounded-xl"
                       src={p.img_src}
                       width="736"
                       height="736"
@@ -36,16 +36,16 @@ export default function SimilarProducts({
                     />
                   </YnsLink>
                   <div className="ps-2">
-                    <h3 className="h5 fw-semibold">
+                    <h3 className="h5 font-bold">
                       <YnsLink
                         href={`/product/${p.id}`}
-                        className="d-inline-block pt-3 text-dark"
+                        className="inline-block pt-3 text-black"
                       >
                         {p.name}
                       </YnsLink>
                     </h3>
                     <div className="pb-3">
-                      <span className="h6 text-body-tertiary">
+                      <span className="h6 text-gray-500">
                         {formatMoney(p.unit_price, p.currency)}
                       </span>
                     </div>

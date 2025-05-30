@@ -25,16 +25,16 @@ export default function SingleProductPageClient({
         <div ref={ref}>
           <AddToCartButton productId={product.id} />
           <div
-            className={`position-fixed start-0 end-0 px-3 bg-white opacity-95 shadow z-1${
+            className={`fixed left-0 right-0 px-3 bg-white opacity-95 shadow-md z-1 ${
               notMounted.current
-                ? " bottom-100"
+                ? "bottom-full"
                 : inView
-                ? " bottom-100"
-                : " bottom-0"
+                ? "bottom-full"
+                : "bottom-0"
             }`}
           >
             <div
-              className="py-2 d-flex align-items-center m-auto"
+              className="py-2 flex items-center m-auto inset-shadow-xs inset-shadow-gray-300"
               style={{
                 maxWidth: "var(--bs-breakpoint-xl)",
               }}
@@ -46,7 +46,7 @@ export default function SingleProductPageClient({
                 }}
               >
                 <Image
-                  className="w-100 h-auto product-image"
+                  className="rounded-xl"
                   src={product.img_src}
                   width="72"
                   height="72"
@@ -56,13 +56,13 @@ export default function SingleProductPageClient({
                   alt=""
                 />
               </div>
-              <div className="d-flex flex-column ms-3">
-                <span className="px-2 fw-bold">{product.name}</span>
-                <span className="px-2 form-text">
+              <div className="flex flex-col ms-3">
+                <span className="px-2 text-lg font-bold">{product.name}</span>
+                <span className="px-2 text-sm">
                   {formatMoney(product.unit_price, product.currency)}
                 </span>
               </div>
-              <div className="ms-auto flex-shrink-0">
+              <div className="ms-auto shrink-0">
                 <AddToCartButton productId={product.id} />
               </div>
             </div>

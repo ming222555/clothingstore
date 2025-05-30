@@ -1,7 +1,14 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
-import YnsLink from "@/ui/yns-link";
 import ProductDetails from "@/ui/product/product-details";
 import SimilarProducts from "@/ui/product/products";
 import {
@@ -54,24 +61,23 @@ export default async function SingleProductPage(props: { params: Params }) {
   return (
     <div className="Page">
       <div>
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb pb-3">
-            <li className="breadcrumb-item form-text">
-              <YnsLink href="/products">All products</YnsLink>
-            </li>
-            <li className="breadcrumb-item form-text">
-              <YnsLink href={`/category/${product.category_id}`}>
+        <Breadcrumb className="mt-3 mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/products">All products</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href={`/category/${product.category_id}`}>
                 {product.category_name}
-              </YnsLink>
-            </li>
-            <li
-              className="breadcrumb-item form-text fw-medium active"
-              aria-current="page"
-            >
-              {product.name}
-            </li>
-          </ol>
-        </nav>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{product.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <ProductDetails product={product} />
       </div>
       <SimilarProducts productId={slug} products={productsAry} />

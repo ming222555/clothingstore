@@ -2,6 +2,7 @@
 
 import { useContext, useTransition } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 import { CartModalContext } from "@/providers/cart-modal-provider";
 import { addToCartAction } from "@/actions/cart-actions";
@@ -11,17 +12,17 @@ export default function AddToCartButton({ productId }: { productId: string }) {
   const [pending, startTransition] = useTransition();
 
   return (
-    <button
+    <Button
       type="button"
-      className={`btn btn-dark rounded-pill w-100${
-        pending ? " cursor-wait" : ""
+      role="button"
+      size="lg"
+      className={`text-lg font-bold rounded-4xl w-full ${
+        pending ? "cursor-wait" : ""
       }`}
       onClick={() => {
         if (pending) {
           return;
         }
-
-        // openCartModal(); // mv to below
 
         startTransition(async () => {
           const res = await addToCartAction(productId);
@@ -34,7 +35,7 @@ export default function AddToCartButton({ productId }: { productId: string }) {
         });
       }}
     >
-      <p className="h5 my-1">Add to cart</p>
-    </button>
+      Add to cart
+    </Button>
   );
 }

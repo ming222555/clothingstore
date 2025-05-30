@@ -6,16 +6,16 @@ import { formatMoney } from "@/lib/utils/utils";
 
 export default function ProductDetails({ product }: { product: Product }) {
   return (
-    <div className="ProductDetails row g-0 row-cols-1 row-cols-md-2">
-      <div className="col-12 d-md-none mb-3">
-        <h1 className="h2 fw-semibold mb-1">{product.name}</h1>
-        <p className="h4 text-body-tertiary">
+    <div className="grid grid-cols-1 md:grid-cols-12">
+      <div className="md:hidden mb-3">
+        <h1 className="h2 font-bold mb-1">{product.name}</h1>
+        <p className="h4 text-gray-500">
           {formatMoney(product.unit_price, product.currency)}
         </p>
       </div>
-      <div className="col-md-7">
+      <div className="md:col-span-7">
         <Image
-          className="w-100 h-auto product-image"
+          className="rounded-xl"
           src={product.img_src}
           width="736"
           height="736"
@@ -25,15 +25,15 @@ export default function ProductDetails({ product }: { product: Product }) {
           alt=""
         />
       </div>
-      <div className="ProductDetails__description col-md-5">
-        <div className="d-none d-md-block">
-          <h1 className="h2 fw-semibold mb-1">{product.name}</h1>
-          <p className="h4 text-body-tertiary">
+      <div className="md:col-span-5 sm:pl-4">
+        <div className="hidden md:block">
+          <h1 className="h2 font-bold mb-1">{product.name}</h1>
+          <p className="h4 text-gray-500">
             {formatMoney(product.unit_price, product.currency)}
           </p>
         </div>
         <div>
-          <p className="py-3">{product.description}</p>
+          <p className="pt-3 pb-6">{product.description}</p>
           <SingleProductPageClient product={product} />
         </div>
       </div>

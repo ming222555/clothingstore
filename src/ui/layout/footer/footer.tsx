@@ -43,7 +43,7 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-        <div className="w-full text-center mt-4">
+        <div className="w-full text-center my-6">
           <span className="text-xs text-gray-400">
             <span className="block">&#169; 2024 Your Nextjs Store</span>
             <span className="block">Commerce made a delight for all</span>
