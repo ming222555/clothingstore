@@ -4,6 +4,8 @@ import { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ip3country from "ip3country";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import BraintreeDropIn from "./checkout-braintreedropin";
 import countrylist from "@/dat/countries.json";
@@ -310,18 +312,18 @@ export default function Checkout({
 
   return (
     <>
-      <p className="form-text mb-3 ps-3">
+      <p className="text-sm text-gray-500 mt-1 mb-5 ps-3">
         Provide billing and shipping details below.
       </p>
-      <form className="Checkout position-relative ps-3 pb-5">
+      <form className="relative ps-3 mb-20">
         <div className="mb-3">
-          <label htmlFor="cust_email" className="form-label mb-1">
+          <label htmlFor="cust_email" className="mb-1">
             Email{" "}
-            <span id="emailHelp" className="form-text text-danger ps-1">
+            <span id="emailHelp" className="text-sm text-red-500 ps-1">
               {getFieldError("cust_email") ? getFieldError("cust_email") : null}
             </span>
           </label>
-          <input
+          <Input
             type="text"
             inputMode="email"
             name="cust_email"
@@ -330,150 +332,147 @@ export default function Checkout({
             value={formValues.cust_email}
             onChange={onValueChange}
             disabled={!modeUpdate || pending}
-            className={`form-control${
-              getFieldError("cust_email") ? " border-warning" : ""
+            className={`block ${
+              getFieldError("cust_email") ? "border-red-500" : ""
             }`}
             aria-describedby="emailHelp"
           />
         </div>
         <fieldset
-          className="border rounded border-1 px-3"
+          className="border rounded-xl px-3"
           disabled={!modeUpdate || pending}
         >
           <legend className="h6">Shipping</legend>
           <div className="mb-3">
-            <label htmlFor="cust_shipping_fullname" className="form-label mb-1">
+            <label htmlFor="cust_shipping_fullname" className="mb-1">
               Full name{" "}
               <span
                 id="custShippingFullnameHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_shipping_fullname")
                   ? getFieldError("cust_shipping_fullname")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_shipping_fullname"
               id="cust_shipping_fullname"
               value={formValues.cust_shipping_fullname}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_shipping_fullname") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_shipping_fullname") ? "border-red-500" : ""
               }`}
               aria-describedby="custShippingFullnameHelp"
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_shipping_address" className="form-label mb-1">
+            <label htmlFor="cust_shipping_address" className="mb-1">
               Address{" "}
               <span
                 id="custShippingAddressHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_shipping_address")
                   ? getFieldError("cust_shipping_address")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_shipping_address"
               id="cust_shipping_address"
               value={formValues.cust_shipping_address}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_shipping_address") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_shipping_address") ? "border-red-500" : ""
               }`}
               aria-describedby="custShippingAddressHelp"
             />
           </div>
-          <div className="d-flex justify-content-between">
-            <div className="mb-3 w-45">
-              <label
-                htmlFor="cust_shipping_postalcode"
-                className="form-label mb-1"
-              >
+          <div className="flex justify-between">
+            <div className="mb-3 w-[45%]">
+              <label htmlFor="cust_shipping_postalcode" className="mb-1">
                 Postal Code{" "}
                 <p
                   id="custShippingPostalCodeHelp"
-                  className="form-text text-danger my-0"
+                  className="text-sm text-red-500 my-0"
                 >
                   {getFieldError("cust_shipping_postalcode")
                     ? getFieldError("cust_shipping_postalcode")
                     : null}
                 </p>
               </label>
-              <input
+              <Input
                 type="text"
                 name="cust_shipping_postalcode"
                 id="cust_shipping_postalcode"
                 value={formValues.cust_shipping_postalcode}
                 onChange={onValueChange}
-                className={`form-control${
+                className={`block ${
                   getFieldError("cust_shipping_postalcode")
-                    ? " border-warning"
+                    ? "border-red-500"
                     : ""
                 }`}
                 aria-describedby="custShippingPostalCodeHelp"
               />
             </div>
-            <div className="mb-3 w-45">
-              <label htmlFor="cust_shipping_city" className="form-label mb-1">
+            <div className="mb-3 w-[45%]">
+              <label htmlFor="cust_shipping_city" className="mb-1">
                 City{" "}
                 <span
                   id="custShippingCityCodeHelp"
-                  className="form-text text-danger ps-1"
+                  className="text-sm text-red-500 ps-1"
                 >
                   {getFieldError("cust_shipping_city")
                     ? getFieldError("cust_shipping_city")
                     : null}
                 </span>
               </label>
-              <input
+              <Input
                 type="text"
                 name="cust_shipping_city"
                 id="cust_shipping_city"
                 value={formValues.cust_shipping_city}
                 onChange={onValueChange}
-                className={`form-control${
-                  getFieldError("cust_shipping_city") ? " border-warning" : ""
+                className={`block ${
+                  getFieldError("cust_shipping_city") ? "border-red-500" : ""
                 }`}
                 aria-describedby="custShippingCityCodeHelp"
               />
             </div>
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_shipping_state" className="form-label mb-1">
+            <label htmlFor="cust_shipping_state" className="mb-1">
               State / Region{" "}
               <span
                 id="custShippingStateHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_shipping_state")
                   ? getFieldError("cust_shipping_state")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_shipping_state"
               id="cust_shipping_state"
               value={formValues.cust_shipping_state}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_shipping_state") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_shipping_state") ? "border-red-500" : ""
               }`}
               aria-describedby="custShippingStateHelp"
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_shipping_country" className="form-label mb-1">
+            <label htmlFor="cust_shipping_country" className="mb-1">
               Country{" "}
               <span
                 id="custShippingCountryHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_shipping_country")
                   ? getFieldError("cust_shipping_country")
@@ -485,8 +484,8 @@ export default function Checkout({
               id="cust_shipping_country"
               value={formValues.cust_shipping_country}
               onChange={onValueChange}
-              className={`form-select form-select-sm${
-                getFieldError("cust_shipping_country") ? " border-warning" : ""
+              className={`py-1 border border-input rounded-md ${
+                getFieldError("cust_shipping_country") ? "border-red-500" : ""
               }`}
               aria-describedby="custShippingCountryHelp"
             >
@@ -501,22 +500,22 @@ export default function Checkout({
         </fieldset>
         <fieldset className="mt-3" disabled={!modeUpdate || pending}>
           {getFieldError("shipping_rate_id") ? (
-            <span className="form-text text-danger">
+            <span className="text-sm text-red-500">
               {getFieldError("shipping_rate_id")}
             </span>
           ) : null}
-          <legend className="h6">Shipping method</legend>
+          <legend className="h6 pt-2">Shipping method</legend>
           <div
-            className={`row row-cols-3 mb-3${
-              pendingShippingRate ? " cursor-wait" : ""
+            className={`grid grid-cols-3 gap-x-3 gap-y-1 mb-3 ${
+              pendingShippingRate ? "cursor-wait" : ""
             }`}
           >
             {shippingRates.map((sr) => (
-              <div className="col mb-2" key={sr.id}>
+              <div className="mb-2" key={sr.id}>
                 <label
                   htmlFor={`${sr.id}`}
-                  className={`d-flex flex-column border border-1 rounded${
-                    formValues.shipping_rate_id === sr.id ? " border-dark" : ""
+                  className={`flex flex-col border-1 rounded-xl ${
+                    formValues.shipping_rate_id === sr.id ? "border-black" : ""
                   }${pendingShippingRate ? " cursor-wait" : ""}`}
                   role="button"
                 >
@@ -531,10 +530,10 @@ export default function Checkout({
                     }}
                     disabled={pending}
                     id={`${sr.id}`}
-                    className="d-none"
+                    className="hidden"
                   />
-                  <span className="h6 mb-0">{`${sr.id}`}</span> {/* agency */}
-                  <span className="form-text">{`${sr.duration}`}</span>
+                  <span className="h6 mb-0">{`${sr.id}`}</span>
+                  <span className="text-sm text-gray-500">{`${sr.duration}`}</span>
                   <span className="h5">{`${formatMoney(
                     sr.rate,
                     sr.rate_currency
@@ -551,150 +550,152 @@ export default function Checkout({
               setBillingAddrEqShipping((prev) => !prev);
             }}
           />
-          <label htmlFor="cbx-billing-addr-eq-shipping" className="ps-2">
+          <label
+            htmlFor="cbx-billing-addr-eq-shipping"
+            className="ps-2 text-gray-500"
+          >
             Billing address same as shipping
           </label>
         </fieldset>
         <fieldset
-          className={`Checkout__fieldset-billing-address mt-3 border rounded border-1 px-3${
-            billingAddrEqShipping ? " hide" : ""
+          className={`max-h-[999px] transition-all delay-200 overflow-hidden [&.hide]:max-h-0 mt-3 rounded-xl border-1 px-3 ${
+            billingAddrEqShipping ? "hide" : ""
           }`}
           disabled={!modeUpdate || pending}
         >
-          <legend className="h6">Billing address</legend>
+          <legend className="h6">
+            {`${billingAddrEqShipping ? "" : "Billing address"}`}
+          </legend>
           <div className="mb-3">
-            <label htmlFor="cust_billing_fullname" className="form-label mb-1">
+            <label htmlFor="cust_billing_fullname" className="mb-1">
               Full name{" "}
               <span
                 id="custBillingFullnameHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_billing_fullname")
                   ? getFieldError("cust_billing_fullname")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_billing_fullname"
               id="cust_billing_fullname"
               value={formValues.cust_billing_fullname}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_billing_fullname") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_billing_fullname") ? "border-red-500" : ""
               }`}
               aria-describedby="custBillingFullnameHelp"
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_billing_address" className="form-label mb-1">
+            <label htmlFor="cust_billing_address" className="mb-1">
               Address{" "}
               <span
                 id="custBillingAddressHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_billing_address")
                   ? getFieldError("cust_billing_address")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_billing_address"
               id="cust_billing_address"
               value={formValues.cust_billing_address}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_billing_address") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_billing_address") ? "border-red-500" : ""
               }`}
               aria-describedby="custBillingAddressHelp"
             />
           </div>
-          <div className="d-flex justify-content-between">
-            <div className="mb-3 w-45">
-              <label
-                htmlFor="cust_billing_postalcode"
-                className="form-label mb-1"
-              >
+          <div className="flex justify-between">
+            <div className="mb-3 w-[45%]">
+              <label htmlFor="cust_billing_postalcode" className="mb-1">
                 Postal Code{" "}
                 <p
                   id="custBillingPostalCodeHelp"
-                  className="form-text text-danger my-0"
+                  className="text-sm text-red-500 my-0"
                 >
                   {getFieldError("cust_billing_postalcode")
                     ? getFieldError("cust_billing_postalcode")
                     : null}
                 </p>
               </label>
-              <input
+              <Input
                 type="text"
                 name="cust_billing_postalcode"
                 id="cust_billing_postalcode"
                 value={formValues.cust_billing_postalcode}
                 onChange={onValueChange}
-                className={`form-control${
+                className={`block ${
                   getFieldError("cust_billing_postalcode")
-                    ? " border-warning"
+                    ? "border-red-500"
                     : ""
                 }`}
                 aria-describedby="custBillingPostalCodeHelp"
               />
             </div>
-            <div className="mb-3 w-45">
-              <label htmlFor="cust_billing_city" className="form-label mb-1">
+            <div className="mb-3 w-[45%]">
+              <label htmlFor="cust_billing_city" className="mb-1">
                 City{" "}
                 <span
                   id="custBillingCityCodeHelp"
-                  className="form-text text-danger ps-1"
+                  className="text-sm text-red-500 ps-1"
                 >
                   {getFieldError("cust_billing_city")
                     ? getFieldError("cust_billing_city")
                     : null}
                 </span>
               </label>
-              <input
+              <Input
                 type="text"
                 name="cust_billing_city"
                 id="cust_billing_city"
                 value={formValues.cust_billing_city}
                 onChange={onValueChange}
-                className={`form-control${
-                  getFieldError("cust_billing_city") ? " border-warning" : ""
+                className={`block ${
+                  getFieldError("cust_billing_city") ? "border-red-500" : ""
                 }`}
                 aria-describedby="custBillingCityCodeHelp"
               />
             </div>
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_billing_state" className="form-label mb-1">
+            <label htmlFor="cust_billing_state" className="mb-1">
               State / Region{" "}
               <span
                 id="custBillingStateHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_billing_state")
                   ? getFieldError("cust_billing_state")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_billing_state"
               id="cust_billing_state"
               value={formValues.cust_billing_state}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_billing_state") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_billing_state") ? "border-red-500" : ""
               }`}
               aria-describedby="custBillingStateHelp"
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_billing_country" className="form-label mb-1">
+            <label htmlFor="cust_billing_country" className="mb-1">
               Country{" "}
               <span
                 id="custBillingCountryHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_billing_country")
                   ? getFieldError("cust_billing_country")
@@ -706,8 +707,9 @@ export default function Checkout({
               id="cust_billing_country"
               value={formValues.cust_billing_country}
               onChange={onValueChange}
-              className={`form-select form-select-sm${
-                getFieldError("cust_billing_country") ? " border-warning" : ""
+              // form-select form-select-sm
+              className={`py-1 border border-input rounded-md ${
+                getFieldError("cust_billing_country") ? "border-red-500" : ""
               }`}
               aria-describedby="custBillingCountryHelp"
             >
@@ -720,25 +722,25 @@ export default function Checkout({
             </select>
           </div>
           <div className="mb-3">
-            <label htmlFor="cust_billing_phone" className="form-label mb-1">
+            <label htmlFor="cust_billing_phone" className="mb-1">
               Phone{" "}
               <span
                 id="custBillingPhoneHelp"
-                className="form-text text-danger ps-1"
+                className="text-sm text-red-500 ps-1"
               >
                 {getFieldError("cust_billing_phone")
                   ? getFieldError("cust_billing_phone")
                   : null}
               </span>
             </label>
-            <input
+            <Input
               type="text"
               name="cust_billing_phone"
               id="cust_billing_phone"
               value={formValues.cust_billing_phone}
               onChange={onValueChange}
-              className={`form-control${
-                getFieldError("cust_billing_phone") ? " border-warning" : ""
+              className={`block ${
+                getFieldError("cust_billing_phone") ? "border-red-500" : ""
               }`}
               aria-describedby="custBillingPhoneHelp"
             />
@@ -747,12 +749,12 @@ export default function Checkout({
         <div
           className={`${
             getFieldError("checkout")
-              ? "text-danger border border-danger rounded border-1 ps-3 py-1 mt-3 d-flex flex-column"
-              : "d-none"
+              ? "text-red-500 border border-red-500 rounded-xl ps-3 py-1 mt-3 flex flex-col"
+              : "hidden"
           }`}
         >
-          <span className="d-flex align-items-center">
-            <span className="w-1rem">
+          <span className="flex items-center">
+            <span className="w-4">
               <svg
                 fill="currentColor"
                 // width="800px"
@@ -764,11 +766,11 @@ export default function Checkout({
                 <path d="M5.094 16.32A8 8 0 0 0 16.32 5.094L5.094 16.32zM3.68 14.906L14.906 3.68A8 8 0 0 0 3.68 14.906zM10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10z" />
               </svg>
             </span>
-            <span className="text-danger fw-medium ps-2 form-text">Error</span>
+            <span className="text-red-500 font-medium ps-2 text-sm">Error</span>
           </span>
-          <span className="d-flex align-items-center">
-            <span className="w-1rem"></span>
-            <span className="text-danger ps-2 form-text">
+          <span className="flex items-center">
+            <span className="w-4"></span>
+            <span className="text-red-500 ps-2 text-sm">
               {getFieldError("checkout") ? getFieldError("checkout") : null}
             </span>
           </span>
@@ -777,12 +779,12 @@ export default function Checkout({
           className={`${
             errors.length > 0 &&
             !(errors.length === 1 && errors[0].field === "checkout")
-              ? "text-danger border border-danger rounded border-1 ps-3 py-1 mt-3 d-flex flex-column"
-              : "d-none"
+              ? "text-red-500 border border-red-500 ps-3 py-1 mt-3 flex flex-col"
+              : "hidden"
           }`}
         >
-          <span className="d-flex align-items-center">
-            <span className="w-1rem">
+          <span className="flex items-center">
+            <span className="w-4">
               <svg
                 fill="currentColor"
                 // width="800px"
@@ -794,20 +796,22 @@ export default function Checkout({
                 <path d="M5.094 16.32A8 8 0 0 0 16.32 5.094L5.094 16.32zM3.68 14.906L14.906 3.68A8 8 0 0 0 3.68 14.906zM10 20C4.477 20 0 15.523 0 10S4.477 0 10 0s10 4.477 10 10-4.477 10-10 10z" />
               </svg>
             </span>
-            <span className="text-danger fw-medium ps-2 form-text">Error</span>
+            <span className="text-red-500 font-medium ps-2 text-sm">Error</span>
           </span>
-          <span className="d-flex align-items-center">
-            <span className="w-1rem"></span>
-            <span className="text-danger ps-2 form-text">
+          <span className="flex items-center">
+            <span className="w-4"></span>
+            <span className="text-red-500 ps-2 text-sm">
               Please fill in the required fields with valid data.
             </span>
           </span>
         </div>
         <br />
-        <button
+        <Button
           type="button"
+          role="button"
+          size="lg"
           // disabled={updatePaymentDisabled || pending || processingPayment}
-          className={`btn btn-dark rounded-pill w-100${
+          className={`text-lg font-bold rounded-4xl w-full ${
             updatePaymentDisabled || pending || processingPayment
               ? " cursor-wait"
               : ""
@@ -824,7 +828,7 @@ export default function Checkout({
           }}
         >
           {modeUpdate ? "Update Shipping/Billing" : "Edit Shipping/Billing"}
-        </button>
+        </Button>
         <BraintreeDropIn
           show={modeUpdate ? false : true}
           processingPayment={processingPayment}

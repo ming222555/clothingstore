@@ -1,9 +1,0 @@
-.CartSummaryTable {
-  table-layout: fixed;
-  width: 100%;
-
-  &__th-image,
-  &__td-image {
-    width: 96px;
-  }
-}

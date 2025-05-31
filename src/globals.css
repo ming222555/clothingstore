@@ -1,11 +1,10 @@
 @import "tailwindcss";
 @import "./css/base.css";
+@import "./css/third-party.css";
 @import "./css/bs-typography.css";
+@import "./css/util.css";
 @import "./css/components.css";
 @import "./css/keyframes.css";
-@import "./ui/checkout/cart-summary-table.css";
-@import "./ui/checkout/checkout.css";
-@import "./ui/checkout/checkout-braintreedropin.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

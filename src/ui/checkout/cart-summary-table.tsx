@@ -1,6 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { useOptimistic, useRef } from "react";
 import CartItemQuantity from "./cart-item-quantity";
@@ -46,35 +54,35 @@ export default function CartSummaryTable({
 
   return (
     <form className="pe-2">
-      <table className="CartSummaryTable table table-sm align-middle table-hover">
-        <thead>
-          <tr className="form-text">
-            <th
-              scope="col"
-              className="CartSummaryTable__th-image d-none d-sm-table-cell"
-            >
-              <span className="visually-hidden">Image</span>
-            </th>
-            <th scope="col" className="fw-medium text-secondary">
+      <Table className="table-fixed w-full align-middle">
+        <TableHeader>
+          <TableRow className="text-sm">
+            <TableHead scope="col" className="w-[96px] hidden sm:table-cell">
+              <span className="block visually-hidden">Image</span>
+            </TableHead>
+            <TableHead scope="col" className="font-medium text-gray-500">
               Product
-            </th>
-            <th scope="col" className="fw-medium text-secondary">
+            </TableHead>
+            <TableHead scope="col" className="font-medium text-gray-500">
               Price
-            </th>
-            <th scope="col" className="fw-medium text-secondary">
+            </TableHead>
+            <TableHead scope="col" className="font-medium text-gray-500">
               Quantity
-            </th>
-            <th scope="col" className="text-end fw-medium text-secondary">
+            </TableHead>
+            <TableHead
+              scope="col"
+              className="text-end font-medium text-gray-500"
+            >
               Total
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {optimisticCart.lines.map((line) => (
-            <tr key={line.product_id} className="form-text">
-              <td className="CartSummaryTable__td-image d-none d-sm-table-cell">
+            <TableRow key={line.product_id} className="text-sm">
+              <TableCell className="w-[96px] hidden sm:table-cell">
                 <Image
-                  className="d-block"
+                  className="block"
                   src={line.img_src}
                   width="80"
                   height="80"
@@ -82,48 +90,50 @@ export default function CartSummaryTable({
                   loading="lazy"
                   alt=""
                 />
-              </td>
-              <td>
+              </TableCell>
+              <TableCell className="text-gray-500">
                 <YnsLink href="/product/horizon-gaze-sunglasses">
                   {line.name}
                 </YnsLink>
-              </td>
-              <td>{formatMoney(line.unit_price, cart.currency)}</td>
-              <td>
+              </TableCell>
+              <TableCell className="text-gray-500">
+                {formatMoney(line.unit_price, cart.currency)}
+              </TableCell>
+              <TableCell className="text-gray-500">
                 <CartItemQuantity
                   qty={line.qty}
                   productId={line.product_id}
                   onChange={dispatchOptimisticCartAction}
                   actionProductId={actionProductId.current}
                 />
-              </td>
-              <td className="text-end">
+              </TableCell>
+              <TableCell className="text-gray-500 text-end">
                 {formatMoney(line.line_total, cart.currency)}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
           {shippingRate ? (
-            <tr>
-              <td className="CartSummaryTable__td-image d-none d-sm-table-cell"></td>
-              <td colSpan={3} className="form-text">
+            <TableRow>
+              <TableCell className="w-[96px] hidden sm:table-cell"></TableCell>
+              <TableCell colSpan={3} className="text-sm text-gray-800">
                 {shippingRate.agency} {shippingRate.duration}
-              </td>
-              <td className="form-text text-end">
+              </TableCell>
+              <TableCell className="text-sm text-gray-800 text-end">
                 {formatMoney(shippingRate.rate, cart.currency)}
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ) : null}
-          <tr className="table-active">
-            <td className="CartSummaryTable__td-image d-none d-sm-table-cell"></td>
-            <td colSpan={3} className="text-end pe-3 h6 fw-bold">
+          <TableRow className="bg-gray-200">
+            <TableCell className="w-[96px] hidden sm:table-cell"></TableCell>
+            <TableCell colSpan={3} className="text-end pe-3 h6 font-bold">
               TOTAL
-            </td>
-            <td className="text-end h6 fw-bold">
+            </TableCell>
+            <TableCell className="text-end h6 font-bold">
               {formatMoney(total, cart.currency)}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </form>
   );
 }

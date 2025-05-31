@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button";
 
 import { cartUpdateAction } from "@/actions/cart-actions";
 import type { OptimisticCartActionType, Delta } from "./cart-summary-table";
@@ -108,26 +109,34 @@ export default function CartItemQuantity({
 
   return (
     <span
-      className={`CartItemQuantity d-flex flex-column flex-sm-row align-items-center justify-content-between p-1${
-        isPending ? " bg-white cursor-wait" : ""
+      className={`flex gap-2 items-center justify-center p-1 ${
+        isPending ? "bg-white cursor-wait" : ""
       }`}
     >
-      <button
+      <Button
         type="submit"
+        role="button"
+        variant="outline"
         disabled={qty <= 0}
-        className={`btn btn-light btn-sm${isPending ? " cursor-wait" : ""}`}
+        size="sm"
+        style={{ cursor: `${isPending ? "wait" : "pointer"}` }}
+        className="p-1 rounded-4xl"
         formAction={() => formAction("DECREASE")}
       >
         <span>-</span>
-      </button>
+      </Button>
       <span>{qty}</span>
-      <button
+      <Button
         type="submit"
-        className={`btn btn-light btn-sm${isPending ? " cursor-wait" : ""}`}
+        role="button"
+        variant="outline"
+        size="sm"
+        style={{ cursor: `${isPending ? "wait" : "pointer"}` }}
+        className="p-1 rounded-4xl"
         formAction={() => formAction("INCREASE")}
       >
         <span>+</span>
-      </button>
+      </Button>
     </span>
   );
 }

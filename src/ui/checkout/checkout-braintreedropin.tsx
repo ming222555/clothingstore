@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import dropin from "braintree-web-drop-in";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 import { braintreeMakePaymentAction } from "@/actions/braintree-actions";
 
@@ -69,6 +70,7 @@ export default function BraintreeDropIn({
         initializeBraintree();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show]);
 
   const braintreeInstanceRef = useRef<dropin.Dropin | undefined>(
@@ -83,25 +85,27 @@ export default function BraintreeDropIn({
   }, []);
 
   return (
-    <div className={`pb-5${show ? " d-block" : " d-none"}`}>
-      <div id={"braintree-drop-in-div"} />
+    <div className={`pb-5 ${show ? "block" : "hidden"}`}>
+      <div id="braintree-drop-in-div" />
 
       {braintreeInstance ? null : (
-        <p className="h5 fst-italic text-white bg-info text-center mt-4">
+        <p className="h5 italic text-white bg-blue-200 text-center mt-4">
           Please wait, loading payment form...
         </p>
       )}
 
       {processingPayment ? (
-        <p className="h5 fst-italic text-white bg-info text-center mt-4">
+        <p className="h5 italic text-white bg-blue-200 text-center mt-4">
           Please wait, payment in progess...
         </p>
       ) : null}
 
-      <button
+      <Button
         type="button"
+        role="button"
+        size="lg"
         style={{ display: braintreeInstance ? "inline-block" : "none" }}
-        className={`btn btn-dark rounded-pill w-100${
+        className={`text-lg font-bold rounded-4xl w-full ${
           !braintreeInstance || processingPayment ? " cursor-wait" : ""
         }`}
         // disabled={!braintreeInstance || processingPayment}
@@ -124,7 +128,7 @@ export default function BraintreeDropIn({
         }}
       >
         Pay
-      </button>
+      </Button>
     </div>
   );
 }
