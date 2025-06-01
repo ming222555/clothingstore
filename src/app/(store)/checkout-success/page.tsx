@@ -11,7 +11,7 @@ export default async function CheckoutSuccessPage(props: {
 
   return (
     <>
-      <div className="position-fixed top-0 start-0 bottom-0 end-0 bg-white z-1 d-flex align-items-center justify-content-center flex-column px-5">
+      <div className="fixed top-0 left-0 bottom-0 right-0 bg-white z-1 flex items-center justify-center flex-col px-5">
         <h2 className="h2">Checkout successful</h2>
         <br />
         <br />
@@ -21,13 +21,17 @@ export default async function CheckoutSuccessPage(props: {
           An email acknowledging your purchase has been sent to the below email
           address
         </p>
-        <p className="text-info">{cust_email}</p>
+        <p className="text-blue-500">{cust_email}</p>
         <br />
         <p>
           You may refer to the link enclosed in the email to keep track of
           shipment progress
         </p>
-        <YnsLink href="/">Back to shopping</YnsLink>
+        <br />
+        <br />
+        <YnsLink href="/" className="underline text-blue-500">
+          Back to shopping
+        </YnsLink>
       </div>
       <ClearYnsCartCookie />
       {dberror ? <ToastClient msg={dberror as string} /> : null}

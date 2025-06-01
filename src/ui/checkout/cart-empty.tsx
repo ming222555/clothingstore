@@ -1,22 +1,25 @@
 import YnsLink from "@/ui/yns-link";
+import { Button } from "@/components/ui/button";
 
 export async function CartEmpty() {
   return (
-    <div className="flex max-h-80 flex-1 flex-col items-center justify-center gap-4">
-      <div className="flex flex-col items-center justify-center space-y-2 text-center">
+    <div className="fixed top-0 left-0 bottom-0 right-0 bg-white z-1 flex items-center justify-center flex-col gap-8">
+      <div className="flex flex-col items-center justify-center gap-y-2 text-center">
         <ShoppingCartIcon className="h-12 w-12 text-neutral-500" />
-        <h2 className="text-2xl font-bold tracking-tight">
-          Your cart is empty
-        </h2>
+        <h2 className="text-2xl font-bold">Your cart is empty</h2>
         <p className="text-neutral-500">
           Looks like you haven&lsquo;t added anything to your cart yet.
         </p>
       </div>
-      <YnsLink
-        className="inline-flex h-10 items-center justify-center rounded-md bg-neutral-900 px-6 text-sm font-medium text-neutral-50 shadow transition-colors hover:bg-neutral-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
-        href="/"
-      >
-        Continue shopping
+      <YnsLink href="/">
+        <Button
+          type="button"
+          role="button"
+          size="lg"
+          className="text-sm font-bold rounded-4xl"
+        >
+          Continue shopping
+        </Button>
       </YnsLink>
     </div>
   );

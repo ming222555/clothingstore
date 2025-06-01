@@ -19,9 +19,7 @@ export default function GlobalError({
             {error.stack && <pre>{error.stack}</pre>}
           </details>
         )}
-        <button className="btn btn-info" onClick={() => reset()}>
-          Try again
-        </button>
+        <button onClick={() => reset()}>Try again</button>
       </body>
     </html>
   );
