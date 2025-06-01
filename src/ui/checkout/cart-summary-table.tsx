@@ -56,7 +56,7 @@ export default function CartSummaryTable({
     <form className="pe-2">
       <Table className="table-fixed w-full align-middle">
         <TableHeader>
-          <TableRow className="text-sm">
+          <TableRow className="text-sm hover:bg-transparent">
             <TableHead scope="col" className="w-[96px] hidden sm:table-cell">
               <span className="block visually-hidden">Image</span>
             </TableHead>
@@ -91,9 +91,9 @@ export default function CartSummaryTable({
                   alt=""
                 />
               </TableCell>
-              <TableCell className="text-gray-500">
-                <YnsLink href="/product/horizon-gaze-sunglasses">
-                  {line.name}
+              <TableCell className="text-blue-500">
+                <YnsLink href={`/product/${line.product_id}`}>
+                  <span className="text-wrap">{line.name}</span>
                 </YnsLink>
               </TableCell>
               <TableCell className="text-gray-500">

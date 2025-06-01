@@ -532,12 +532,19 @@ export default function Checkout({
                     id={`${sr.id}`}
                     className="hidden"
                   />
-                  <span className="h6 mb-0">{`${sr.id}`}</span>
-                  <span className="text-sm text-gray-500">{`${sr.duration}`}</span>
-                  <span className="h5">{`${formatMoney(
-                    sr.rate,
-                    sr.rate_currency
-                  )}`}</span>
+                  <span
+                    className={`h6 mb-0 ${
+                      pendingShippingRate ? "cursor-wait" : ""
+                    }`}
+                  >{`${sr.id}`}</span>
+                  <span
+                    className={`text-sm text-gray-500 ${
+                      pendingShippingRate ? "cursor-wait" : ""
+                    }`}
+                  >{`${sr.duration}`}</span>
+                  <span
+                    className={`h5 ${pendingShippingRate ? "cursor-wait" : ""}`}
+                  >{`${formatMoney(sr.rate, sr.rate_currency)}`}</span>
                 </label>
               </div>
             ))}
