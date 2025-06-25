@@ -1,7 +1,14 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { gateway } from "@/config/braintree";
+import braintree from "braintree";
+
+const gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment["Sandbox"],
+  merchantId: "48sxsf8xxnxgcn8q",
+  publicKey: "tb5gt3b73vs7n6f8",
+  privateKey: "056333032fa211b04855983779a06242",
+});
 
 import { getCartFromCookiesAction } from "@/actions/cart-actions";
 import * as Commerce from "@/lib/commerce-kit";
